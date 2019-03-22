@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { GoogleSignin, statusCodes } from 'react-native-google-signin';
-
+import { LoginManager } from 'react-native-fbsdk';
 
 
 export default class HomeScreen extends React.Component {
@@ -19,6 +19,8 @@ export default class HomeScreen extends React.Component {
     this.state = {
       userInfo: null,
       error: null,
+      normalUser: '',
+      normalPassword:''
     };
 }
   
@@ -56,17 +58,38 @@ export default class HomeScreen extends React.Component {
         });
       }
     }
-};
+  };
 
+  async loginFacebook() {
+    try {
+      let result = await LoginManager.logInWithReadPermissions(['public_profile'])
+      if (result.isCancelled) {
+        alert('Login was cancelled');
+      } else {
+        alert('Login was successful with permission: '
+        + result.grantedPermissions.toString());
+      }
+    } catch (error) {
+      alert('Login failed with error:'+error)
+    }
+  }
+
+  normalLogin = () => {
+    if(this.state.normalUser == 'Admin' && this.state.normalPassword == 'Admin') {
+      Alert.alert('Login is successful');
+    } else {
+      Alert.alert('Nope, ask Abhilash for password!!');
+    }
+  }
   
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={[styles.headerfont, styles.headcont1]}>
+          <Text style={styles.headerfont}>
             WHISKEYPEDIA
           </Text>
-          <Text style={[styles.temp, styles.headcont2]}>icons here</Text>
+          <Text style={styles.temp}>icons here</Text>
         </View>
         <View style={styles.orangeline} />
         <View style={styles.body}>
@@ -91,7 +114,12 @@ export default class HomeScreen extends React.Component {
             >
               USERNAME
             </Text>
-            <TextInput placeholder="username" underlineColorAndroid="orange" />
+            <TextInput
+            style={{color: 'white'}}
+            onChangeText={(text)=>{this.setState({normalUser: text})}}
+            underlineColorAndroid="orange" 
+            selectionColor='orange'
+            placeholderTextColor='orange'/>
             <Text
               style={{
                 color: "orange",
@@ -102,7 +130,12 @@ export default class HomeScreen extends React.Component {
             >
               PASSWORD
             </Text>
-            <TextInput underlineColorAndroid="orange" />
+            <TextInput 
+            style={{color: 'white'}}
+            onChangeText={(text)=>{this.setState({normalPassword: text})}}
+            underlineColorAndroid="orange"
+            selectionColor='orange'
+            secureTextEntry={true} />
             <View
               style={{
                 flexDirection: "row",
@@ -111,7 +144,7 @@ export default class HomeScreen extends React.Component {
               }}
             >
               <View style={{ alignItems: "stretch", width: 150 }}>
-                <Button color="orange" title="LOGIN" />
+                <Button color="orange" title="LOGIN" onPress={this.normalLogin}/>
               </View>
               <TouchableOpacity>
                 <Text style={{ color: "orange" }}>Forgot Password?</Text>
@@ -137,7 +170,7 @@ export default class HomeScreen extends React.Component {
                 <Button title="Google" color="orange" onPress={this._signIn}/>
               </View>
               <View style={{marginTop: 15, marginLeft: 50, marginRight: 50}}>
-                <Button title="Facebook" color="orange"/>
+                <Button title="Facebook" color="orange" onPress={this.loginFacebook}/>
               </View>
             <View style={{marginTop: 15, marginLeft: 50, marginRight: 50}}>
               <Button title="Twitter" color="orange" />
@@ -164,12 +197,6 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     justifyContent: "space-around",
     alignItems: "flex-end"
-  },
-  headcont1: {
-    // alignItems: 'flex-start',
-  },
-  headcont2: {
-    // alignItems: 'flex-end',
   },
   headerfont: {
     color: "orange",
