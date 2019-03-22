@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "560077884751",
+    "firebase_url": "https://spiritpedia-8a900.firebaseio.com",
+    "project_id": "spiritpedia-8a900",
+    "storage_bucket": "spiritpedia-8a900.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560077884751:android:c5a346ea7977bec4",
+        "android_client_info": {
+          "package_name": "com.spiritpedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560077884751-7e6vi0hn0nkk9t5a9jsorm0c5642vuec.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spiritpedia",
+            "certificate_hash": "782bd53cfa33f781a5576953bbc8b21b831fadac"
+          }
+        },
+        {
+          "client_id": "560077884751-7unt1srstt203fqk602do7svb0ffdvlk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2PO8M9hxvh_mO4URBTYboXE7ANkAEe4Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560077884751-7unt1srstt203fqk602do7svb0ffdvlk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

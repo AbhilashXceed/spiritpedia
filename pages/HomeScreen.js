@@ -8,10 +8,55 @@ import {
   Alert
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import { GoogleSignin, statusCodes } from 'react-native-google-signin';
+
 
 
 export default class HomeScreen extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      userInfo: null,
+      error: null,
+    };
+}
   
+  async componentDidMount() {
+    this._configureGoogleSignIn();
+  }
+
+  _configureGoogleSignIn() {
+    GoogleSignin.configure({
+      webClientId: "560077884751-7unt1srstt203fqk602do7svb0ffdvlk.apps.googleusercontent.com",
+      offlineAccess: false,
+    });
+  }
+
+  _signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      this.setState({ userInfo, error: null });
+      console.warn('user info', userInfo);
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // sign in was cancelled
+        Alert.alert('cancelled');
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation in progress already
+        Alert.alert('in progress');
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        Alert.alert('play services not available or outdated');
+      } else {
+        console.warn('Something went wrong', error.toString());
+        Alert.alert('Something went wrong', error.toString());
+        this.setState({
+          error,
+        });
+      }
+    }
+};
 
   
   render() {
@@ -28,7 +73,7 @@ export default class HomeScreen extends React.Component {
           <View style={styles.loginbox}>
             <Text
               style={{
-                color: "white",
+                color: "orange",
                 fontSize: 20,
                 fontWeight: "bold",
                 textAlign: "center"
@@ -38,7 +83,7 @@ export default class HomeScreen extends React.Component {
             </Text>
             <Text
               style={{
-                color: "white",
+                color: "orange",
                 fontSize: 15,
                 fontWeight: "normal",
                 textAlign: "left"
@@ -46,10 +91,10 @@ export default class HomeScreen extends React.Component {
             >
               USERNAME
             </Text>
-            <TextInput placeholder="username" underlineColorAndroid="white" />
+            <TextInput placeholder="username" underlineColorAndroid="orange" />
             <Text
               style={{
-                color: "white",
+                color: "orange",
                 fontSize: 15,
                 fontWeight: "normal",
                 textAlign: "left"
@@ -57,7 +102,7 @@ export default class HomeScreen extends React.Component {
             >
               PASSWORD
             </Text>
-            <TextInput underlineColorAndroid="white" />
+            <TextInput underlineColorAndroid="orange" />
             <View
               style={{
                 flexDirection: "row",
@@ -69,25 +114,34 @@ export default class HomeScreen extends React.Component {
                 <Button color="orange" title="LOGIN" />
               </View>
               <TouchableOpacity>
-                <Text style={{ color: "white" }}>Forgot Password?</Text>
+                <Text style={{ color: "orange" }}>Forgot Password?</Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={styles.signupbox}>
-            <View>
+            <View style={{marginLeft: 50, marginRight: 50}}>
               <Button color="orange" title="SIGN UP!" />
             </View>
             <Text
               style={{
-                color: "white",
+                color: "orange",
                 fontSize: 20,
                 fontWeight: "bold",
-                textAlign: "center"
+                textAlign: "center",
+                marginTop: 30,
               }}
             >
               SIGNUP USING
             </Text>
-            <Button title="Dummy" />
+              <View style={{marginTop: 15, marginLeft: 50, marginRight: 50}}>
+                <Button title="Google" color="orange" onPress={this._signIn}/>
+              </View>
+              <View style={{marginTop: 15, marginLeft: 50, marginRight: 50}}>
+                <Button title="Facebook" color="orange"/>
+              </View>
+            <View style={{marginTop: 15, marginLeft: 50, marginRight: 50}}>
+              <Button title="Twitter" color="orange" />
+            </View>
           </View>
         </View>
       </View>
@@ -119,19 +173,32 @@ const styles = StyleSheet.create({
   },
   headerfont: {
     color: "orange",
-    fontSize: 25,
-    fontWeight: "bold"
+    fontSize: 35,
+    fontWeight: "bold",
+    fontFamily: 'sans-serif-condensed'
   },
   body: {
     flex: 18,
     backgroundColor: "black"
   },
   loginbox: {
-    // flex: 10,
-    padding: 15,
+    marginTop: 30,
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 10,
     justifyContent: "center"
   },
   temp: {
     color: "white"
+  },
+  signupbox: {
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 15,
+  },
+  buttonbox: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    justifyContent: 'space-around'
   }
-});
+}); 
