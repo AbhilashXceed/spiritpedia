@@ -8,34 +8,33 @@ import {
   Alert,
   StatusBar,
   KeyboardAvoidingView,
-  AsyncStorage,
-  
+  AsyncStorage
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { GoogleSignin, statusCodes } from 'react-native-google-signin';
-import { LoginManager } from 'react-native-fbsdk';
-
+import { GoogleSignin, statusCodes } from "react-native-google-signin";
+import { LoginManager } from "react-native-fbsdk";
+import InstagramLogin from "react-native-instagram-login";
 
 export default class HomeScreen extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       userInfo: null,
       error: null,
-      normalUser: '',
-      normalPassword:''
+      normalUser: "",
+      normalPassword: ""
     };
-}
-  
+  }
+
   async componentDidMount() {
     this._configureGoogleSignIn();
   }
 
   _configureGoogleSignIn() {
     GoogleSignin.configure({
-      webClientId: "560077884751-7unt1srstt203fqk602do7svb0ffdvlk.apps.googleusercontent.com",
-      offlineAccess: false,
+      webClientId:
+        "560077884751-7unt1srstt203fqk602do7svb0ffdvlk.apps.googleusercontent.com",
+      offlineAccess: false
     });
   }
 
@@ -44,21 +43,21 @@ export default class HomeScreen extends React.Component {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       this.setState({ userInfo, error: null });
-      console.warn('user info', userInfo);
+      console.warn("user info", userInfo);
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // sign in was cancelled
-        Alert.alert('cancelled');
+        Alert.alert("cancelled");
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // operation in progress already
-        Alert.alert('in progress');
+        Alert.alert("in progress");
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        Alert.alert('play services not available or outdated');
+        Alert.alert("play services not available or outdated");
       } else {
-        console.warn('Something went wrong', error.toString());
-        Alert.alert('Something went wrong', error.toString());
+        console.warn("Something went wrong", error.toString());
+        Alert.alert("Something went wrong", error.toString());
         this.setState({
-          error,
+          error
         });
       }
     }
@@ -66,34 +65,39 @@ export default class HomeScreen extends React.Component {
 
   async loginFacebook() {
     try {
-      let result = await LoginManager.logInWithReadPermissions(['public_profile'])
+      let result = await LoginManager.logInWithReadPermissions([
+        "public_profile"
+      ]);
       if (result.isCancelled) {
-        alert('Login was cancelled');
+        alert("Login was cancelled");
       } else {
-        alert('Login was successful with permission: '
-        + result.grantedPermissions.toString());
+        alert(
+          "Login was successful with permission: " +
+            result.grantedPermissions.toString()
+        );
       }
     } catch (error) {
-      alert('Login failed with error:'+error)
+      alert("Login failed with error:" + error);
     }
   }
 
   normalLogin = () => {
-    if(this.state.normalUser == 'Admin' && this.state.normalPassword == 'Admin') {
-      Alert.alert('Login is successful');
+    if (
+      this.state.normalUser == "Admin" &&
+      this.state.normalPassword == "Admin"
+    ) {
+      Alert.alert("Login is successful");
     } else {
-      Alert.alert('Nope, ask Abhilash for password!!');
+      Alert.alert("Nope, ask Abhilash for password!!");
     }
-  }
-  
+  };
+
   render() {
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="#263238" barStyle="dark-content" />
         <View style={styles.header}>
-          <Text style={styles.headerfont}>
-            WHISKEYPEDIA
-          </Text>
+          <Text style={styles.headerfont}>WHISKEYPEDIA</Text>
           <Text style={styles.temp}>icons here</Text>
         </View>
         <View style={styles.orangeline} />
@@ -120,11 +124,14 @@ export default class HomeScreen extends React.Component {
               USERNAME
             </Text>
             <TextInput
-            style={{color: 'white'}}
-            onChangeText={(text)=>{this.setState({normalUser: text})}}
-            underlineColorAndroid="orange" 
-            selectionColor='orange'
-            placeholderTextColor='orange'/>
+              style={{ color: "white" }}
+              onChangeText={text => {
+                this.setState({ normalUser: text });
+              }}
+              underlineColorAndroid="orange"
+              selectionColor="orange"
+              placeholderTextColor="orange"
+            />
             <Text
               style={{
                 color: "orange",
@@ -135,12 +142,15 @@ export default class HomeScreen extends React.Component {
             >
               PASSWORD
             </Text>
-            <TextInput 
-            style={{color: 'white'}}
-            onChangeText={(text)=>{this.setState({normalPassword: text})}}
-            underlineColorAndroid="orange"
-            selectionColor='orange'
-            secureTextEntry={true} />
+            <TextInput
+              style={{ color: "white" }}
+              onChangeText={text => {
+                this.setState({ normalPassword: text });
+              }}
+              underlineColorAndroid="orange"
+              selectionColor="orange"
+              secureTextEntry={true}
+            />
             <View
               style={{
                 flexDirection: "row",
@@ -149,7 +159,11 @@ export default class HomeScreen extends React.Component {
               }}
             >
               <View style={{ alignItems: "stretch", width: 150 }}>
-                <Button color="orange" title="LOGIN" onPress={this.normalLogin}/>
+                <Button
+                  color="orange"
+                  title="LOGIN"
+                  onPress={this.normalLogin}
+                />
               </View>
               <TouchableOpacity>
                 <Text style={{ color: "orange" }}>Forgot Password?</Text>
@@ -157,9 +171,12 @@ export default class HomeScreen extends React.Component {
             </View>
           </View>
           <View style={styles.signupbox}>
-            <View style={{marginLeft: 50, marginRight: 50}}>
-              <Button color="orange" title="SIGN UP!" 
-              onPress={() => this.props.navigation.navigate('Register')}/>
+            <View style={{ marginLeft: 50, marginRight: 50 }}>
+              <Button
+                color="orange"
+                title="SIGN UP!"
+                onPress={() => this.props.navigation.navigate("Register")}
+              />
             </View>
             <Text
               style={{
@@ -167,20 +184,37 @@ export default class HomeScreen extends React.Component {
                 fontSize: 20,
                 fontWeight: "bold",
                 textAlign: "center",
-                marginTop: 30,
+                marginTop: 30
               }}
             >
               SIGNUP USING
             </Text>
-              <View style={{marginTop: 15, marginLeft: 50, marginRight: 50}}>
-                <Button title="Google" color="orange" onPress={this._signIn}/>
-              </View>
-              <View style={{marginTop: 15, marginLeft: 50, marginRight: 50}}>
-                <Button title="Facebook" color="orange" onPress={this.loginFacebook}/>
-              </View>
-            <View style={{marginTop: 15, marginLeft: 50, marginRight: 50}}>
-              <Button title="Twitter" color="orange" />
+            <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
+              <Button title="Google" color="orange" onPress={this._signIn} />
             </View>
+            <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
+              <Button
+                title="Facebook"
+                color="orange"
+                onPress={this.loginFacebook}
+              />
+            </View>
+            <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
+              <Button
+                title="Instagram"
+                color="orange"
+                onPress={() => this.refs.instagramLogin.show()}
+              />
+            </View>
+          </View>
+          <View>
+            <InstagramLogin
+              ref="instagramLogin"
+              clientId="992305b1948d4e069631b9a3b66d5f55"
+              scopes={["public_content", "follower_list"]}
+              onLoginSuccess={token => this.setState({ token })}
+              onLoginFailure={data => console.log(data)}
+            />
           </View>
         </View>
       </View>
@@ -208,7 +242,7 @@ const styles = StyleSheet.create({
     color: "orange",
     fontSize: 35,
     fontWeight: "bold",
-    fontFamily: 'sans-serif-condensed'
+    fontFamily: "sans-serif-condensed"
   },
   body: {
     flex: 18,
@@ -227,11 +261,11 @@ const styles = StyleSheet.create({
   signupbox: {
     marginLeft: 15,
     marginRight: 15,
-    marginBottom: 15,
+    marginBottom: 15
   },
   buttonbox: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    justifyContent: 'space-around'
+    flexDirection: "row",
+    alignItems: "stretch",
+    justifyContent: "space-around"
   }
-}); 
+});
