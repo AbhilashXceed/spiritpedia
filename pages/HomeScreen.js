@@ -5,7 +5,11 @@ import {
   View,
   Button,
   TouchableOpacity,
-  Alert
+  Alert,
+  StatusBar,
+  KeyboardAvoidingView,
+  AsyncStorage,
+  
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { GoogleSignin, statusCodes } from 'react-native-google-signin';
@@ -85,6 +89,7 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar backgroundColor="#263238" barStyle="dark-content" />
         <View style={styles.header}>
           <Text style={styles.headerfont}>
             WHISKEYPEDIA
@@ -153,7 +158,8 @@ export default class HomeScreen extends React.Component {
           </View>
           <View style={styles.signupbox}>
             <View style={{marginLeft: 50, marginRight: 50}}>
-              <Button color="orange" title="SIGN UP!" />
+              <Button color="orange" title="SIGN UP!" 
+              onPress={() => this.props.navigation.navigate('Register')}/>
             </View>
             <Text
               style={{
@@ -194,7 +200,7 @@ const styles = StyleSheet.create({
   header: {
     flex: 2,
     flexDirection: "row",
-    backgroundColor: "black",
+    backgroundColor: "#263238",
     justifyContent: "space-around",
     alignItems: "flex-end"
   },
@@ -206,7 +212,7 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 18,
-    backgroundColor: "black"
+    backgroundColor: "#263238"
   },
   loginbox: {
     marginTop: 30,
