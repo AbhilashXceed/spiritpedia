@@ -139,7 +139,10 @@ android {
     }
 }
 
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
 dependencies {
+    implementation project(':react-native-vector-icons')
     implementation project(':react-native-webview')
     implementation project(':react-native-fbsdk')
     implementation 'com.facebook.android:facebook-android-sdk:4.34.0'

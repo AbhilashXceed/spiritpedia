@@ -13,6 +13,7 @@ import {
 import { TextInput } from "react-native-gesture-handler";
 import { GoogleSignin, statusCodes } from "react-native-google-signin";
 import { LoginManager } from "react-native-fbsdk";
+import Icon from "react-native-vector-icons/FontAwesome";
 import InstagramLogin from "react-native-instagram-login";
 
 export default class HomeScreen extends React.Component {
@@ -97,8 +98,23 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <StatusBar backgroundColor="#263238" barStyle="dark-content" />
         <View style={styles.header}>
-          <Text style={styles.headerfont}>WHISKEYPEDIA</Text>
-          <Text style={styles.temp}>icons here</Text>
+
+            <Text style={styles.headerfont}>WHISKEYPEDIA</Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: 'center'
+            }}
+          >
+            <TouchableOpacity style={{ padding: 7 }}>
+              <Icon name="search" color="orange" size={20} />
+            </TouchableOpacity>
+            <TouchableOpacity style={{ padding: 7 }}>
+              <Icon name="bell" color="orange" size={20} />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.orangeline} />
         <View style={styles.body}>
@@ -137,20 +153,28 @@ export default class HomeScreen extends React.Component {
                 color: "orange",
                 fontSize: 15,
                 fontWeight: "normal",
-                textAlign: "left"
+                textAlign: "left",
+                marginTop: 5
               }}
             >
               PASSWORD
             </Text>
-            <TextInput
-              style={{ color: "white" }}
-              onChangeText={text => {
-                this.setState({ normalPassword: text });
-              }}
-              underlineColorAndroid="orange"
-              selectionColor="orange"
-              secureTextEntry={true}
-            />
+            <View style={{ flexDirection: "row" }}>
+              <View style={{ alignItems: "stretch", width: 280 }}>
+                <TextInput
+                  style={{ color: "white" }}
+                  onChangeText={text => {
+                    this.setState({ normalPassword: text });
+                  }}
+                  underlineColorAndroid="orange"
+                  selectionColor="orange"
+                  secureTextEntry={true}
+                />
+              </View>
+              <TouchableOpacity style={{ padding: 10 }}>
+                <Icon name="eye" color="orange" size={22} />
+              </TouchableOpacity>
+            </View>
             <View
               style={{
                 flexDirection: "row",
@@ -184,7 +208,7 @@ export default class HomeScreen extends React.Component {
                 fontSize: 20,
                 fontWeight: "bold",
                 textAlign: "center",
-                marginTop: 30
+                marginTop: 25
               }}
             >
               SIGNUP USING
@@ -236,7 +260,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#263238",
     justifyContent: "space-around",
-    alignItems: "flex-end"
+    alignItems: "center"
   },
   headerfont: {
     color: "orange",
@@ -254,9 +278,6 @@ const styles = StyleSheet.create({
     marginRight: 15,
     marginBottom: 10,
     justifyContent: "center"
-  },
-  temp: {
-    color: "white"
   },
   signupbox: {
     marginLeft: 15,
