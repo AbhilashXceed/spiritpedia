@@ -1,5 +1,6 @@
 import HomeScreen from './pages/HomeScreen'
 import RegisterUser from './pages/RegisterUser'
+import LandingScreen from './pages/LandingScreen'
 
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
@@ -18,6 +19,12 @@ const AppNavigator = createStackNavigator({
       headerTintColor: 'white',
     },
   },
+  Landing: {
+    screen: LandingScreen,
+    navigationOptions: {
+      header: null
+    }
+  }
 });
 
 export default createAppContainer(AppNavigator);

@@ -8,8 +8,8 @@ import {
   Alert,
   StatusBar,
   KeyboardAvoidingView,
-  AsyncStorage
 } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import { TextInput } from "react-native-gesture-handler";
 import { GoogleSignin, statusCodes } from "react-native-google-signin";
 import { LoginManager } from "react-native-fbsdk";
@@ -22,10 +22,11 @@ export default class HomeScreen extends React.Component {
     this.state = {
       userInfo: null,
       error: null,
-      normalUser: "",
-      normalPassword: ""
+      normalUser: '',
+      normalPassword: ''
     };
   }
+  
 
   async componentDidMount() {
     this._configureGoogleSignIn();
@@ -82,16 +83,21 @@ export default class HomeScreen extends React.Component {
     }
   }
 
-  normalLogin = () => {
+  normalLogin = async () => {
+    
     if (
       this.state.normalUser == "Admin" &&
       this.state.normalPassword == "Admin"
     ) {
       Alert.alert("Login is successful");
+      await AsyncStorage.setItem('user', JSON.stringify(this.state.normalUser));
+      await AsyncStorage.setItem('password', JSON.stringify(this.state.normalPassword));
+      this.props.navigation.navigate('Landing');
     } else {
-      Alert.alert("Nope, ask Abhilash for password!!");
+      Alert.alert("Nope, Wrong credentials");
     }
   };
+
 
   render() {
     return (
@@ -186,7 +192,7 @@ export default class HomeScreen extends React.Component {
                 <Button
                   color="orange"
                   title="LOGIN"
-                  onPress={this.normalLogin}
+                  onPress={() => this.normalLogin()}
                 />
               </View>
               <TouchableOpacity>
