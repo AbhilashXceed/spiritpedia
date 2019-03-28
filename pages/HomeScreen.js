@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   Alert,
   StatusBar,
-  KeyboardAvoidingView,
+  KeyboardAvoidingView
 } from "react-native";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from "@react-native-community/async-storage";
 import { TextInput } from "react-native-gesture-handler";
 import { GoogleSignin, statusCodes } from "react-native-google-signin";
 import { LoginManager } from "react-native-fbsdk";
@@ -22,11 +22,10 @@ export default class HomeScreen extends React.Component {
     this.state = {
       userInfo: null,
       error: null,
-      normalUser: '',
-      normalPassword: ''
+      normalUser: null,
+      normalPassword: null
     };
   }
-  
 
   async componentDidMount() {
     this._configureGoogleSignIn();
@@ -45,13 +44,13 @@ export default class HomeScreen extends React.Component {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       this.setState({ userInfo, error: null });
-      console.warn("user info", userInfo);
+      console.warn("Signed in by google and the user is ", userInfo.user.name);
+      await AsyncStorage.setItem("user", userInfo.user.name);
+      this.props.navigation.navigate("Landing");
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // sign in was cancelled
         Alert.alert("cancelled");
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation in progress already
         Alert.alert("in progress");
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         Alert.alert("play services not available or outdated");
@@ -84,169 +83,170 @@ export default class HomeScreen extends React.Component {
   }
 
   normalLogin = async () => {
-    
     if (
       this.state.normalUser == "Admin" &&
       this.state.normalPassword == "Admin"
     ) {
       Alert.alert("Login is successful");
-      await AsyncStorage.setItem('user', JSON.stringify(this.state.normalUser));
-      await AsyncStorage.setItem('password', JSON.stringify(this.state.normalPassword));
-      this.props.navigation.navigate('Landing');
+      await AsyncStorage.setItem("user", JSON.stringify(this.state.normalUser));
+      await AsyncStorage.setItem(
+        "password",
+        JSON.stringify(this.state.normalPassword)
+      );
+      this.props.navigation.navigate("Landing");
     } else {
       Alert.alert("Nope, Wrong credentials");
     }
   };
 
-
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor="#263238" barStyle="dark-content" />
-        <View style={styles.header}>
-
+        
+          <StatusBar backgroundColor="#263238" barStyle="dark-content" />
+          <View style={styles.header}>
             <Text style={styles.headerfont}>WHISKEYPEDIA</Text>
 
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: 'center'
-            }}
-          >
-            <TouchableOpacity style={{ padding: 7 }}>
-              <Icon name="search" color="orange" size={20} />
-            </TouchableOpacity>
-            <TouchableOpacity style={{ padding: 7 }}>
-              <Icon name="bell" color="orange" size={20} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.orangeline} />
-        <View style={styles.body}>
-          <View style={styles.loginbox}>
-            <Text
-              style={{
-                color: "orange",
-                fontSize: 20,
-                fontWeight: "bold",
-                textAlign: "center"
-              }}
-            >
-              LOGIN
-            </Text>
-            <Text
-              style={{
-                color: "orange",
-                fontSize: 15,
-                fontWeight: "normal",
-                textAlign: "left"
-              }}
-            >
-              USERNAME
-            </Text>
-            <TextInput
-              style={{ color: "white" }}
-              onChangeText={text => {
-                this.setState({ normalUser: text });
-              }}
-              underlineColorAndroid="orange"
-              selectionColor="orange"
-              placeholderTextColor="orange"
-            />
-            <Text
-              style={{
-                color: "orange",
-                fontSize: 15,
-                fontWeight: "normal",
-                textAlign: "left",
-                marginTop: 5
-              }}
-            >
-              PASSWORD
-            </Text>
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ alignItems: "stretch", width: 280 }}>
-                <TextInput
-                  style={{ color: "white" }}
-                  onChangeText={text => {
-                    this.setState({ normalPassword: text });
-                  }}
-                  underlineColorAndroid="orange"
-                  selectionColor="orange"
-                  secureTextEntry={true}
-                />
-              </View>
-              <TouchableOpacity style={{ padding: 10 }}>
-                <Icon name="eye" color="orange" size={22} />
-              </TouchableOpacity>
-            </View>
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                padding: 15
+                alignItems: "center"
               }}
             >
-              <View style={{ alignItems: "stretch", width: 150 }}>
-                <Button
-                  color="orange"
-                  title="LOGIN"
-                  onPress={() => this.normalLogin()}
-                />
-              </View>
-              <TouchableOpacity>
-                <Text style={{ color: "orange" }}>Forgot Password?</Text>
+              <TouchableOpacity style={{ padding: 7 }}>
+                <Icon name="search" color="orange" size={20} />
+              </TouchableOpacity>
+              <TouchableOpacity style={{ padding: 7 }}>
+                <Icon name="bell" color="orange" size={20} />
               </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.signupbox}>
-            <View style={{ marginLeft: 50, marginRight: 50 }}>
-              <Button
-                color="orange"
-                title="SIGN UP!"
-                onPress={() => this.props.navigation.navigate("Register")}
+          <View style={styles.orangeline} />
+          <View style={styles.body}>
+            <View style={styles.loginbox}>
+              <Text
+                style={{
+                  color: "orange",
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  textAlign: "center"
+                }}
+              >
+                LOGIN
+              </Text>
+              <Text
+                style={{
+                  color: "orange",
+                  fontSize: 15,
+                  fontWeight: "normal",
+                  textAlign: "left"
+                }}
+              >
+                USERNAME
+              </Text>
+              <TextInput
+                style={{ color: "white" }}
+                onChangeText={text => {
+                  this.setState({ normalUser: text });
+                }}
+                underlineColorAndroid="orange"
+                selectionColor="orange"
+                placeholderTextColor="orange"
               />
+              <Text
+                style={{
+                  color: "orange",
+                  fontSize: 15,
+                  fontWeight: "normal",
+                  textAlign: "left",
+                  marginTop: 5
+                }}
+              >
+                PASSWORD
+              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ alignItems: "stretch", width: 280 }}>
+                  <TextInput
+                    style={{ color: "white" }}
+                    onChangeText={text => {
+                      this.setState({ normalPassword: text });
+                    }}
+                    underlineColorAndroid="orange"
+                    selectionColor="orange"
+                    secureTextEntry={true}
+                  />
+                </View>
+                <TouchableOpacity style={{ padding: 10 }}>
+                  <Icon name="eye" color="orange" size={22} />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  padding: 15
+                }}
+              >
+                <View style={{ alignItems: "stretch", width: 150 }}>
+                  <Button
+                    color="orange"
+                    title="LOGIN"
+                    onPress={() => this.normalLogin()}
+                  />
+                </View>
+                <TouchableOpacity>
+                  <Text style={{ color: "orange" }}>Forgot Password?</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <Text
-              style={{
-                color: "orange",
-                fontSize: 20,
-                fontWeight: "bold",
-                textAlign: "center",
-                marginTop: 25
-              }}
-            >
-              SIGNUP USING
-            </Text>
-            <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
-              <Button title="Google" color="orange" onPress={this._signIn} />
+            <View style={styles.signupbox}>
+              <View style={{ marginLeft: 50, marginRight: 50 }}>
+                <Button
+                  color="orange"
+                  title="SIGN UP!"
+                  onPress={() => this.props.navigation.navigate("Register")}
+                />
+              </View>
+              <Text
+                style={{
+                  color: "orange",
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  marginTop: 25
+                }}
+              >
+                SIGNUP USING
+              </Text>
+              <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
+                <Button title="Google" color="orange" onPress={this._signIn} />
+              </View>
+              <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
+                <Button
+                  title="Facebook"
+                  color="orange"
+                  onPress={this.loginFacebook}
+                />
+              </View>
+              <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
+                <Button
+                  title="Instagram"
+                  color="orange"
+                  onPress={() => this.refs.instagramLogin.show()}
+                />
+              </View>
             </View>
-            <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
-              <Button
-                title="Facebook"
-                color="orange"
-                onPress={this.loginFacebook}
-              />
-            </View>
-            <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
-              <Button
-                title="Instagram"
-                color="orange"
-                onPress={() => this.refs.instagramLogin.show()}
+            <View>
+              <InstagramLogin
+                ref="instagramLogin"
+                clientId="992305b1948d4e069631b9a3b66d5f55"
+                scopes={["public_content", "follower_list"]}
+                onLoginSuccess={token => this.setState({ token })}
+                onLoginFailure={data => console.log(data)}
               />
             </View>
           </View>
-          <View>
-            <InstagramLogin
-              ref="instagramLogin"
-              clientId="992305b1948d4e069631b9a3b66d5f55"
-              scopes={["public_content", "follower_list"]}
-              onLoginSuccess={token => this.setState({ token })}
-              onLoginFailure={data => console.log(data)}
-            />
-          </View>
-        </View>
       </View>
     );
   }
