@@ -12,6 +12,7 @@
     "react-native": "0.59.1",
     "react-native-elements": "^1.1.0",
     "react-native-fbsdk": "^0.8.0",
+    "react-native-firebase": "^5.2.3",
     "react-native-gesture-handler": "~1.0.14",
     "react-native-google-signin": "^1.2.1",
     "react-native-instagram-login": "^1.1.1",

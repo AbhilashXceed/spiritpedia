@@ -6,8 +6,7 @@ import {
   Button,
   TouchableOpacity,
   Alert,
-  StatusBar,
-  KeyboardAvoidingView
+  StatusBar
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import { TextInput } from "react-native-gesture-handler";
@@ -15,6 +14,9 @@ import { GoogleSignin, statusCodes } from "react-native-google-signin";
 import { LoginManager } from "react-native-fbsdk";
 import Icon from "react-native-vector-icons/FontAwesome";
 import InstagramLogin from "react-native-instagram-login";
+
+// clean this after it works
+import firebase from "react-native-firebase";
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -30,6 +32,15 @@ export default class HomeScreen extends React.Component {
   async componentDidMount() {
     this._configureGoogleSignIn();
   }
+
+  async tokenFunction() {
+    const fcmToken = await firebase.messaging().getToken();
+    if (fcmToken) {
+      console.log('FCM key',fcmToken);
+    } else {
+      console.warn("token not received");
+    }
+  }s
 
   _configureGoogleSignIn() {
     GoogleSignin.configure({
@@ -102,151 +113,156 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        
-          <StatusBar backgroundColor="#263238" barStyle="dark-content" />
-          <View style={styles.header}>
-            <Text style={styles.headerfont}>WHISKEYPEDIA</Text>
+        <StatusBar backgroundColor="#263238" barStyle="dark-content" />
+        <View style={styles.header}>
+          <Text style={styles.headerfont}>WHISKEYPEDIA</Text>
 
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center"
+            }}
+          >
+            <TouchableOpacity
+              style={{ padding: 7 }}
+              onPress={()=>this.tokenFunction()}
+            >
+              <Icon name="search" color="orange" size={20} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ padding: 7 }}
+              onPress={() => this.props.navigation.navigate("PushService")}
+            >
+              <Icon name="bell" color="orange" size={20} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.orangeline} />
+        <View style={styles.body}>
+          <View style={styles.loginbox}>
+            <Text
+              style={{
+                color: "orange",
+                fontSize: 20,
+                fontWeight: "bold",
+                textAlign: "center"
+              }}
+            >
+              LOGIN
+            </Text>
+            <Text
+              style={{
+                color: "orange",
+                fontSize: 15,
+                fontWeight: "normal",
+                textAlign: "left"
+              }}
+            >
+              USERNAME
+            </Text>
+            <TextInput
+              style={{ color: "white" }}
+              onChangeText={text => {
+                this.setState({ normalUser: text });
+              }}
+              underlineColorAndroid="orange"
+              selectionColor="orange"
+              placeholderTextColor="orange"
+            />
+            <Text
+              style={{
+                color: "orange",
+                fontSize: 15,
+                fontWeight: "normal",
+                textAlign: "left",
+                marginTop: 5
+              }}
+            >
+              PASSWORD
+            </Text>
+            <View style={{ flexDirection: "row" }}>
+              <View style={{ alignItems: "stretch", width: 280 }}>
+                <TextInput
+                  style={{ color: "white" }}
+                  onChangeText={text => {
+                    this.setState({ normalPassword: text });
+                  }}
+                  underlineColorAndroid="orange"
+                  selectionColor="orange"
+                  secureTextEntry={true}
+                />
+              </View>
+              <TouchableOpacity style={{ padding: 10 }}>
+                <Icon name="eye" color="orange" size={22} />
+              </TouchableOpacity>
+            </View>
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                alignItems: "center"
+                padding: 15
               }}
             >
-              <TouchableOpacity style={{ padding: 7 }}>
-                <Icon name="search" color="orange" size={20} />
-              </TouchableOpacity>
-              <TouchableOpacity style={{ padding: 7 }}>
-                <Icon name="bell" color="orange" size={20} />
+              <View style={{ alignItems: "stretch", width: 150 }}>
+                <Button
+                  color="orange"
+                  title="LOGIN"
+                  onPress={() => this.normalLogin()}
+                />
+              </View>
+              <TouchableOpacity>
+                <Text style={{ color: "orange" }}>Forgot Password?</Text>
               </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.orangeline} />
-          <View style={styles.body}>
-            <View style={styles.loginbox}>
-              <Text
-                style={{
-                  color: "orange",
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  textAlign: "center"
-                }}
-              >
-                LOGIN
-              </Text>
-              <Text
-                style={{
-                  color: "orange",
-                  fontSize: 15,
-                  fontWeight: "normal",
-                  textAlign: "left"
-                }}
-              >
-                USERNAME
-              </Text>
-              <TextInput
-                style={{ color: "white" }}
-                onChangeText={text => {
-                  this.setState({ normalUser: text });
-                }}
-                underlineColorAndroid="orange"
-                selectionColor="orange"
-                placeholderTextColor="orange"
+          <View style={styles.signupbox}>
+            <View style={{ marginLeft: 50, marginRight: 50 }}>
+              <Button
+                color="orange"
+                title="SIGN UP!"
+                onPress={() => this.props.navigation.navigate("Register")}
               />
-              <Text
-                style={{
-                  color: "orange",
-                  fontSize: 15,
-                  fontWeight: "normal",
-                  textAlign: "left",
-                  marginTop: 5
-                }}
-              >
-                PASSWORD
-              </Text>
-              <View style={{ flexDirection: "row" }}>
-                <View style={{ alignItems: "stretch", width: 280 }}>
-                  <TextInput
-                    style={{ color: "white" }}
-                    onChangeText={text => {
-                      this.setState({ normalPassword: text });
-                    }}
-                    underlineColorAndroid="orange"
-                    selectionColor="orange"
-                    secureTextEntry={true}
-                  />
-                </View>
-                <TouchableOpacity style={{ padding: 10 }}>
-                  <Icon name="eye" color="orange" size={22} />
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  padding: 15
-                }}
-              >
-                <View style={{ alignItems: "stretch", width: 150 }}>
-                  <Button
-                    color="orange"
-                    title="LOGIN"
-                    onPress={() => this.normalLogin()}
-                  />
-                </View>
-                <TouchableOpacity>
-                  <Text style={{ color: "orange" }}>Forgot Password?</Text>
-                </TouchableOpacity>
-              </View>
             </View>
-            <View style={styles.signupbox}>
-              <View style={{ marginLeft: 50, marginRight: 50 }}>
-                <Button
-                  color="orange"
-                  title="SIGN UP!"
-                  onPress={() => this.props.navigation.navigate("Register")}
-                />
-              </View>
-              <Text
-                style={{
-                  color: "orange",
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  marginTop: 25
-                }}
-              >
-                SIGNUP USING
-              </Text>
-              <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
-                <Button title="Google" color="orange" onPress={this._signIn} />
-              </View>
-              <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
-                <Button
-                  title="Facebook"
-                  color="orange"
-                  onPress={this.loginFacebook}
-                />
-              </View>
-              <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
-                <Button
-                  title="Instagram"
-                  color="orange"
-                  onPress={() => this.refs.instagramLogin.show()}
-                />
-              </View>
+            <Text
+              style={{
+                color: "orange",
+                fontSize: 20,
+                fontWeight: "bold",
+                textAlign: "center",
+                marginTop: 25
+              }}
+            >
+              SIGNUP USING
+            </Text>
+            <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
+              <Button title="Google" color="orange" onPress={this._signIn} />
             </View>
-            <View>
-              <InstagramLogin
-                ref="instagramLogin"
-                clientId="992305b1948d4e069631b9a3b66d5f55"
-                scopes={["public_content", "follower_list"]}
-                onLoginSuccess={token => this.setState({ token })}
-                onLoginFailure={data => console.log(data)}
+            <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
+              <Button
+                title="Facebook"
+                color="orange"
+                onPress={this.loginFacebook}
+              />
+            </View>
+            <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
+              <Button
+                title="Instagram"
+                color="orange"
+                onPress={() => this.refs.instagramLogin.show()}
               />
             </View>
           </View>
+          <View>
+            <InstagramLogin
+              ref="instagramLogin"
+              clientId="992305b1948d4e069631b9a3b66d5f55"
+              scopes={["public_content", "follower_list"]}
+              onLoginSuccess={token => this.setState({ token })}
+              onLoginFailure={data => console.log(data)}
+            />
+          </View>
+        </View>
       </View>
     );
   }
