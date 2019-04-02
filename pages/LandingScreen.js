@@ -3,15 +3,27 @@ import { StyleSheet, View, Button, TouchableOpacity, Text } from "react-native";
 
 import AsyncStorage from "@react-native-community/async-storage";
 import { GoogleSignin } from "react-native-google-signin";
-import { Tile, Icon, Header } from "react-native-elements";
+import { Icon } from "react-native-elements";
 
 export default class LandingScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      normalUser: null
+      normalUser: null,
+      googleToken: null
     };
   }
+
+  componentDidMount = async () => {
+    let A = await AsyncStorage.getItem("user");
+    let B = await AsyncStorage.getItem("googleToken");
+    if (A) {
+      this.setState({ normalUser: A, googleToken: B });
+      console.warn("User is", this.state.normalUser);
+    } else {
+      console.warn("There is no userdata, something went wrong");
+    }
+  };
 
   //
   // INSERT GOOGLE SIGN OUT WITHOUT CONFLICT.
@@ -20,11 +32,17 @@ export default class LandingScreen extends React.Component {
   // L O G O U T   F U N c T I O N    B E L O W
 
   logOut = async () => {
-    AsyncStorage.setItem("user", "");
-    AsyncStorage.setItem("password", "");
+    AsyncStorage.setItem("user", null);
+    AsyncStorage.setItem("password", null);
+
     this.setState({ normalUser: null });
-    await GoogleSignin.revokeAccess();
-    await GoogleSignin.signOut();
+    if (this.state.googleToken) {
+      AsyncStorage.setItem("googleToken", null);
+      this.setState({ googleToken: null });
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+    }
+
     this.props.navigation.navigate("HomeScreen");
     let A = AsyncStorage.getItem("user");
     console.warn("user is", A);
@@ -35,93 +53,100 @@ export default class LandingScreen extends React.Component {
   //
   //
 
-  componentDidMount = async () => {
-    let A = await AsyncStorage.getItem("user");
-    this.setState({ normalUser: A });
-    if (this.state.normalUser) {
-      console.warn("User is", this.state.normalUser);
-    } else {
-      console.warn("There is no userdata, something went wrong");
-    }
-  };
-
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.header} />
+        <View style={styles.header} >
+          <View style={{flex: 2, alignItems: 'center'}}><TouchableOpacity><Icon name="menu" type="entypo" color="coral" size={45}/></TouchableOpacity></View>
+          <View style={{flex: 6, alignItems: 'center'}}><Text style={{textAlign:'center', color:'coral', fontSize: 35, fontWeight: 'bold'}}>WHISKEY</Text></View>
+          <View style={{flex: 2, alignItems: 'center', marginTop: 10}}><TouchableOpacity><Icon name="bell" type="font-awesome" color="coral" size={25}/></TouchableOpacity></View>
+        </View>
         <View style={styles.tilesBox}>
           <View style={styles.tilesrow}>
-            <View style={{flex: 1, backgroundColor: "orange", padding: 2 }}>
-              {/* <TouchableOpacity>
-                <Icon name="search" color="orange" size={60} />
-              </TouchableOpacity> */}
-            </View>
-            {/* <View style={{ backgroundColor: "orange", padding: 2 }}>
-              <TouchableOpacity>
-                <Icon name="search" color="orange" size={60} />
+            <View style={styles.block}>
+              <TouchableOpacity style={{padding: 1}}>
+                <Icon name="infocirlce" type="antdesign" color="coral" size={75} />
+                <Text style={styles.smalltitle}>WHISKYPEDIA</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ backgroundColor: "orange", padding: 2 }}>
+            <View style={styles.block}>
               <TouchableOpacity>
-                <Icon name="search" color="orange" size={60} />
+                <Icon name="industry" type='font-awesome' color="coral" size={75} />
+                <Text style={styles.smalltitle}>DISTILLERIES</Text>
               </TouchableOpacity>
-            </View> */}
+            </View>
+            <View style={styles.block}>
+              <TouchableOpacity>
+                <Icon name="feed" type='font-awesome' color="coral" size={75} />
+                <Text style={styles.smalltitle}>FEED</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          {/* <View style={styles.tilesrow}>
-            <View style={{ backgroundColor: "black", padding: 2 }}>
+          <View style={styles.tilesrow}>
+            <View style={styles.block}>
               <TouchableOpacity>
-                <Icon name="search" color="orange" size={60} />
+                <Icon name="institution" type='font-awesome' color="coral" size={75} />
+                <Text style={styles.smalltitle}>INSTITUTES</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ backgroundColor: "black", padding: 2 }}>
+            <View style={styles.block}>
               <TouchableOpacity>
-                <Icon name="search" color="orange" size={60} />
+                <Icon name="calendar" type="antdesign" color="coral" size={75} />
+                <Text style={styles.smalltitle}>EVENTS</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ backgroundColor: "black", padding: 2 }}>
+            <View style={styles.block}>
               <TouchableOpacity>
-                <Icon name="search" color="orange" size={60} />
+                <Icon name="local-offer" color="coral" size={75} />
+                <Text style={styles.smalltitle}>OFFERS</Text>
               </TouchableOpacity>
             </View>
-          </View> */}
-          {/* <View style={styles.tilesrow}>
-            <View style={{ backgroundColor: "black", padding: 2 }}>
+          </View>
+          <View style={styles.tilesrow}>
+            <View style={styles.block}>
               <TouchableOpacity>
-                <Icon name="search" color="orange" size={60} />
+                <Icon name="video" type="entypo" color="coral" size={75} />
+                <Text style={styles.smalltitle}>WHISKYTUBE</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ backgroundColor: "black", padding: 2 }}>
+            <View style={styles.block}>
               <TouchableOpacity>
-                <Icon name="search" color="orange" size={60} />
+                <Icon name="md-cart" type="ionicon" color="coral" size={75} />
+                <Text style={styles.smalltitle}>MERCHANDISE</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ backgroundColor: "black", padding: 2 }}>
+            <View style={styles.block}>
               <TouchableOpacity>
-                <Icon name="search" color="orange" size={60} />
+                <Icon name="news" type="entypo" color="coral" size={75} />
+                <Text style={styles.smalltitle}>NEWS</Text>
               </TouchableOpacity>
             </View>
-          </View> */}
+          </View>
         </View>
 
         <View style={styles.footer}>
           <View style={{ padding: 10 }}>
             <TouchableOpacity>
-              <Icon name="search" color="black" size={30} />
+              <Icon name="appstore1" type="antdesign" color="coral" size={30} />
+              <Text style={styles.smallsmall}>Explore</Text>
             </TouchableOpacity>
           </View>
           <View style={{ padding: 10 }}>
             <TouchableOpacity>
-              <Icon name="search" color="black" size={30} />
+              <Icon name="bookmark" type="font-awesome" color="coral" size={30} />
+              <Text style={styles.smallsmall}>Bookmarks</Text>
             </TouchableOpacity>
           </View>
           <View style={{ padding: 10 }}>
             <TouchableOpacity>
-              <Icon name="search" color="black" size={30} />
+              <Icon name="price-tag" type="entypo" color="coral" size={30} />
+              <Text style={styles.smallsmall}>Offers</Text>
             </TouchableOpacity>
           </View>
           <View style={{ padding: 10 }}>
             <TouchableOpacity>
-              <Icon name="search" color="black" size={30} />
+              <Icon name="feed" type="font-awesome" color="coral" size={30} />
+              <Text style={styles.smallsmall}>Feed</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -133,28 +158,54 @@ export default class LandingScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "orange"
+    backgroundColor: "white"
   },
   header: {
-    flex: 1,
-    backgroundColor: "slateblue"
+    flex: 2,
+    backgroundColor: "#263238",
+    flexDirection: 'row'
   },
   tilesBox: {
     flex: 12,
-    backgroundColor: 'white'
+    backgroundColor: "white"
   },
   tilesrow: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: "coral",
     flexDirection: "row",
-    // alignItems: 'center',
-    
+    justifyContent: 'space-around',
+    padding: 1
   },
   footer: {
-    flex: 1,
-    backgroundColor: "steelblue",
+    flex: 2,
+    backgroundColor: "#263238",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    
+  },
+  block: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "#263238",
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    padding: 1
+  },
+  smalltitle: {
+    color: 'coral',
+    fontSize: 15,
+    textAlign: 'center',
+    marginTop: 10,
+    fontWeight: '100',
+    fontStyle: 'italic'
+  },
+  smallsmall: {
+    color: 'coral',
+    fontSize: 10,
+    textAlign: 'center',
+    marginTop: 5,
+    fontWeight: '100'
   }
 });
+

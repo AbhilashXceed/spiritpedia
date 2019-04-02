@@ -14,8 +14,6 @@ import { GoogleSignin, statusCodes } from "react-native-google-signin";
 import { LoginManager } from "react-native-fbsdk";
 import Icon from "react-native-vector-icons/FontAwesome";
 import InstagramLogin from "react-native-instagram-login";
-
-// clean this after it works
 import firebase from "react-native-firebase";
 
 export default class HomeScreen extends React.Component {
@@ -31,6 +29,13 @@ export default class HomeScreen extends React.Component {
 
   async componentDidMount() {
     this._configureGoogleSignIn();
+    this.checkPermission();
+    this.createNotificationListeners();
+  }
+
+  componentWillUnmount() {
+    this.notificationListener;
+    this.notificationOpenedListener;
   }
 
   async tokenFunction() {
@@ -56,6 +61,7 @@ export default class HomeScreen extends React.Component {
       const userInfo = await GoogleSignin.signIn();
       this.setState({ userInfo, error: null });
       console.warn("Signed in by google and the user is ", userInfo.user.name);
+      await AsyncStorage.setItem("googleToken", userInfo.accessToken);
       await AsyncStorage.setItem("user", userInfo.user.name);
       this.props.navigation.navigate("Landing");
     } catch (error) {
@@ -128,13 +134,13 @@ export default class HomeScreen extends React.Component {
               style={{ padding: 7 }}
               onPress={()=>this.tokenFunction()}
             >
-              <Icon name="search" color="orange" size={20} />
+              <Icon name="search" color="coral" size={20} />
             </TouchableOpacity>
             <TouchableOpacity
               style={{ padding: 7 }}
-              onPress={() => this.props.navigation.navigate("PushService")}
+              onPress={() => this.props.navigation.navigate("Landing")}
             >
-              <Icon name="bell" color="orange" size={20} />
+              <Icon name="bell" color="coral" size={20} />
             </TouchableOpacity>
           </View>
         </View>
@@ -143,7 +149,7 @@ export default class HomeScreen extends React.Component {
           <View style={styles.loginbox}>
             <Text
               style={{
-                color: "orange",
+                color: "coral",
                 fontSize: 20,
                 fontWeight: "bold",
                 textAlign: "center"
@@ -153,7 +159,7 @@ export default class HomeScreen extends React.Component {
             </Text>
             <Text
               style={{
-                color: "orange",
+                color: "coral",
                 fontSize: 15,
                 fontWeight: "normal",
                 textAlign: "left"
@@ -166,13 +172,13 @@ export default class HomeScreen extends React.Component {
               onChangeText={text => {
                 this.setState({ normalUser: text });
               }}
-              underlineColorAndroid="orange"
-              selectionColor="orange"
-              placeholderTextColor="orange"
+              underlineColorAndroid="coral"
+              selectionColor="coral"
+              placeholderTextColor="coral"
             />
             <Text
               style={{
-                color: "orange",
+                color: "coral",
                 fontSize: 15,
                 fontWeight: "normal",
                 textAlign: "left",
@@ -188,13 +194,13 @@ export default class HomeScreen extends React.Component {
                   onChangeText={text => {
                     this.setState({ normalPassword: text });
                   }}
-                  underlineColorAndroid="orange"
-                  selectionColor="orange"
+                  underlineColorAndroid="coral"
+                  selectionColor="coral"
                   secureTextEntry={true}
                 />
               </View>
               <TouchableOpacity style={{ padding: 10 }}>
-                <Icon name="eye" color="orange" size={22} />
+                <Icon name="eye" color="coral" size={22} />
               </TouchableOpacity>
             </View>
             <View
@@ -206,27 +212,27 @@ export default class HomeScreen extends React.Component {
             >
               <View style={{ alignItems: "stretch", width: 150 }}>
                 <Button
-                  color="orange"
+                  color="coral"
                   title="LOGIN"
                   onPress={() => this.normalLogin()}
                 />
               </View>
               <TouchableOpacity>
-                <Text style={{ color: "orange" }}>Forgot Password?</Text>
+                <Text style={{ color: "coral" }}>Forgot Password?</Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={styles.signupbox}>
             <View style={{ marginLeft: 50, marginRight: 50 }}>
               <Button
-                color="orange"
+                color="coral"
                 title="SIGN UP!"
                 onPress={() => this.props.navigation.navigate("Register")}
               />
             </View>
             <Text
               style={{
-                color: "orange",
+                color: "coral",
                 fontSize: 20,
                 fontWeight: "bold",
                 textAlign: "center",
@@ -236,19 +242,19 @@ export default class HomeScreen extends React.Component {
               SIGNUP USING
             </Text>
             <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
-              <Button title="Google" color="orange" onPress={this._signIn} />
+              <Button title="Google" color="coral" onPress={this._signIn} />
             </View>
             <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
               <Button
                 title="Facebook"
-                color="orange"
+                color="coral"
                 onPress={this.loginFacebook}
               />
             </View>
             <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
               <Button
                 title="Instagram"
-                color="orange"
+                color="coral"
                 onPress={() => this.refs.instagramLogin.show()}
               />
             </View>
@@ -266,6 +272,89 @@ export default class HomeScreen extends React.Component {
       </View>
     );
   }
+
+  async checkPermission() {
+    const enabled = await firebase.messaging().hasPermission();
+    if (enabled) {
+      await firebase.messaging().getToken();
+    } else {
+      this.requestPermission();
+    }
+  }
+
+  async createNotificationListeners() {
+    /*
+     * Triggered when a particular notification has been received in foreground
+     * */
+    this.notificationListener = firebase
+      .notifications().onNotification(notification => {
+        const { title, body } = notification;
+        console.log("onNotification:");
+        console.warn("onNotification:");
+        // this.showAlert(title, body);
+        // alert('message');
+
+        const localNotification = new firebase.notifications.Notification({
+          sound: "sampleaudio",
+          show_in_foreground: true
+        })
+          .setNotificationId(notification.notificationId)
+          .setTitle(notification.title)
+          // .setSubtitle(notification.subtitle)
+          .setBody(notification.body)
+          // .setData(notification.data)
+          .android.setChannelId("fcm_default_channel") // e.g. the id you chose above
+          .android.setSmallIcon("@drawable/ic_launcher") // create this icon in Android Studio
+          .android.setColor("#000000") // you can set a color here
+          .android.setPriority(firebase.notifications.Android.Priority.High);
+
+        firebase
+          .notifications()
+          .displayNotification(localNotification)
+          .catch(err => console.error(err));
+      });
+
+    const channel = new firebase.notifications.Android.Channel(
+      "fcm_default_channel",
+      "SPIRITPEDIA",
+      firebase.notifications.Android.Importance.High
+    )
+      .setDescription("The Xceed App")
+      .setSound("sampleaudio.mp3");
+    firebase.notifications().android.createChannel(channel);
+
+    /*
+     * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
+     * */
+    this.notificationOpenedListener = firebase
+      .notifications()
+      .onNotificationOpened(notificationOpen => {
+        const { title, body } = notificationOpen.notification;
+        console.warn("onNotificationOpened:");
+        // this.showAlert(tistle, body);
+      });
+    /*
+     * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+     * */
+    const notificationOpen = await firebase
+      .notifications()
+      .getInitialNotification();
+    if (notificationOpen) {
+      const { title, body } = notificationOpen.notification;
+      console.warn("getInitialNotification:");
+      this.props.navigation.navigate("PushService")
+      // this.showAlert(title, body);
+    }
+    /*
+     * Triggered for data only payload in foreground
+     * */
+    this.messageListener = firebase.messaging().onMessage(message => {
+      //process data message
+      console.warn(JSON.stringify(message));
+    });
+  }
+
+
 }
 
 const styles = StyleSheet.create({
@@ -275,7 +364,7 @@ const styles = StyleSheet.create({
   },
   orangeline: {
     flex: 1,
-    backgroundColor: "orange"
+    backgroundColor: "coral"
   },
   header: {
     flex: 2,
@@ -285,7 +374,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   headerfont: {
-    color: "orange",
+    color: "coral",
     fontSize: 35,
     fontWeight: "bold",
     fontFamily: "sans-serif-condensed"
