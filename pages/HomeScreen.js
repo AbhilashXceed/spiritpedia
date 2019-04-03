@@ -15,6 +15,7 @@ import { LoginManager } from "react-native-fbsdk";
 import Icon from "react-native-vector-icons/FontAwesome";
 import InstagramLogin from "react-native-instagram-login";
 import firebase from "react-native-firebase";
+import SplashScreen from 'react-native-splash-screen';
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -31,6 +32,7 @@ export default class HomeScreen extends React.Component {
     this._configureGoogleSignIn();
     this.checkPermission();
     this.createNotificationListeners();
+    SplashScreen.hide();
   }
 
   componentWillUnmount() {

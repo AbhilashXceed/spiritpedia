@@ -1,3 +1,5 @@
 <resources>
     <color name="notificationColor">#800000</color>
+    <color name="blue">#4F6D7A</color>
+    <color name="primary_dark">#4F6D7A</color>
 </resources>
