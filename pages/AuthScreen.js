@@ -17,7 +17,7 @@ import InstagramLogin from "react-native-instagram-login";
 import firebase from "react-native-firebase";
 import SplashScreen from 'react-native-splash-screen';
 
-export default class HomeScreen extends React.Component {
+export default class AuthScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,10 +29,10 @@ export default class HomeScreen extends React.Component {
   }
 
   async componentDidMount() {
+    SplashScreen.hide();
     this._configureGoogleSignIn();
     this.checkPermission();
     this.createNotificationListeners();
-    SplashScreen.hide();
   }
 
   componentWillUnmount() {
@@ -65,7 +65,7 @@ export default class HomeScreen extends React.Component {
       console.warn("Signed in by google and the user is ", userInfo.user.name);
       await AsyncStorage.setItem("googleToken", userInfo.accessToken);
       await AsyncStorage.setItem("user", userInfo.user.name);
-      this.props.navigation.navigate("Landing");
+      this.props.navigation.navigate("Landingone");
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         Alert.alert("cancelled");
@@ -112,7 +112,7 @@ export default class HomeScreen extends React.Component {
         "password",
         JSON.stringify(this.state.normalPassword)
       );
-      this.props.navigation.navigate("Landing");
+      this.props.navigation.navigate("Landingone");
     } else {
       Alert.alert("Nope, Wrong credentials");
     }
@@ -132,15 +132,15 @@ export default class HomeScreen extends React.Component {
               alignItems: "center"
             }}
           >
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{ padding: 7 }}
               onPress={()=>this.tokenFunction()}
             >
-              <Icon name="search" color="coral" size={20} />
-            </TouchableOpacity>
+              <Icon name="search" color="coral" size={20} />s
+            </TouchableOpacity> */}
             <TouchableOpacity
               style={{ padding: 7 }}
-              onPress={() => this.props.navigation.navigate("Landing")}
+              onPress={() => this.props.navigation.navigate("Landingone")}
             >
               <Icon name="bell" color="coral" size={20} />
             </TouchableOpacity>
@@ -344,7 +344,6 @@ export default class HomeScreen extends React.Component {
     if (notificationOpen) {
       const { title, body } = notificationOpen.notification;
       console.warn("getInitialNotification:");
-      this.props.navigation.navigate("PushService")
       // this.showAlert(title, body);
     }
     /*
