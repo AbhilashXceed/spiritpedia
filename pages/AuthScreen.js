@@ -11,7 +11,7 @@ import {
 import AsyncStorage from "@react-native-community/async-storage";
 import { TextInput } from "react-native-gesture-handler";
 import { GoogleSignin, statusCodes } from "react-native-google-signin";
-import { LoginManager } from "react-native-fbsdk";
+import { LoginManager, AccessToken } from "react-native-fbsdk";
 import Icon from "react-native-vector-icons/FontAwesome";
 import InstagramLogin from "react-native-instagram-login";
 import firebase from "react-native-firebase";
@@ -47,7 +47,7 @@ export default class AuthScreen extends React.Component {
     } else {
       console.warn("token not received");
     }
-  }s
+  }
 
   _configureGoogleSignIn() {
     GoogleSignin.configure({
@@ -91,6 +91,8 @@ export default class AuthScreen extends React.Component {
       if (result.isCancelled) {
         alert("Login was cancelled");
       } else {
+        console.log(AccessToken.name);
+        // await AsyncStorage.setItem('user', AccessToken.name);
         alert(
           "Login was successful with permission: " +
             result.grantedPermissions.toString()

@@ -56,30 +56,7 @@ export default class ExploreOne extends React.Component {
     return (
       <View style={styles.container}>
       <StatusBar backgroundColor="#263238" barStyle="dark-content" />
-        <View style={styles.header}>
-          <View style={{ flex: 2, alignItems: "center" }}>
-            <TouchableOpacity>
-              <Icon name="menu" type="entypo" color="coral" size={45} />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flex: 6, alignItems: "center" }}>
-            <Text
-              style={{
-                textAlign: "center",
-                color: "coral",
-                fontSize: 35,
-                fontWeight: "bold"
-              }}
-            >
-              WHISKEY
-            </Text>
-          </View>
-          <View style={{ flex: 2, alignItems: "center", marginTop: 10 }}>
-            <TouchableOpacity>
-              <Icon name="bell" type="font-awesome" color="coral" size={25} />
-            </TouchableOpacity>
-          </View>
-        </View>
+        
         <View style={styles.tilesBox}>
           <View style={styles.tilesrow}>
             <View style={styles.block}>
@@ -162,38 +139,6 @@ export default class ExploreOne extends React.Component {
             </View>
           </View>
         </View>
-
-        <View style={styles.footer}>
-          <View style={{ padding: 10 }}>
-            <TouchableOpacity>
-              <Icon name="appstore1" type="antdesign" color="coral" size={30} />
-              <Text style={styles.smallsmall}>Explore</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ padding: 10 }}>
-            <TouchableOpacity>
-              <Icon
-                name="bookmark"
-                type="font-awesome"
-                color="coral"
-                size={30}
-              />
-              <Text style={styles.smallsmall}>Bookmarks</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ padding: 10 }}>
-            <TouchableOpacity>
-              <Icon name="price-tag" type="entypo" color="coral" size={30} />
-              <Text style={styles.smallsmall}>Offers</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ padding: 10 }}>
-            <TouchableOpacity>
-              <Icon name="feed" type="font-awesome" color="coral" size={30} />
-              <Text style={styles.smallsmall}>Feed</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
       </View>
     );
   }
@@ -202,16 +147,12 @@ export default class ExploreOne extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white"
+    backgroundColor: "coral"
   },
-  header: {
-    flex: 2,
-    backgroundColor: "#263238",
-    flexDirection: "row"
-  },
+  
   tilesBox: {
     flex: 12,
-    backgroundColor: "white"
+    backgroundColor: "coral"
   },
   tilesrow: {
     flex: 1,
@@ -219,13 +160,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     padding: 1
-  },
-  footer: {
-    flex: 2,
-    backgroundColor: "#263238",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around"
   },
   block: {
     flex: 1,
@@ -243,11 +177,4 @@ const styles = StyleSheet.create({
     fontWeight: "100",
     fontStyle: "italic"
   },
-  smallsmall: {
-    color: "coral",
-    fontSize: 10,
-    textAlign: "center",
-    marginTop: 5,
-    fontWeight: "100"
-  }
 });

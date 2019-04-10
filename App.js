@@ -21,8 +21,9 @@ import React from "react";
 const Explore = createStackNavigator({
   ExploreOne: {
     screen: ExploreOne,
-    headerTitle: Explore,
+    // headerTitle: Explore,
     navigationOptions:({navigation})=>{
+      
       return{
         headerLeft:
         <Icon 
@@ -100,33 +101,72 @@ const LandingTabNavigator = createBottomTabNavigator({
   Bookmarks,
   Offers,
   Feed,
-},{
-  navigationOptions:({navigation})=>{
-    const {routeName} = navigation.state.routes[navigation.state.index]
-    return{
-      header: null,
-      headerTitle: routeName
-    }
+},
+// {
+//   navigationOptions:({navigation})=>{
+//     const {routeName} = navigation.state.routes[navigation.state.index]
+//     return{
+//       header: null,
+//       headerTitle: routeName
+//     }
+//   }
+// }
+{
+  defaultNavigationOptions: ({ navigation })=>({
+    tabBarIcon: ({ focused, horizontal, tintColor})=> {
+      const { routeName } = navigation.state;
+      let iconName;
+      let iconType;
+      if (routeName === 'Explore') {
+        iconName = 'appstore1';
+        iconType = 'antdesign';
+      } else if (routeName === 'Bookmarks') {
+        iconName = 'bookmark';
+        iconType = 'font-awesome';
+      } else if (routeName === 'Offers') {
+        iconName = 'price-tag';
+        iconType = 'entypo';
+      } else if (routeName === 'Feed') {
+        iconName = 'feed';
+        iconType = 'font-awesome';
+      }
+      return(<Icon name={iconName} type={iconType} size={20} color={tintColor}/>)
+    },
+  }),
+  tabBarOptions: {
+    activeTintColor: 'white',
+    inactiveTintColor: 'coral',
+    activeBackgroundColor: '#263238',
+    inactiveBackgroundColor: '#263238'
   }
-})
+}
+)
 
 const WrapperStackTab = createStackNavigator({
-  LandingTabNavigator: LandingTabNavigator
-},{
-  defaultNavigationOptions:({navigation})=>{
-    return {
-      headerLeft:(
-        <Icon 
-        name="menu" 
-        type="entypo" 
-        color="coral" 
-        size={45}
-        style={{paddingLeft:15}}
-        onPress={()=>navigation.openDrawer()}/>
-      )
+  LandingTabNavigator: {
+    screen: LandingTabNavigator,
+    navigationOptions: {
+      header: null
     }
   }
-})
+  
+}
+// {
+//   defaultNavigationOptions:({navigation})=>{
+//     return {
+//       headerLeft:(
+//         <Icon 
+//         name="menu" 
+//         type="entypo" 
+//         color="coral" 
+//         size={45}
+//         style={{paddingLeft:15}}
+//         onPress={()=>navigation.openDrawer()}/>
+//       )
+//     }
+//   }
+// }
+)
 
 
 const AuthStack = createStackNavigator({
