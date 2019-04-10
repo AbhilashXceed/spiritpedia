@@ -13,18 +13,23 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { GoogleSignin } from "react-native-google-signin";
 import { Icon } from "react-native-elements";
 import SplashScreen from "react-native-splash-screen";
+import firebase from "react-native-firebase";
 
 export default class ExploreOne extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       normalUser: null,
-      googleToken: null
+      googleToken: null,
+      currentUser: null,
     };
   }
 
   componentDidMount = async () => {
+    const {currentUser} = firebase.auth();
+    this.setState({ currentUser })
     SplashScreen.hide();
+    console.log(this.state.currentUser);
     let A = await AsyncStorage.getItem("user");
     let B = await AsyncStorage.getItem("googleToken");
     if (A) {
@@ -53,10 +58,13 @@ export default class ExploreOne extends React.Component {
   };
 
   render() {
+    const  {currentUser} = this.state
     return (
       <View style={styles.container}>
       <StatusBar backgroundColor="#263238" barStyle="dark-content" />
-        
+      <Text>
+      Hi { currentUser && currentUser.email}!
+      </Text>
         <View style={styles.tilesBox}>
           <View style={styles.tilesrow}>
             <View style={styles.block}>
@@ -151,7 +159,7 @@ const styles = StyleSheet.create({
   },
   
   tilesBox: {
-    flex: 12,
+    flex: 1,
     backgroundColor: "coral"
   },
   tilesrow: {

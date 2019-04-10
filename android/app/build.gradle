@@ -105,10 +105,14 @@ android {
         applicationId "com.spiritpedia"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
     }
 
+    dexOptions {
+        jumboMode true
+    }
 
     splits {
         abi {
@@ -149,6 +153,7 @@ dependencies {
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-webview')
     implementation project(':react-native-fbsdk')
+    implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.facebook.android:facebook-android-sdk:4.34.0'
     implementation project(':react-native-google-signin')
     implementation project(':react-native-gesture-handler')
@@ -160,6 +165,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-base:16.0.1"
     implementation "com.google.firebase:firebase-core:16.0.6"
     implementation "com.google.firebase:firebase-messaging:17.3.4"
+    implementation "com.google.firebase:firebase-auth:16.2.1"
 }
 
 // Run this once to be able to run the application with BUCK

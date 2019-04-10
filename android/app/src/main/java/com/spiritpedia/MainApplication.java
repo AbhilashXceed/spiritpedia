@@ -19,7 +19,7 @@ import com.facebook.soloader.SoLoader;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
-
+import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -58,7 +58,8 @@ public class MainApplication extends Application implements ShareApplication, Re
             new RNGoogleSigninPackage(),
             new RNGestureHandlerPackage(),
             new RNFirebaseMessagingPackage(),
-            new RNFirebaseNotificationsPackage()
+            new RNFirebaseNotificationsPackage(),
+            new RNFirebaseAuthPackage()
       );
     }
 
@@ -67,6 +68,7 @@ public class MainApplication extends Application implements ShareApplication, Re
       return "index";
     }
   };
+
 
   @Override
   public ReactNativeHost getReactNativeHost() {

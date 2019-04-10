@@ -17,6 +17,7 @@ import InstagramLogin from "react-native-instagram-login";
 import firebase from "react-native-firebase";
 import SplashScreen from 'react-native-splash-screen';
 
+
 export default class AuthScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +25,7 @@ export default class AuthScreen extends React.Component {
       userInfo: null,
       error: null,
       normalUser: null,
-      normalPassword: null
+      normalPassword: null,
     };
   }
 
