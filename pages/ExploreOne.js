@@ -30,32 +30,32 @@ export default class ExploreOne extends React.Component {
     this.setState({ currentUser })
     SplashScreen.hide();
     console.log(this.state.currentUser);
-    let A = await AsyncStorage.getItem("user");
-    let B = await AsyncStorage.getItem("googleToken");
-    if (A) {
-      this.setState({ normalUser: A, googleToken: B });
-      console.warn("User is", this.state.normalUser);
-    } else {
-      console.warn("There is no userdata, something went wrong");
-    }
+    // let A = await AsyncStorage.getItem("user");
+    // let B = await AsyncStorage.getItem("googleToken");
+    // if (A) {
+    //   this.setState({ normalUser: A, googleToken: B });
+    //   console.warn("User is", this.state.normalUser);
+    // } else {
+    //   console.warn("There is no userdata, something went wrong");
+    // }
   };
 
-  logOut = async () => {
-    AsyncStorage.setItem("user", null);
-    AsyncStorage.setItem("password", null);
+  // logOut = async () => {
+  //   AsyncStorage.setItem("user", null);
+  //   AsyncStorage.setItem("password", null);
 
-    this.setState({ normalUser: null });
-    if (this.state.googleToken) {
-      AsyncStorage.setItem("googleToken", null);
-      this.setState({ googleToken: null });
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
-    }
+  //   this.setState({ normalUser: null });
+  //   if (this.state.googleToken) {
+  //     AsyncStorage.setItem("googleToken", null);
+  //     this.setState({ googleToken: null });
+  //     await GoogleSignin.revokeAccess();
+  //     await GoogleSignin.signOut();
+  //   }
 
-    this.props.navigation.navigate("AuthScreen");
-    let A = AsyncStorage.getItem("user");
-    console.warn("user is", A);
-  };
+  //   this.props.navigation.navigate("AuthScreen");
+  //   let A = AsyncStorage.getItem("user");
+  //   console.warn("user is", A);
+  // };
 
   render() {
     const  {currentUser} = this.state

@@ -61,15 +61,29 @@ export default class AuthScreen extends React.Component {
     });
   }
 
-  _signIn = async () => {
+  signinGoogle = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      this.setState({ userInfo, error: null });
-      console.warn("Signed in by google and the user is ", userInfo.user.name);
-      await AsyncStorage.setItem("googleToken", userInfo.accessToken);
-      await AsyncStorage.setItem("user", userInfo.user.name);
-      this.props.navigation.navigate("Landingone");
+
+      const credential = firebase
+                        .auth
+                        .GoogleAuthProvider
+                        .credential(userInfo.idToken, userInfo.accessToken);
+
+      const firebaseUserCredential = firebase
+                                    .auth()
+                                    .signInWithCredential(credential)
+                                    .then(()=>this.props.navigation.navigate('Landinone'));
+                        
+      console.warn(userInfo.user);
+      // console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()));
+      
+      // this.setState({ userInfo, error: null });
+      // console.warn("Signed in by google and the user is ", userInfo.user.name);
+      // await AsyncStorage.setItem("googleToken", userInfo.accessToken);
+      // await AsyncStorage.setItem("user", userInfo.user.name);
+      // this.props.navigation.navigate("Landingone");
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         Alert.alert("cancelled");
@@ -89,19 +103,29 @@ export default class AuthScreen extends React.Component {
 
   async loginFacebook() {
     try {
-      let result = await LoginManager.logInWithReadPermissions([
-        "public_profile"
-      ]);
+      let result = await LoginManager.logInWithReadPermissions(["public_profile", "email"]);
+
       if (result.isCancelled) {
         alert("Login was cancelled");
-      } else {
-        console.log(AccessToken.name);
-        // await AsyncStorage.setItem('user', AccessToken.name);
-        alert(
-          "Login was successful with permission: " +
-            result.grantedPermissions.toString()
-        );
+      } 
+        
+      console.warn(AccessToken.name);
+      alert("Login was successful with permission: " +result.grantedPermissions.toString());
+
+      const data = await AccessToken.getCurrentAccessToken();
+
+      if (!data){
+        throw new Error("Something went wrong getting Acees Token, code needs to be checked");
       }
+
+      const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+
+      const firebaseUserCredential = await firebase
+                                            .auth()
+                                            .signInWithCredential(credential)
+                                            .then(()=>this.props.navigation.navigate('Landingone'));
+      console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()))
+
     } catch (error) {
       alert("Login failed with error:" + error);
     }
@@ -267,7 +291,7 @@ export default class AuthScreen extends React.Component {
               SIGNUP USING
             </Text>
             <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
-              <Button title="Google" color="coral" onPress={this._signIn} />
+              <Button title="Google" color="coral" onPress={this.signinGoogle} />
             </View>
             <View style={{ marginTop: 15, marginLeft: 50, marginRight: 50 }}>
               <Button
@@ -288,9 +312,16 @@ export default class AuthScreen extends React.Component {
             <InstagramLogin
               ref="instagramLogin"
               clientId="992305b1948d4e069631b9a3b66d5f55"
-              scopes={["public_content", "follower_list"]}
-              onLoginSuccess={token => this.setState({ token })}
-              onLoginFailure={data => console.log(data)}
+              scopes={["public_content", "follower_list", "email"]}
+              onLoginSuccess={
+                token => {this.setState({ token })
+                // const credential = firebase.auth.OAuthProvider.credential(token);
+                // console.warn(token);
+                // const InstaLog = firebase.auth().signInWithCustomToken(token);
+                // console.warn();
+                }  
+              }
+              onLoginFailure={data => console.warn(data)}
             />
           </View>
         </View>
