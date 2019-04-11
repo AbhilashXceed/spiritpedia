@@ -5,6 +5,7 @@ import BookmarksOne from './pages/BookmarksOne'
 import OffersOne from './pages/OffersOne'
 import FeedOne from './pages/FeedOne'
 import AuthLoad from './pages/AuthLoad';
+import LogOut from './pages/LogOut'
 
 import { 
   createStackNavigator, 
@@ -190,7 +191,11 @@ const AuthStack = createStackNavigator({
 const LandingDrawerNavigator = createDrawerNavigator({
   Home: {
     screen: WrapperStackTab
+  },
+  LogOut: {
+    screen: LogOut
   }
+
 })
 
 const AuthSwitchNavigator = createSwitchNavigator({

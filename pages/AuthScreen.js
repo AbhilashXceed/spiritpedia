@@ -26,6 +26,9 @@ export default class AuthScreen extends React.Component {
       error: null,
       normalUser: null,
       normalPassword: null,
+      email: '',
+      password: '',
+      errorMessage: null,
     };
   }
 
@@ -104,22 +107,32 @@ export default class AuthScreen extends React.Component {
     }
   }
 
-  normalLogin = async () => {
-    if (
-      this.state.normalUser == "Admin" &&
-      this.state.normalPassword == "Admin"
-    ) {
-      Alert.alert("Login is successful");
-      await AsyncStorage.setItem("user", JSON.stringify(this.state.normalUser));
-      await AsyncStorage.setItem(
-        "password",
-        JSON.stringify(this.state.normalPassword)
-      );
-      this.props.navigation.navigate("Landingone");
-    } else {
-      Alert.alert("Nope, Wrong credentials");
-    }
-  };
+  // normalLogin = async () => {
+  //   if (
+  //     this.state.normalUser == "Admin" &&
+  //     this.state.normalPassword == "Admin"
+  //   ) {
+  //     Alert.alert("Login is successful");
+  //     await AsyncStorage.setItem("user", JSON.stringify(this.state.normalUser));
+  //     await AsyncStorage.setItem(
+  //       "password",
+  //       JSON.stringify(this.state.normalPassword)
+  //     );
+  //     this.props.navigation.navigate("Landingone");
+  //   } else {
+  //     Alert.alert("Nope, Wrong credentials");
+  //   }
+  // };
+
+  normalLogin = () => {
+    const { email, password } = this.state;
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(()=>this.props.navigation.navigate('Landingone'))
+      .catch(error => {this.setState({errorMessage: error.message});
+                      console.warn(this.state.errorMessage)})
+  }
 
   render() {
     return (
@@ -170,13 +183,14 @@ export default class AuthScreen extends React.Component {
                 textAlign: "left"
               }}
             >
-              USERNAME
+              EMAIL ID
             </Text>
             <TextInput
               style={{ color: "white" }}
               onChangeText={text => {
-                this.setState({ normalUser: text });
+                this.setState({ email: text.replace(/\s/g, '') });
               }}
+              autoCapitalize="none"
               underlineColorAndroid="coral"
               selectionColor="coral"
               placeholderTextColor="coral"
@@ -197,8 +211,9 @@ export default class AuthScreen extends React.Component {
                 <TextInput
                   style={{ color: "white" }}
                   onChangeText={text => {
-                    this.setState({ normalPassword: text });
+                    this.setState({ password: text.replace( /\s/g, '') });
                   }}
+                  autoCapitalize="none"
                   underlineColorAndroid="coral"
                   selectionColor="coral"
                   secureTextEntry={true}
@@ -222,6 +237,11 @@ export default class AuthScreen extends React.Component {
                   onPress={() => this.normalLogin()}
                 />
               </View>
+              {/* here is the added error msg */}
+              {this.state.errorMessage &&
+              <Text style={{ color: 'red' }}>
+                {this.state.errorMessage}
+              </Text>}
               <TouchableOpacity>
                 <Text style={{ color: "coral" }}>Forgot Password?</Text>
               </TouchableOpacity>

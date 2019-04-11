@@ -39,7 +39,7 @@ render() {
       }}>
         <ActivityIndicator size='large'/>
         <Text>Loading</Text>
-        <StatusBar barStyle="default" />
+        <StatusBar backgroundColor="#263238" barStyle="dark-content" />
       </View>
     );
   }
