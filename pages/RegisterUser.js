@@ -5,92 +5,140 @@ import {
   View,
   Button,
   TouchableOpacity,
-  Alert
+  Alert,
+  StatusBar
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import firebase from "react-native-firebase";
 
 export default class RegisterUser extends React.Component {
-  
-
-  constructor(props){
+  constructor(props) {
     super(props),
-    this.state = { email: '', password: '', errorMessage: null }
+      // (this.state = { email: "", password: "", errorMessage: null });
+      this.state ={
+        name: null,
+        email: null,
+        password: null,
+        phone: null,
+      }
   }
-  
+
   handleSignUp = () => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(()=>this.props.navigation.navigate('Landingone'))
-      .catch(error=>this.setState({errorMessage: error.message}))
+      .then(() => this.props.navigation.navigate("Landingone"))
+      .catch(error => this.setState({ errorMessage: error.message }));
+  };
+
+  pusher() {
+    let collection = {};
+    collection.name=this.state.name;
+    collection.email=this.state.email;
+    collection.password=this.state.password;
+    collection.phone=this.state.phone;
+
+    var url = 'http://apartment.xceedtech.in/api/flat-owners-list';
+    var data = {"model":"ExpensesMaster","condition":""}
+
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+    .then(response => console.warn('Success:', JSON.stringify(response)))
+    .catch(error => console.error('Error:', error));
   }
 
-	render() {
-		return(
-			<View style={styles.container}>
-        {/* <View style={styles.containerone}>
-        <Text style={styles.titlestyle}>Username</Text>
-        <TextInput underlineColorAndroid="orange" selectionColor='orange'></TextInput>
-        <Text style={styles.titlestyle}>Password</Text>
-        <TextInput underlineColorAndroid="orange" selectionColor='orange'></TextInput>
-        <Text style={styles.titlestyle}>First Name</Text>
-        <TextInput underlineColorAndroid="orange" selectionColor='orange'></TextInput>
-        <Text style={styles.titlestyle}>Last Name</Text>
-        <TextInput underlineColorAndroid="orange" selectionColor='orange'></TextInput>
-        <Text style={styles.titlestyle}>Email ID</Text>
-        <TextInput underlineColorAndroid="orange" selectionColor='orange'></TextInput>
-        <Text style={styles.titlestyle}>Phone Number</Text>
-        <TextInput underlineColorAndroid="orange" selectionColor='orange'></TextInput>
-        </View> */}
+  render() {
+    return (
+      <View style={styles.container}>
+        <StatusBar backgroundColor={'#36485f'} />
+        <View style={styles.regform}>
+          <Text style={styles.header}>Registration</Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Your Name"
+            underlineColorAndroid={"transparent"}
+            placeholderTextColor={'white'}
+            autoCapitalize="none"
+            onChangeText={(text)=>this.setState({name: text})}
+          />
 
-        <Text style={styles.titlestyle}>Email ID</Text>
-        {this.state.errorMessage &&
-          <Text style={{ color: 'red' }}>
-            {this.state.errorMessage}
-          </Text>}
+          <TextInput
+            style={styles.textInput}
+            placeholder="Email ID"
+            underlineColorAndroid={"transparent"}
+            placeholderTextColor={'white'}
+            autoCapitalize="none"
+            onChangeText={(text)=>this.setState({email: text})}
+          />
 
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          placeholder="Email"
-          underlineColorAndroid="orange" 
-          selectionColor='orange'
-          onChangeText={email => this.setState({ email })}
-          value={this.state.email}
-        />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Password"
+            underlineColorAndroid={"transparent"}
+            placeholderTextColor={'white'}
+            autoCapitalize="none"
+            onChangeText={(text)=>this.setState({password: text})}
+          />
 
-        <Text style={styles.titlestyle}>Password</Text>
-        <TextInput
-          secureTextEntry
-          style={styles.textInput}
-          underlineColorAndroid="orange" 
-          selectionColor='orange'
-          autoCapitalize="none"
-          placeholder="Password"
-          onChangeText={password => this.setState({ password })}
-          value={this.state.password}
-        />
-        <Button title="Sign Up!" onPress={()=>this.handleSignUp()} />
-			</View>
-		)
+          <TextInput
+            style={styles.textInput}
+            placeholder="Phone No"
+            underlineColorAndroid={"transparent"}
+            placeholderTextColor={'white'}
+            autoCapitalize="none"
+            onChangeText={(text)=>this.setState({phone: text})}
+          />
+
+          <TouchableOpacity style={styles.Button} onPress={()=>this.pusher()}>
+            <Text style={styles.btntext}>Sign Up!</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
   }
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#263238',
+    backgroundColor: "#36485f",
+    justifyContent: "center",
+    paddingLeft: 60,
+    paddingRight: 60
   },
-  containerone: {
-    padding: 20,
+  regform: {
+    alignSelf: "stretch"
   },
-  titlestyle: {
-    marginTop: 10,
-    color: 'orange',
-    fontSize: 20,
-    fontWeight: 'bold'
+  header: {
+    marginBottom: 40,
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
+    borderBottomColor: "#199187",
+    borderBottomWidth: 3
   },
-  inputstyle: {
+  textInput: {
+    alignSelf: "stretch",
+    height: 40,
+    marginBottom: 30,
+    color: "white",
+    borderBottomColor: "#f8f8f8",
+    borderBottomWidth: 2,
 
   },
-})
+  Button: {
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#59cbbd',
+    marginTop: 30,
+  },
+  btntext: {
+    color: 'white',
+    fontWeight: 'bold'
+  }
+});

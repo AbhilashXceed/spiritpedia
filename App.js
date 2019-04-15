@@ -180,6 +180,7 @@ const AuthStack = createStackNavigator({
   Register: {
     screen: RegisterUser,
     navigationOptions: {
+      header: null,
       title: 'Register User',
       headerStyle: { backgroundColor: 'orange' },
       headerTintColor: 'white',

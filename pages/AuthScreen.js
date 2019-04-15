@@ -312,13 +312,13 @@ export default class AuthScreen extends React.Component {
             <InstagramLogin
               ref="instagramLogin"
               clientId="992305b1948d4e069631b9a3b66d5f55"
-              scopes={["public_content", "follower_list", "email"]}
+              scopes={["public_content", "follower_list"]}
               onLoginSuccess={
                 token => {this.setState({ token })
                 // const credential = firebase.auth.OAuthProvider.credential(token);
-                // console.warn(token);
-                // const InstaLog = firebase.auth().signInWithCustomToken(token);
-                // console.warn();
+                console.warn("this is token",token);
+                const InstaLog = firebase.auth().signInWithCustomToken(token).catch(error=>console.warn(error))
+                // console.warn("this is insta log",JSON.stringify(InstaLog.user.toJSON()));
                 }  
               }
               onLoginFailure={data => console.warn(data)}
