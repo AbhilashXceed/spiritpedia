@@ -22,6 +22,18 @@ export default class LogOut extends React.Component {
 
   componentDidMount(){
     this.logout();
+    this.removeItemValue()
+  }
+  async removeItemValue() {
+    try {
+      await AsyncStorage.removeItem('A');
+      await AsyncStorage.removeItem('B');
+      await AsyncStorage.removeItem('C');
+      return true;
+    }
+    catch(exception) {
+      return false;
+    }
   }
 
   logout = () => {

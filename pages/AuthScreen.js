@@ -29,6 +29,7 @@ export default class AuthScreen extends React.Component {
       email: '',
       password: '',
       errorMessage: null,
+      A: null,
     };
   }
 
@@ -74,16 +75,20 @@ export default class AuthScreen extends React.Component {
       const firebaseUserCredential = firebase
                                     .auth()
                                     .signInWithCredential(credential)
-                                    .then(()=>this.props.navigation.navigate('Landinone'));
-                        
-      console.warn(userInfo.user);
-      // console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()));
+                                    .then(()=>this.props.navigation.navigate('Landingone'));
+
+
+      await AsyncStorage.multiSet([
+                                  ['A', JSON.stringify(userInfo.user.name)],
+                                  ['B', JSON.stringify(userInfo.user.photo)], 
+                                  ['C', JSON.stringify(userInfo.user.email)]]);
+                
+      let B = await AsyncStorage.getAllKeys();
+      console.warn(B)
       
-      // this.setState({ userInfo, error: null });
-      // console.warn("Signed in by google and the user is ", userInfo.user.name);
-      // await AsyncStorage.setItem("googleToken", userInfo.accessToken);
-      // await AsyncStorage.setItem("user", userInfo.user.name);
-      // this.props.navigation.navigate("Landingone");
+      console.warn("stringified item:::"+JSON.stringify(userInfo.user));
+      
+      
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         Alert.alert("cancelled");
@@ -131,22 +136,7 @@ export default class AuthScreen extends React.Component {
     }
   }
 
-  // normalLogin = async () => {
-  //   if (
-  //     this.state.normalUser == "Admin" &&
-  //     this.state.normalPassword == "Admin"
-  //   ) {
-  //     Alert.alert("Login is successful");
-  //     await AsyncStorage.setItem("user", JSON.stringify(this.state.normalUser));
-  //     await AsyncStorage.setItem(
-  //       "password",
-  //       JSON.stringify(this.state.normalPassword)
-  //     );
-  //     this.props.navigation.navigate("Landingone");
-  //   } else {
-  //     Alert.alert("Nope, Wrong credentials");
-  //   }
-  // };
+  
 
   normalLogin = () => {
     const { email, password } = this.state;
@@ -312,13 +302,25 @@ export default class AuthScreen extends React.Component {
             <InstagramLogin
               ref="instagramLogin"
               clientId="992305b1948d4e069631b9a3b66d5f55"
+              redirectUrl='https://www.google.com/'
               scopes={["public_content", "follower_list"]}
               onLoginSuccess={
                 token => {this.setState({ token })
-                // const credential = firebase.auth.OAuthProvider.credential(token);
                 console.warn("this is token",token);
-                const InstaLog = firebase.auth().signInWithCustomToken(token).catch(error=>console.warn(error))
-                // console.warn("this is insta log",JSON.stringify(InstaLog.user.toJSON()));
+                const url = `https://api.instagram.com/v1/users/self/?access_token=${token}`;
+                fetch(url, {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json"
+                  }
+                }).then(res=>res.json())
+                .then(resJson => {this.setState({resJson});
+                await AsyncStorage.multiSet([
+                  ['A', JSON.stringify(resJson.user.full_name)],
+                  ['B', JSON.stringify(resJson.user.profile_picture)], 
+                ]);
+                }).then(()=>this.props.navigation.navigate('Landingone'))
+                .catch(data=>{console.warn(data)})
                 }  
               }
               onLoginFailure={data => console.warn(data)}

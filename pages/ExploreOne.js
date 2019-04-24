@@ -22,6 +22,8 @@ export default class ExploreOne extends React.Component {
       normalUser: null,
       googleToken: null,
       currentUser: null,
+      insta:null,
+      instaname: null,
     };
   }
 
@@ -30,6 +32,13 @@ export default class ExploreOne extends React.Component {
     this.setState({ currentUser })
     SplashScreen.hide();
     console.log(this.state.currentUser);
+    let A = await AsyncStorage.getItem('insta');
+    let insta = JSON.parse(A);
+    if(insta){
+      console.warn("Hello"+insta.data.username);
+      this.setState({insta: insta});
+      this.setState({instaname: insta.data.username});
+    }
     // let A = await AsyncStorage.getItem("user");
     // let B = await AsyncStorage.getItem("googleToken");
     // if (A) {
@@ -39,25 +48,9 @@ export default class ExploreOne extends React.Component {
     //   console.warn("There is no userdata, something went wrong");
     // }
   };
-
-  // logOut = async () => {
-  //   AsyncStorage.setItem("user", null);
-  //   AsyncStorage.setItem("password", null);
-
-  //   this.setState({ normalUser: null });
-  //   if (this.state.googleToken) {
-  //     AsyncStorage.setItem("googleToken", null);
-  //     this.setState({ googleToken: null });
-  //     await GoogleSignin.revokeAccess();
-  //     await GoogleSignin.signOut();
-  //   }
-
-  //   this.props.navigation.navigate("AuthScreen");
-  //   let A = AsyncStorage.getItem("user");
-  //   console.warn("user is", A);
-  // };
-
+ 
   render() {
+    
     const  {currentUser} = this.state
     return (
       <View style={styles.container}>
