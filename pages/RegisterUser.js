@@ -1,16 +1,42 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
+  // Text,
   View,
-  Button,
+  // Button,
   TouchableOpacity,
   Alert,
-  StatusBar
+  StatusBar,
+  KeyboardAvoidingView,
+  ScrollView,
+  ImageBackground,
+  Image,
+  TextInput
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+
+import {
+  Container,
+  Header,
+  Button,
+  Form,
+  Item,
+  Input,
+  Label,
+  Text,
+  Icon,
+  Radio,
+  ListItem,
+  Right,
+  Left
+} from "native-base";
+
 import firebase from "react-native-firebase";
-import { Input } from "react-native-elements";
+// import { Input } from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 
 export default class RegisterUser extends React.Component {
   constructor(props) {
@@ -48,18 +74,22 @@ export default class RegisterUser extends React.Component {
       this.setState({ errorname: null });
       this.setState({ erroremail: "please enter the email" });
     } else if (!regex.test(email)) {
-      this.setState({ erroremail: "unvalid email id" })
-    }else if (password == "") {
+      this.setState({ erroremail: "unvalid email id" });
+    } else if (password == "") {
       this.setState({ erroremail: null });
+      this.setState({ errorname: null });
       this.setState({ errorpass: "please fill the password" });
     } else if (password.toString().length < 6) {
-      this.setState({ errorpass: "password should be at least 6 letters long" });
+      this.setState({
+        errorpass: "password should be at least 6 letters long"
+      });
     } else if (phone == "") {
       this.setState({ errorpass: null });
       this.setState({ errorphone: "please enter the phonenumber" });
     } else if (phone.toString().length < 10) {
-      this.setState({errorphone: "unvalid phone number"})
-    }else {
+      this.setState({ errorphone: "unvalid phone number" });
+    } else {
+      console.warn("one");
       var url = "http://192.168.0.103/User_Project/user_registration.php";
 
       fetch(url, {
@@ -71,7 +101,7 @@ export default class RegisterUser extends React.Component {
           phone: this.state.phone
         }),
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
           "Content-Type": "application/json"
         }
       })
@@ -98,22 +128,167 @@ export default class RegisterUser extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <StatusBar backgroundColor={"#36485f"} />
-        <View style={styles.regform}>
-          <Text style={styles.header}>Registration</Text>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.container}
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        scrollEnabled={true}
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+      >
+        <StatusBar backgroundColor={"orange"} />
 
-          <Input
-            inputStyle={styles.textInput}
-            containerStyle={{ marginBottom: 30 }}
+        <View style={{ flex: 4 }}>
+          <ImageBackground
+            source={require("../android/app/images/registerimg.png")}
+            style={{
+              flex: 1,
+              width: undefined,
+              height: undefined,
+              alignSelf: "stretch",
+              position: "relative",
+              bottom: 0,
+              alignItems:'center',
+              justifyContent:'flex-end',
+              paddingTop:50,
+              
+            }}
+          >
+            <Image
+              source={require("../android/app/images/spiritpedia-logo.png")}
+              style={{ height: hp("17.94%") }}
+              resizeMode="contain"
+            />
+          </ImageBackground>
+        </View>
+
+
+        <View style={styles.regform}>
+          <Text style={styles.header}>Sign Up</Text>
+            <View style={{marginHorizontal: 25}}>
+
+
+            <Form style={{width: wp("77%"), marginLeft:17}}>
+            <Item 
+              floatingLabel
+              style={{
+                borderBottomColor: "black",
+                      borderBottomWidth: 1,
+                      marginBottom: 0,
+                      marginTop: 0,
+                      marginLeft: 0
+              }}>
+              <Label style={{ color: "grey", fontSize: 10 }}>Email Address*</Label>
+              <Input
+              autoCapitalize="none"
+              onChangeText={text =>
+                this.setState({ email: text.replace(/\s/g, "") })
+              }
+              />
+            </Item>
+            <Item 
+            floatingLabel
+            style={{
+              borderBottomColor: "black",
+                    borderBottomWidth: 1,
+                    marginBottom: 0,
+                    marginTop: 0,
+                    marginLeft: 0
+            }}>
+              <Label style={{ color: "grey", fontSize: 10 }}>Password</Label>
+              <Input
+              autoCapitalize="none"/>
+            </Item>
+            <Item 
+            floatingLabel
+            style={{
+              borderBottomColor: "black",
+                    borderBottomWidth: 1,
+                    marginBottom: 0,
+                    marginTop: 0,
+                    marginLeft: 0
+            }}>
+              <Label style={{ color: "grey", fontSize: 10 }}>Full Name*</Label>
+              <Input
+              autoCapitalize="none"
+              onChangeText={text =>
+                this.setState({ name: text.replace(/\s/g, "") })
+              }/>
+            </Item>
+            <Item 
+            floatingLabel
+            style={{
+              borderBottomColor: "black",
+                    borderBottomWidth: 1,
+                    marginBottom: 0,
+                    marginTop: 0,
+                    marginLeft: 0
+            }}>
+              <Label style={{ color: "grey", fontSize: 10 }}>Mobile Number*</Label>
+              <Input
+              autoCapitalize="none"
+              maxLength={10}
+              keyboardType={"phone-pad"}
+              onChangeText={text =>
+                this.setState({ phone: text.replace(/\s/g, "") })
+              }/>
+            </Item>
+            
+            <View style={{flexDirection:'row', justifyContent: 'space-around', alignItems:'center'}}>
+              <View style={{flexDirection:'row'}}>
+              <Radio
+                color={"black"}
+                selectedColor={"orange"}
+                selected={true}
+              />
+              <Text style={{fontSize: 11}}>Male</Text>
+              
+              </View>
+              <View style={{flexDirection:'row'}}>
+              
+              <Radio
+              style={{fontSize:10}}
+                color={"black"}
+                selectedColor={"orange"}
+                selected={false}
+              />
+              <Text style={{fontSize: 11}}>Female</Text>
+              </View>
+            </View>
+            
+          </Form>
+
+          <Button
+                  rounded
+                  onPress={() => this.normalLogin()}
+                  style={{
+                    alignSelf: "center",
+                    width: wp("77%"),
+                    height: hp("5.3%"),
+                    backgroundColor: "#fab430",
+                    elevation: 0,
+                    margin: 20,
+                    justifyContent: 'center',
+                    alignItems:'center'
+                  }}
+                >
+                  <Text 
+                  onPress={() => this.pusher()}
+                  style={{ color: "black", fontSize: 11,  }}>Create Account</Text>
+                </Button>
+
+            <Input
+            // inputStyle={styles.textInput}
+            containerStyle={{
+            borderBottomWidth:0 }}
+            borderBottomWidth={0}
             placeholder="Your Name"
             underlineColorAndroid={"transparent"}
-            placeholderTextColor={"white"}
+            placeholderTextColor={"gray"}
             autoCapitalize="none"
             onChangeText={text =>
               this.setState({ name: text.replace(/\s/g, "") })
             }
-            errorStyle={{ color: "yellow" }}
+            errorStyle={{ color: "red" }}
             errorMessage={this.state.errorname}
           />
 
@@ -121,14 +296,14 @@ export default class RegisterUser extends React.Component {
             inputStyle={styles.textInput}
             containerStyle={{ marginBottom: 30 }}
             placeholder="Email ID"
-            keyboardType={'email-address'}
+            keyboardType={"email-address"}
             underlineColorAndroid={"transparent"}
-            placeholderTextColor={"white"}
+            placeholderTextColor={"gray"}
             autoCapitalize="none"
             onChangeText={text =>
               this.setState({ email: text.replace(/\s/g, "") })
             }
-            errorStyle={{ color: "yellow" }}
+            errorStyle={{ color: "red" }}
             errorMessage={this.state.erroremail}
           />
 
@@ -137,57 +312,59 @@ export default class RegisterUser extends React.Component {
             containerStyle={{ marginBottom: 30 }}
             placeholder="Password"
             underlineColorAndroid={"transparent"}
-            placeholderTextColor={"white"}
+            placeholderTextColor={"gray"}
             autoCapitalize="none"
             onChangeText={text =>
               this.setState({ password: text.replace(/\s/g, "") })
             }
-            errorStyle={{ color: "yellow" }}
+            errorStyle={{ color: "red" }}
             errorMessage={this.state.errorpass}
           />
 
           <Input
             inputStyle={styles.textInput}
-            containerStyle={{ marginBottom: 30 }}
+            // containerStyle={{ marginBottom: 30 }}
             placeholder="Phone No"
             maxLength={10}
-            keyboardType={'phone-pad'}
+            keyboardType={"phone-pad"}
             underlineColorAndroid={"transparent"}
-            placeholderTextColor={"white"}
+            placeholderTextColor={"gray"}
             autoCapitalize="none"
             onChangeText={text =>
               this.setState({ phone: text.replace(/\s/g, "") })
             }
-            errorStyle={{ color: "yellow" }}
+            errorStyle={{ color: "red" }}
             errorMessage={this.state.errorphone}
           />
 
-          <TouchableOpacity style={styles.Button} onPress={() => this.pusher()}>
+          {/* <TouchableOpacity style={styles.Button} onPress={() => this.pusher()}>
             <Text style={styles.btntext}>Sign Up!</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
+
+          </View>
+         
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#36485f",
-    justifyContent: "center",
-    paddingLeft: 30,
-    paddingRight: 30
+    backgroundColor: "white",
+    justifyContent: "center"
   },
   regform: {
-    alignSelf: "stretch"
+    alignSelf: "stretch",
+    flex: 8,
+    // backgroundColor:'coral'
   },
   header: {
-    marginBottom: 40,
-    color: "white",
-    fontSize: 28,
-    fontWeight: "bold",
-    borderBottomColor: "#199187",
-    borderBottomWidth: 10
+    color: "black",
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop:30
   },
   textInput: {
     alignSelf: "stretch",

@@ -1,22 +1,46 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
   View,
-  Button,
   TouchableOpacity,
-  Alert,
-  StatusBar
+  StatusBar,
+  ImageBackground,
+  Image,
+  Dimensions,
+  KeyboardAvoidingView,
+  ScrollView,
+  Keyboard
 } from "react-native";
+
 import AsyncStorage from "@react-native-community/async-storage";
 import { TextInput } from "react-native-gesture-handler";
 import { GoogleSignin, statusCodes } from "react-native-google-signin";
 import { LoginManager, AccessToken } from "react-native-fbsdk";
-import Icon from "react-native-vector-icons/FontAwesome";
 import InstagramLogin from "react-native-instagram-login";
 import firebase from "react-native-firebase";
-import SplashScreen from 'react-native-splash-screen';
+import SplashScreen from "react-native-splash-screen";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+import {
+  Container,
+  Header,
+  Button,
+  Form,
+  Item,
+  Input,
+  Label,
+  Text,
+  Icon
+} from "native-base";
+// import { Icon } from "react-native-elements";
+
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
+
+const WIDTH = Dimensions.get("window").width;
+const HEIGHT = Dimensions.get("window").height;
 
 export default class AuthScreen extends React.Component {
   constructor(props) {
@@ -26,18 +50,21 @@ export default class AuthScreen extends React.Component {
       error: null,
       normalUser: null,
       normalPassword: null,
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       errorMessage: null,
+      errorEmail: null,
+      errorPassword: null,
       A: null,
+      toggle: true
     };
   }
 
   async componentDidMount() {
     SplashScreen.hide();
     this._configureGoogleSignIn();
-    this.checkPermission();
-    this.createNotificationListeners();
+    // this.checkPermission();
+    // this.createNotificationListeners();
   }
 
   componentWillUnmount() {
@@ -48,7 +75,7 @@ export default class AuthScreen extends React.Component {
   async tokenFunction() {
     const fcmToken = await firebase.messaging().getToken();
     if (fcmToken) {
-      console.log('FCM key',fcmToken);
+      console.log("FCM key", fcmToken);
     } else {
       console.warn("token not received");
     }
@@ -67,28 +94,26 @@ export default class AuthScreen extends React.Component {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
 
-      const credential = firebase
-                        .auth
-                        .GoogleAuthProvider
-                        .credential(userInfo.idToken, userInfo.accessToken);
+      const credential = firebase.auth.GoogleAuthProvider.credential(
+        userInfo.idToken,
+        userInfo.accessToken
+      );
 
       const firebaseUserCredential = firebase
-                                    .auth()
-                                    .signInWithCredential(credential)
-                                    .then(()=>this.props.navigation.navigate('Landingone'));
-
+        .auth()
+        .signInWithCredential(credential)
+        .then(() => this.props.navigation.navigate("Landingone"));
 
       await AsyncStorage.multiSet([
-                                  ['A', JSON.stringify(userInfo.user.name)],
-                                  ['B', JSON.stringify(userInfo.user.photo)], 
-                                  ['C', JSON.stringify(userInfo.user.email)]]);
-                
+        ["A", JSON.stringify(userInfo.user.name)],
+        ["B", JSON.stringify(userInfo.user.photo)],
+        ["C", JSON.stringify(userInfo.user.email)]
+      ]);
+
       let B = await AsyncStorage.getAllKeys();
-      console.warn(B)
-      
-      console.warn("stringified item:::"+JSON.stringify(userInfo.user));
-      
-      
+      console.warn(B);
+
+      console.warn("stringified item:::" + JSON.stringify(userInfo.user));
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         Alert.alert("cancelled");
@@ -108,160 +133,381 @@ export default class AuthScreen extends React.Component {
 
   async loginFacebook() {
     try {
-      let result = await LoginManager.logInWithReadPermissions(["public_profile", "email"]);
+      let result = await LoginManager.logInWithReadPermissions([
+        "public_profile",
+        "email"
+      ]);
 
       if (result.isCancelled) {
         alert("Login was cancelled");
-      } 
-        
+      }
+
       console.warn(AccessToken.name);
-      alert("Login was successful with permission: " +result.grantedPermissions.toString());
+      alert(
+        "Login was successful with permission: " +
+          result.grantedPermissions.toString()
+      );
 
       const data = await AccessToken.getCurrentAccessToken();
 
-      if (!data){
-        throw new Error("Something went wrong getting Acees Token, code needs to be checked");
+      if (!data) {
+        throw new Error(
+          "Something went wrong getting Acees Token, code needs to be checked"
+        );
       }
 
-      const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+      const credential = firebase.auth.FacebookAuthProvider.credential(
+        data.accessToken
+      );
 
       const firebaseUserCredential = await firebase
-                                            .auth()
-                                            .signInWithCredential(credential)
-                                            .then(()=>this.props.navigation.navigate('Landingone'));
-      console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()))
-
+        .auth()
+        .signInWithCredential(credential)
+        .then(() => this.props.navigation.navigate("Landingone"));
+      console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()));
     } catch (error) {
       alert("Login failed with error:" + error);
     }
   }
 
-  
-
-  normalLogin = () => {
+  normalLogin = async () => {
     const { email, password } = this.state;
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(()=>this.props.navigation.navigate('Landingone'))
-      .catch(error => {this.setState({errorMessage: error.message});
-                      console.warn(this.state.errorMessage)})
-  }
+    const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (email == null) {
+      this.setState({ errorEmail: "Username field is Empty" });
+    } else if (email == "") {
+      this.setState({ errorEmail: "Username field is Empty" });
+    } else if (!regex.test(email)) {
+      console.warn("u r here");
+      this.setState({ errorEmail: "Unvalid Email ID" });
+    } else if (password == null) {
+      this.setState({ errorPassword: "Password field is empty" });
+      this.setState({ errorEmail: null });
+      console.warn("or here");
+    } else if (password == "") {
+      this.setState({ errorPassword: "Password field is empty" });
+      console.warn("and here");
+    } else if (password.toString().length < 6) {
+      this.setState({ errorPassword: "Password is invalid" });
+      console.warn("lalalala");
+    } else {
+      this.setState({ errorPassword: null });
+      this.setState({ errorEmail: null });
+      console.warn("this is email", email, password);
+
+      var url = "http://192.168.0.103/User_Project/login.php";
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email,
+          pass: password
+        })
+      })
+        .then(response => response.json())
+        .then(responsejson => {
+          alert(responsejson);
+        })
+        .catch(error => {
+          this.setState({ errorMessage: error.message });
+          console.warn(this.state.errorMessage);
+          alert(this.state.errorMessage);
+        });
+
+      // firebase
+      // .auth()
+      // .signInWithEmailAndPassword(email, password)
+      // .then(
+      //   fetch(url,{
+      //     method: "POST",
+      //     headers: {
+      //       "Accept": "application/json",
+      //       "Content-Type": "application/json"
+      //     },
+      //     body:JSON.stringify({
+      //       emailphp: email,
+      //       passwordphp: password
+      //     })
+      //   })
+      // )
+      // .then((response)=>response.json())
+      // .then((responsejson)=>{
+      //   alert(responsejson)
+      // })
+      // // .then(() => this.props.navigation.navigate("Landingone"))
+      // .catch(error => {
+      //   this.setState({ errorMessage: error.message });
+      //   console.warn(this.state.errorMessage);
+      //   alert(this.state.errorMessage);
+      // });
+    }
+    Keyboard.dismiss();
+  };
 
   render() {
     return (
-      <View style={styles.container}>
-        <StatusBar backgroundColor="#263238" barStyle="dark-content" />
-        <View style={styles.header}>
-          <Text style={styles.headerfont}>WHISKEYPEDIA</Text>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.awarescrollview}
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        scrollEnabled={true}
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+      >
+        <StatusBar backgroundColor="white" barStyle="dark-content" />
+        {/* <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled  > */}
+        {/* <ScrollView > */}
 
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center"
-            }}
-          >
-            {/* <TouchableOpacity
-              style={{ padding: 7 }}
-              onPress={()=>this.tokenFunction()}
-            >
-              <Icon name="search" color="coral" size={20} />s
-            </TouchableOpacity> */}
-            <TouchableOpacity
-              style={{ padding: 7 }}
-              onPress={() => this.props.navigation.navigate("Landingone")}
-            >
-              <Icon name="bell" color="coral" size={20} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.orangeline} />
-        <View style={styles.body}>
-          <View style={styles.loginbox}>
-            <Text
-              style={{
-                color: "coral",
-                fontSize: 20,
-                fontWeight: "bold",
-                textAlign: "center"
-              }}
-            >
-              LOGIN
-            </Text>
-            <Text
-              style={{
-                color: "coral",
-                fontSize: 15,
-                fontWeight: "normal",
-                textAlign: "left"
-              }}
-            >
-              EMAIL ID
-            </Text>
-            <TextInput
-              style={{ color: "white" }}
-              onChangeText={text => {
-                this.setState({ email: text.replace(/\s/g, '') });
-              }}
-              autoCapitalize="none"
-              underlineColorAndroid="coral"
-              selectionColor="coral"
-              placeholderTextColor="coral"
+        {/* <ImageBackground
+            source={require("../android/app/images/login-bg.png")}
+            style={styles.backgroundimage}> */}
+        <View style={styles.container}>
+          <View style={styles.upperportion}>
+            <Image
+              source={require("../android/app/images/spiritpedia-logo.png")}
+              style={{ height: hp("17.94%"), marginTop: hp("13.75%") }}
+              resizeMode="contain"
             />
-            <Text
-              style={{
-                color: "coral",
-                fontSize: 15,
-                fontWeight: "normal",
-                textAlign: "left",
-                marginTop: 5
-              }}
-            >
-              PASSWORD
-            </Text>
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ alignItems: "stretch", width: 280 }}>
-                <TextInput
-                  style={{ color: "white" }}
-                  onChangeText={text => {
-                    this.setState({ password: text.replace( /\s/g, '') });
-                  }}
-                  autoCapitalize="none"
-                  underlineColorAndroid="coral"
-                  selectionColor="coral"
-                  secureTextEntry={true}
-                />
-              </View>
-              <TouchableOpacity style={{ padding: 10 }}>
-                <Icon name="eye" color="coral" size={22} />
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                padding: 15
-              }}
-            >
-              <View style={{ alignItems: "stretch", width: 150 }}>
-                <Button
-                  color="coral"
-                  title="LOGIN"
-                  onPress={() => this.normalLogin()}
-                />
-              </View>
-              {/* here is the added error msg */}
-              {this.state.errorMessage &&
-              <Text style={{ color: 'red' }}>
-                {this.state.errorMessage}
-              </Text>}
-              <TouchableOpacity>
-                <Text style={{ color: "coral" }}>Forgot Password?</Text>
-              </TouchableOpacity>
-            </View>
           </View>
-          <View style={styles.signupbox}>
+
+          <View style={styles.body}>
+            <View style={{ width: wp("85.52%") }}>
+              <Form>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginHorizontal: 29
+                  }}
+                >
+                  <View
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: 1,
+                      padding: 5
+                    }}
+                  >
+                    <Icon
+                      type="Feather"
+                      name="user"
+                      style={{ fontSize: 14, paddingTop: 26 }}
+                    />
+                  </View>
+                  <Item
+                    floatingLabel
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: 1,
+                      marginBottom: 0,
+                      marginTop: 0,
+                      marginLeft: 0
+                    }}
+                    // last
+                  >
+                    <Label style={{ color: "grey", fontSize: 10 }}>
+                      Username
+                    </Label>
+                    <Input
+                      autoCapitalize="none"
+                      onChangeText={text => {
+                        this.setState({ email: text.replace(/\s/g, "") });
+                      }}
+                    />
+                  </Item>
+                </View>
+
+                {this.state.errorEmail && (
+                  <Text style={{ color: "red", fontSize: 10 }}>
+                    {this.state.errorEmail}
+                  </Text>
+                )}
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginHorizontal: 45,
+                    marginLeft: 82
+                  }}
+                >
+                  <View
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: 1,
+                      padding: 5
+                    }}
+                  >
+                    <Icon
+                      type="Feather"
+                      name="lock"
+                      style={{ fontSize: 14, paddingTop: 25 }}
+                    />
+                  </View>
+                  <Item
+                    floatingLabel
+                    style={{
+                      borderBottomColor: "black",
+                      borderBottomWidth: 1,
+                      marginTop: 0,
+                      paddingTop: 0,
+                      margin: 0,
+                      padding: 0,
+                      marginLeft: 0
+                    }}
+                  >
+                    <Label style={{ color: "grey", fontSize: 10 }}>
+                      Password
+                    </Label>
+                    <Input
+                      autoCapitalize="none"
+                      secureTextEntry={this.state.toggle}
+                      onChangeText={text => {
+                        this.setState({ password: text.replace(/\s/g, "") });
+                      }}
+                    />
+                  </Item>
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+                      borderBottomColor: "black",
+                      paddingTop: 5
+                      // marginRight:30,
+                    }}
+                  >
+                    <Button
+                      transparent
+                      dark
+                      style={{ paddingLeft: 30 }}
+                      onPress={() =>
+                        this.setState({ toggle: !this.state.toggle })
+                      }
+                    >
+                      <Text
+                        style={{ fontSize: 8, paddingTop: 28, color: "gray" }}
+                      >
+                        show
+                      </Text>
+                    </Button>
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: "white",
+                      height: 20,
+                      width: 22,
+                      position: "relative",
+                      top: 20,
+                      right: 15
+                    }}
+                  />
+                </View>
+
+                {this.state.errorPassword && (
+                  <Text style={{ color: "red", fontSize: 10 }}>
+                    {this.state.errorPassword}
+                  </Text>
+                )}
+
+                <Button transparent dark style={{ alignSelf: "flex-end" }}>
+                  <Text style={{ fontSize: 8 }}>Forgot Password?</Text>
+                </Button>
+
+                <Button
+                  rounded
+                  onPress={() => this.normalLogin()}
+                  style={{
+                    alignSelf: "center",
+                    width: wp("33%"),
+                    height: hp("5.3%"),
+                    // paddingLeft: 25,
+                    justifyContent:'center',
+                    alignItems: 'center',
+                    backgroundColor: "#fab430",
+                    elevation: 0,
+                    margin: 20
+                  }}
+                >
+                  <Text style={{ color: "black", fontSize: 12 }}>Log In</Text>
+                </Button>
+                <Text style={{ fontSize: 10, alignSelf: "center", margin: 10 }}>
+                  --------------------------- Or ---------------------------
+                </Text>
+                <Button
+                  iconLeft
+                  style={{
+                    alignSelf: "center",
+                    // width: 270,
+                    // height: 35,
+                    width: wp("58.66%"),
+                    height: hp("4%"),
+                    margin: 5,
+                    elevation: 0
+                  }}
+                >
+                  <Icon
+                    name="facebook"
+                    type="FontAwesome"
+                    color="white"
+                    style={{ fontSize: 12 }}
+                  />
+                  <Text style={{ fontSize: 9, paddingRight: 48 }}>
+                    Continue with Facebook
+                  </Text>
+                </Button>
+                <Button
+                  bordered
+                  dark
+                  iconLeft
+                  style={{
+                    alignSelf: "center",
+                    width: wp("58.66%"),
+                    height: hp("4%"),
+                    marginTop: 10,
+                    // margin: 5,
+                    backgroundColor: "white"
+                  }}
+                  onPress={() => {
+                    this.signinGoogle();
+                  }}
+                >
+                  <Icon name="logo-google" style={{ fontSize: 12 }} />
+                  <Text
+                    style={{ fontSize: 9, color: "black", paddingRight: 52 }}
+                  >
+                    Continue with Google
+                  </Text>
+                </Button>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    paddingTop: 5,
+                    paddingLeft: 10
+                  }}
+                >
+                  <Text style={{ fontSize: 10, paddingTop: 15 }}>
+                    New to Spiritpedia?
+                  </Text>
+                  <Button
+                    transparent
+                    dark
+                    style={{}}
+                    onPress={() => this.props.navigation.navigate("Register")}
+                  >
+                    <Text style={{ fontSize: 10, paddingLeft: 5 }}>
+                      Sign Up
+                    </Text>
+                  </Button>
+                </View>
+              </Form>
+            </View>
+            {/* <View style={styles.signupbox}>
             <View style={{ marginLeft: 50, marginRight: 50 }}>
               <Button
                 color="coral"
@@ -297,8 +543,8 @@ export default class AuthScreen extends React.Component {
                 onPress={() => this.refs.instagramLogin.show()}
               />
             </View>
-          </View>
-          <View>
+          </View> */}
+            {/* <View>
             <InstagramLogin
               ref="instagramLogin"
               clientId="992305b1948d4e069631b9a3b66d5f55"
@@ -315,9 +561,10 @@ export default class AuthScreen extends React.Component {
                   }
                 }).then(res=>res.json())
                 .then(resJson => {this.setState({resJson});
-                await AsyncStorage.multiSet([
+                AsyncStorage.multiSet([
                   ['A', JSON.stringify(resJson.user.full_name)],
-                  ['B', JSON.stringify(resJson.user.profile_picture)], 
+                  ['B', JSON.stringify(resJson.user.profile_picture)],
+                  ['C', 'instEmailPlaceholder'] 
                 ]);
                 }).then(()=>this.props.navigation.navigate('Landingone'))
                 .catch(data=>{console.warn(data)})
@@ -325,128 +572,58 @@ export default class AuthScreen extends React.Component {
               }
               onLoginFailure={data => console.warn(data)}
             />
+          </View> */}
           </View>
+
+          {/* </ImageBackground> */}
+          {/* </ScrollView> */}
+          {/* </KeyboardAvoidingView> */}
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 
-  async checkPermission() {
-    const enabled = await firebase.messaging().hasPermission();
-    if (enabled) {
-      await firebase.messaging().getToken();
-    } else {
-      this.requestPermission();
-    }
-  }
-
-  async createNotificationListeners() {
-    /*
-     * Triggered when a particular notification has been received in foreground
-     * */
-    this.notificationListener = firebase
-      .notifications().onNotification(notification => {
-        const { title, body } = notification;
-        console.log("onNotification:");
-        console.warn("onNotification:");
-        // this.showAlert(title, body);
-        // alert('message');
-
-        const localNotification = new firebase.notifications.Notification({
-          sound: "sampleaudio",
-          show_in_foreground: true
-        })
-          .setNotificationId(notification.notificationId)
-          .setTitle(notification.title)
-          // .setSubtitle(notification.subtitle)
-          .setBody(notification.body)
-          // .setData(notification.data)
-          .android.setChannelId("fcm_default_channel") // e.g. the id you chose above
-          .android.setSmallIcon("@drawable/ic_launcher") // create this icon in Android Studio
-          .android.setColor("#000000") // you can set a color here
-          .android.setPriority(firebase.notifications.Android.Priority.High);
-
-        firebase
-          .notifications()
-          .displayNotification(localNotification)
-          .catch(err => console.error(err));
-      });
-
-    const channel = new firebase.notifications.Android.Channel(
-      "fcm_default_channel",
-      "SPIRITPEDIA",
-      firebase.notifications.Android.Importance.High
-    )
-      .setDescription("The Xceed App")
-      .setSound("sampleaudio.mp3");
-    firebase.notifications().android.createChannel(channel);
-
-    /*
-     * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
-     * */
-    this.notificationOpenedListener = firebase
-      .notifications()
-      .onNotificationOpened(notificationOpen => {
-        const { title, body } = notificationOpen.notification;
-        console.warn("onNotificationOpened:");
-        // this.showAlert(tistle, body);
-      });
-    /*
-     * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
-     * */
-    const notificationOpen = await firebase
-      .notifications()
-      .getInitialNotification();
-    if (notificationOpen) {
-      const { title, body } = notificationOpen.notification;
-      console.warn("getInitialNotification:");
-      // this.showAlert(title, body);
-    }
-    /*
-     * Triggered for data only payload in foreground
-     * */
-    this.messageListener = firebase.messaging().onMessage(message => {
-      //process data message
-      console.warn(JSON.stringify(message));
-    });
-  }
-
-
+  // here was notification code
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column"
-  },
-  orangeline: {
-    flex: 1,
-    backgroundColor: "coral"
-  },
-  header: {
-    flex: 2,
-    flexDirection: "row",
-    backgroundColor: "#263238",
-    justifyContent: "space-around",
-    alignItems: "center"
-  },
-  headerfont: {
-    color: "coral",
-    fontSize: 35,
-    fontWeight: "bold",
-    fontFamily: "sans-serif-condensed"
-  },
-  body: {
-    flex: 18,
-    backgroundColor: "#263238"
-  },
-  loginbox: {
-    marginTop: 30,
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 10,
+    alignItems: "center",
     justifyContent: "center"
   },
+  awarescrollview: {
+    flex: 1
+  },
+  upperportion: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  logo: {
+    height: 130,
+    width: 130,
+    justifyContent: "flex-end"
+  },
+  body: {
+    flex: 2,
+    // justifyContent: "center"
+    alignItems: "center",
+    marginTop: 40
+  },
+  textinput: {
+    width: WIDTH - 50,
+    height: 45,
+    marginHorizontal: 30
+    // marginRight: 45,
+    // justifyContent: "flex-end"
+  },
+  loginbox: {
+    // marginTop: 10,
+    marginBottom: 70,
+    justifyContent: "flex-end"
+  },
+
   signupbox: {
     marginLeft: 15,
     marginRight: 15,

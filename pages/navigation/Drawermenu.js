@@ -5,7 +5,8 @@ import {
 		View,
         Text,
         TouchableOpacity,
-        Image
+        Image,
+        StatusBar
 } from 'react-native';
 import { Container, Content, Header, Body } from "native-base";
 import AsyncStorage from '@react-native-community/async-storage';
@@ -49,8 +50,11 @@ export default class Drawermenu extends React.Component{
     render(){
         
         return(
+            
             <Container>
-                <Header style={{ height: 100, backgroundColor: "#1c313a" }}>
+            <StatusBar  androidStatusBarColor='orange' barStyle="light-content" />
+
+                <Header style={{ height: 100, backgroundColor: "#1c313a" }} androidStatusBarColor='orange'>
                     <Body style={{flexDirection: 'row', }}>
                         <View>
                             <Image style={styles.Imgview} 

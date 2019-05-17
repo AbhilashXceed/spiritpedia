@@ -31,7 +31,7 @@ export default class ExploreOne extends React.Component {
     const {currentUser} = firebase.auth();
     this.setState({ currentUser })
     SplashScreen.hide();
-    console.log(this.state.currentUser);
+    console.warn(this.state.currentUser);
     let A = await AsyncStorage.getItem('insta');
     let insta = JSON.parse(A);
     if(insta){
@@ -54,7 +54,7 @@ export default class ExploreOne extends React.Component {
     const  {currentUser} = this.state
     return (
       <View style={styles.container}>
-      <StatusBar backgroundColor="#263238" barStyle="dark-content" />
+      <StatusBar  androidStatusBarColor='orange' barStyle="light-content" />
       <Text>
       Hi { currentUser && currentUser.email}!
       </Text>
@@ -148,7 +148,7 @@ export default class ExploreOne extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "coral"
+    backgroundColor: "orange"
   },
   
   tilesBox: {
