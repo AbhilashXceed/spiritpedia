@@ -198,53 +198,53 @@ export default class AuthScreen extends React.Component {
 
       var url = "http://192.168.0.103/User_Project/login.php";
 
-      fetch(url, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: email,
-          pass: password
-        })
-      })
-        .then(response => response.json())
-        .then(responsejson => {
-          alert(responsejson);
-        })
-        .catch(error => {
-          this.setState({ errorMessage: error.message });
-          console.warn(this.state.errorMessage);
-          alert(this.state.errorMessage);
-        });
-
-      // firebase
-      // .auth()
-      // .signInWithEmailAndPassword(email, password)
-      // .then(
-      //   fetch(url,{
-      //     method: "POST",
-      //     headers: {
-      //       "Accept": "application/json",
-      //       "Content-Type": "application/json"
-      //     },
-      //     body:JSON.stringify({
-      //       emailphp: email,
-      //       passwordphp: password
-      //     })
+      // fetch(url, {
+      //   method: "POST",
+      //   headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "application/json"
+      //   },
+      //   body: JSON.stringify({
+      //     email: email,
+      //     pass: password
       //   })
-      // )
-      // .then((response)=>response.json())
-      // .then((responsejson)=>{
-      //   alert(responsejson)
       // })
-      // // .then(() => this.props.navigation.navigate("Landingone"))
-      // .catch(error => {
-      //   this.setState({ errorMessage: error.message });
-      //   console.warn(this.state.errorMessage);
-      //   alert(this.state.errorMessage);
-      // });
+      //   .then(response => response.json())
+      //   .then(responsejson => {
+      //     alert(responsejson);
+      //   })
+      //   .catch(error => {
+      //     this.setState({ errorMessage: error.message });
+      //     console.warn(this.state.errorMessage);
+      //     alert(this.state.errorMessage);
+      //   });
+
+      firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(
+        fetch(url,{
+          method: "POST",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          body:JSON.stringify({
+            emailphp: email,
+            passwordphp: password
+          })
+        })
+      )
+      .then((response)=>response.json())
+      .then((responsejson)=>{
+        alert(responsejson)
+      })
+      .then(() => this.props.navigation.navigate("Landingone"))
+      .catch(error => {
+        this.setState({ errorMessage: error.message });
+        console.warn(this.state.errorMessage);
+        alert(this.state.errorMessage);
+      });
     }
     Keyboard.dismiss();
   };
@@ -267,6 +267,7 @@ export default class AuthScreen extends React.Component {
             style={styles.backgroundimage}> */}
         <View style={styles.container}>
           <View style={styles.upperportion}>
+          
             <Image
               source={require("../android/app/images/spiritpedia-logo.png")}
               style={{ height: hp("17.94%"), marginTop: hp("13.75%") }}
@@ -277,6 +278,10 @@ export default class AuthScreen extends React.Component {
           <View style={styles.body}>
             <View style={{ width: wp("85.52%") }}>
               <Form>
+                <TouchableOpacity onPress={()=>this.props.navigation.navigate('Landingone')} >
+                <Icon name="logo-google" style={{ fontSize: 22 }} />
+                </TouchableOpacity>
+              
                 <View
                   style={{
                     flexDirection: "row",
@@ -295,7 +300,7 @@ export default class AuthScreen extends React.Component {
                     <Icon
                       type="Feather"
                       name="user"
-                      style={{ fontSize: 14, paddingTop: 26 }}
+                      style={{ fontSize: 14, paddingTop: 25 }}
                     />
                   </View>
                   <Item
@@ -346,7 +351,7 @@ export default class AuthScreen extends React.Component {
                     <Icon
                       type="Feather"
                       name="lock"
-                      style={{ fontSize: 14, paddingTop: 25 }}
+                      style={{ fontSize: 14, paddingTop: 26 }}
                     />
                   </View>
                   <Item
@@ -354,7 +359,7 @@ export default class AuthScreen extends React.Component {
                     style={{
                       borderBottomColor: "black",
                       borderBottomWidth: 1,
-                      marginTop: 0,
+                      marginTop: 1,
                       paddingTop: 0,
                       margin: 0,
                       padding: 0,
@@ -376,7 +381,7 @@ export default class AuthScreen extends React.Component {
                     style={{
                       borderBottomWidth: 1,
                       borderBottomColor: "black",
-                      paddingTop: 5
+                      paddingTop: 6
                       // marginRight:30,
                     }}
                   >
@@ -389,7 +394,7 @@ export default class AuthScreen extends React.Component {
                       }
                     >
                       <Text
-                        style={{ fontSize: 8, paddingTop: 28, color: "gray" }}
+                        style={{ fontSize: 8, paddingTop: 30, color: "gray" }}
                       >
                         show
                       </Text>

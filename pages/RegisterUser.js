@@ -27,8 +27,12 @@ import {
   Radio,
   ListItem,
   Right,
-  Left
+  Left,
+  StyleProvider
 } from "native-base";
+
+import getTheme from "../native-base-theme/components";
+import platform from "../native-base-theme/variables/platform";
 
 import firebase from "react-native-firebase";
 // import { Input } from "react-native-elements";
@@ -49,7 +53,9 @@ export default class RegisterUser extends React.Component {
         errorname: null,
         erroremail: null,
         errorpass: null,
-        errorphone: null
+        errorphone: null,
+        femaleRadio: false,
+        maleRadio: false
       });
   }
 
@@ -62,6 +68,7 @@ export default class RegisterUser extends React.Component {
   // };
 
   pusher() {
+    console.warn("button is pressed");
     const { name, email, password, phone } = this.state;
     const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -126,6 +133,20 @@ export default class RegisterUser extends React.Component {
     }
   }
 
+  femaleRadioclick() {
+    this.setState({
+      femaleRadio: !this.state.femaleRadio,
+      maleRadio: false
+    });
+  }
+
+  maleRadioclick() {
+    this.setState({
+      maleRadio: !this.state.maleRadio,
+      femaleRadio: false
+    });
+  }
+
   render() {
     return (
       <KeyboardAwareScrollView
@@ -135,7 +156,7 @@ export default class RegisterUser extends React.Component {
         enableOnAndroid={true}
         enableAutomaticScroll={true}
       >
-        <StatusBar backgroundColor={"orange"} />
+        <StatusBar backgroundColor={"#ff9900"} />
 
         <View style={{ flex: 4 }}>
           <ImageBackground
@@ -147,10 +168,9 @@ export default class RegisterUser extends React.Component {
               alignSelf: "stretch",
               position: "relative",
               bottom: 0,
-              alignItems:'center',
-              justifyContent:'flex-end',
-              paddingTop:50,
-              
+              alignItems: "center",
+              justifyContent: "flex-end",
+              paddingTop: 50
             }}
           >
             <Image
@@ -161,123 +181,154 @@ export default class RegisterUser extends React.Component {
           </ImageBackground>
         </View>
 
-
         <View style={styles.regform}>
           <Text style={styles.header}>Sign Up</Text>
-            <View style={{marginHorizontal: 25}}>
+          <View style={{ marginHorizontal: 25 }}>
+            <Form style={{ width: wp("77%"), marginLeft: 17 }}>
+              <Item
+                floatingLabel
+                style={{
+                  borderBottomColor: "black",
+                  borderBottomWidth: 1,
+                  marginBottom: 0,
+                  marginTop: 0,
+                  marginLeft: 0
+                }}
+              >
+                <Label style={{ color: "grey", fontSize: 10 }}>
+                  Email Address*
+                </Label>
+                <Input
+                  autoCapitalize="none"
+                  onChangeText={text =>
+                    this.setState({ email: text.replace(/\s/g, "") })
+                  }
+                />
+              </Item>
+              <Item
+                floatingLabel
+                style={{
+                  borderBottomColor: "black",
+                  borderBottomWidth: 1,
+                  marginBottom: 0,
+                  marginTop: 0,
+                  marginLeft: 0
+                }}
+              >
+                <Label style={{ color: "grey", fontSize: 10 }}>Password</Label>
+                <Input autoCapitalize="none" />
+              </Item>
+              <Item
+                floatingLabel
+                style={{
+                  borderBottomColor: "black",
+                  borderBottomWidth: 1,
+                  marginBottom: 0,
+                  marginTop: 0,
+                  marginLeft: 0
+                }}
+              >
+                <Label style={{ color: "grey", fontSize: 10 }}>
+                  Full Name*
+                </Label>
+                <Input
+                  autoCapitalize="none"
+                  onChangeText={text =>
+                    this.setState({ name: text.replace(/\s/g, "") })
+                  }
+                />
+              </Item>
+              <Item
+                floatingLabel
+                style={{
+                  borderBottomColor: "black",
+                  borderBottomWidth: 1,
+                  marginBottom: 0,
+                  marginTop: 0,
+                  marginLeft: 0
+                }}
+              >
+                <Label style={{ color: "grey", fontSize: 10 }}>
+                  Mobile Number*
+                </Label>
+                <Input
+                  autoCapitalize="none"
+                  maxLength={10}
+                  keyboardType={"phone-pad"}
+                  onChangeText={text =>
+                    this.setState({ phone: text.replace(/\s/g, "") })
+                  }
+                />
+              </Item>
 
-
-            <Form style={{width: wp("77%"), marginLeft:17}}>
-            <Item 
-              floatingLabel
-              style={{
-                borderBottomColor: "black",
-                      borderBottomWidth: 1,
-                      marginBottom: 0,
-                      marginTop: 0,
-                      marginLeft: 0
-              }}>
-              <Label style={{ color: "grey", fontSize: 10 }}>Email Address*</Label>
-              <Input
-              autoCapitalize="none"
-              onChangeText={text =>
-                this.setState({ email: text.replace(/\s/g, "") })
-              }
-              />
-            </Item>
-            <Item 
-            floatingLabel
-            style={{
-              borderBottomColor: "black",
-                    borderBottomWidth: 1,
-                    marginBottom: 0,
-                    marginTop: 0,
-                    marginLeft: 0
-            }}>
-              <Label style={{ color: "grey", fontSize: 10 }}>Password</Label>
-              <Input
-              autoCapitalize="none"/>
-            </Item>
-            <Item 
-            floatingLabel
-            style={{
-              borderBottomColor: "black",
-                    borderBottomWidth: 1,
-                    marginBottom: 0,
-                    marginTop: 0,
-                    marginLeft: 0
-            }}>
-              <Label style={{ color: "grey", fontSize: 10 }}>Full Name*</Label>
-              <Input
-              autoCapitalize="none"
-              onChangeText={text =>
-                this.setState({ name: text.replace(/\s/g, "") })
-              }/>
-            </Item>
-            <Item 
-            floatingLabel
-            style={{
-              borderBottomColor: "black",
-                    borderBottomWidth: 1,
-                    marginBottom: 0,
-                    marginTop: 0,
-                    marginLeft: 0
-            }}>
-              <Label style={{ color: "grey", fontSize: 10 }}>Mobile Number*</Label>
-              <Input
-              autoCapitalize="none"
-              maxLength={10}
-              keyboardType={"phone-pad"}
-              onChangeText={text =>
-                this.setState({ phone: text.replace(/\s/g, "") })
-              }/>
-            </Item>
-            
-            <View style={{flexDirection:'row', justifyContent: 'space-around', alignItems:'center'}}>
-              <View style={{flexDirection:'row'}}>
-              <Radio
-                color={"black"}
-                selectedColor={"orange"}
-                selected={true}
-              />
-              <Text style={{fontSize: 11}}>Male</Text>
-              
-              </View>
-              <View style={{flexDirection:'row'}}>
-              
-              <Radio
-              style={{fontSize:10}}
-                color={"black"}
-                selectedColor={"orange"}
-                selected={false}
-              />
-              <Text style={{fontSize: 11}}>Female</Text>
-              </View>
-            </View>
-            
-          </Form>
-
-          <Button
-                  rounded
-                  onPress={() => this.normalLogin()}
+              <StyleProvider style={getTheme(platform)}>
+                <View
                   style={{
-                    alignSelf: "center",
-                    width: wp("77%"),
-                    height: hp("5.3%"),
-                    backgroundColor: "#fab430",
-                    elevation: 0,
-                    margin: 20,
-                    justifyContent: 'center',
-                    alignItems:'center'
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    alignItems: "center",
+                    margin: 10,
+                    marginTop: 10
                   }}
                 >
-                  <Text 
-                  onPress={() => this.pusher()}
-                  style={{ color: "black", fontSize: 11,  }}>Create Account</Text>
-                </Button>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between"
+                    }}
+                  >
+                    <Radio
+                      style={{ marginRight: 10 }}
+                      color={"black"}
+                      selectedColor={"orange"}
+                      onPress={() => this.maleRadioclick()}
+                      selected={this.state.maleRadio}
+                    />
+                    <Text style={{ fontSize: 11 }}>Male</Text>
+                  </View>
+                  <View style={{ flexDirection: "row" }}>
+                    <Radio
+                      style={{ paddingRight: 10 }}
+                      color={"black"}
+                      selectedColor={"orange"}
+                      onPress={() => this.femaleRadioclick()}
+                      selected={this.state.femaleRadio}
+                    />
+                    <Text style={{ fontSize: 11 }}>Female</Text>
+                  </View>
+                </View>
+              </StyleProvider>
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ fontSize: 10, textAlign: "center", margin: 10 }}>
+                  Enter your referral code here
+                </Text>
+                <Input style={{ width: 150, borderBottomWidth: 1 }} />
+              </View>
+            </Form>
 
-            <Input
-            // inputStyle={styles.textInput}
+            <Button
+              rounded
+              onPress={() => this.pusher()}
+              style={{
+                alignSelf: "center",
+                width: wp("77%"),
+                height: hp("5.3%"),
+                backgroundColor: "#fab430",
+                elevation: 0,
+                margin: 10,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Text
+                style={{ color: "black", fontSize: 11 }}
+              >
+                Create Account
+              </Text>
+            </Button>
+
+            {/* <Input
+            inputStyle={styles.textInput}
             containerStyle={{
             borderBottomWidth:0 }}
             borderBottomWidth={0}
@@ -290,9 +341,9 @@ export default class RegisterUser extends React.Component {
             }
             errorStyle={{ color: "red" }}
             errorMessage={this.state.errorname}
-          />
+          /> */}
 
-          <Input
+            {/* <Input
             inputStyle={styles.textInput}
             containerStyle={{ marginBottom: 30 }}
             placeholder="Email ID"
@@ -305,9 +356,9 @@ export default class RegisterUser extends React.Component {
             }
             errorStyle={{ color: "red" }}
             errorMessage={this.state.erroremail}
-          />
+          /> */}
 
-          <Input
+            {/* <Input
             inputStyle={styles.textInput}
             containerStyle={{ marginBottom: 30 }}
             placeholder="Password"
@@ -319,11 +370,11 @@ export default class RegisterUser extends React.Component {
             }
             errorStyle={{ color: "red" }}
             errorMessage={this.state.errorpass}
-          />
+          /> */}
 
-          <Input
+            {/* <Input
             inputStyle={styles.textInput}
-            // containerStyle={{ marginBottom: 30 }}
+            containerStyle={{ marginBottom: 30 }}
             placeholder="Phone No"
             maxLength={10}
             keyboardType={"phone-pad"}
@@ -335,15 +386,12 @@ export default class RegisterUser extends React.Component {
             }
             errorStyle={{ color: "red" }}
             errorMessage={this.state.errorphone}
-          />
+          /> */}
 
-          {/* <TouchableOpacity style={styles.Button} onPress={() => this.pusher()}>
+            {/* <TouchableOpacity style={styles.Button} onPress={() => this.pusher()}>
             <Text style={styles.btntext}>Sign Up!</Text>
           </TouchableOpacity> */}
-
-
           </View>
-         
         </View>
       </KeyboardAwareScrollView>
     );
@@ -357,14 +405,14 @@ const styles = StyleSheet.create({
   },
   regform: {
     alignSelf: "stretch",
-    flex: 8,
+    flex: 8
     // backgroundColor:'coral'
   },
   header: {
     color: "black",
     fontSize: 18,
-    textAlign: 'center',
-    marginTop:30
+    textAlign: "center",
+    marginTop: 30
   },
   textInput: {
     alignSelf: "stretch",

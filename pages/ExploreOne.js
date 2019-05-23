@@ -6,8 +6,16 @@ import {
   Button,
   TouchableOpacity,
   Alert,
-  StatusBar
+  StatusBar,
+  ImageBackground,
+  ScrollView,
+  Image
 } from "react-native";
+
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 
 import AsyncStorage from "@react-native-community/async-storage";
 import { GoogleSignin } from "react-native-google-signin";
@@ -22,22 +30,22 @@ export default class ExploreOne extends React.Component {
       normalUser: null,
       googleToken: null,
       currentUser: null,
-      insta:null,
-      instaname: null,
+      insta: null,
+      instaname: null
     };
   }
 
   componentDidMount = async () => {
-    const {currentUser} = firebase.auth();
-    this.setState({ currentUser })
+    const { currentUser } = firebase.auth();
+    this.setState({ currentUser });
     SplashScreen.hide();
-    console.warn(this.state.currentUser);
-    let A = await AsyncStorage.getItem('insta');
+    // console.warn(this.state.currentUser);
+    let A = await AsyncStorage.getItem("insta");
     let insta = JSON.parse(A);
-    if(insta){
-      console.warn("Hello"+insta.data.username);
-      this.setState({insta: insta});
-      this.setState({instaname: insta.data.username});
+    if (insta) {
+      console.warn("Hello" + insta.data.username);
+      this.setState({ insta: insta });
+      this.setState({ instaname: insta.data.username });
     }
     // let A = await AsyncStorage.getItem("user");
     // let B = await AsyncStorage.getItem("googleToken");
@@ -48,98 +56,143 @@ export default class ExploreOne extends React.Component {
     //   console.warn("There is no userdata, something went wrong");
     // }
   };
- 
+
   render() {
-    
-    const  {currentUser} = this.state
+    const { currentUser } = this.state;
     return (
       <View style={styles.container}>
-      <StatusBar  androidStatusBarColor='orange' barStyle="light-content" />
-      <Text>
+        <ScrollView>
+          <Image
+            source={require("../android/app/images/bottle1.png")}
+            style={{ height: hp("28.2%"), width: wp("100%"),  }}
+            // resizeMode="contain"
+          />
+          <View style={{ marginVertical: 10, marginHorizontal: 20 }}>
+            <Text style={{ color: "black", margin: 5 }}>Whiskey</Text>
+            <TouchableOpacity>
+              <Image
+                source={require("../android/app/images/bottle5.png")}
+                style={{
+                  height: hp("20%"),
+                  width: wp("88.5%"),
+                  borderColor: "#bfbfbf",
+                  borderWidth: 3,
+                  borderRadius: 10
+                }}
+                // resizeMode="cover"
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View>
+            <Text
+              style={{
+                color: "black",
+                margin: 5,
+                marginBottom: 5,
+                marginHorizontal: 25
+              }}
+            >
+              Distilleries
+            </Text>
+            <ScrollView horizontal={true}>
+              <TouchableOpacity>
+                <Image
+                  source={require("../android/app/images/bottle2.png")}
+                  style={{
+                    height: hp("20%"),
+                    width: wp("40%"),
+                    borderColor: "#bfbfbf",
+                    borderWidth: 3,
+                    borderRadius: 10
+                  }}
+                  // resizeMode="cover"
+                />
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 9,
+                    color: "black",
+                    margin: 10
+                  }}
+                >
+                  Australian Distillery
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity>
+                <Image
+                  source={require("../android/app/images/bottle3.png")}
+                  style={{
+                    height: hp("20%"),
+                    width: wp("40%"),
+                    borderColor: "#bfbfbf",
+                    borderWidth: 3,
+                    borderRadius: 10,
+                    marginHorizontal: 12
+                  }}
+                  // resizeMode="center"
+                />
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 9,
+                    color: "black",
+                    margin: 10
+                  }}
+                >
+                  Australian Distillery
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity>
+                <Image
+                  source={require("../android/app/images/bottle4.png")}
+                  style={{
+                    height: hp("20%"),
+                    width: wp("40%"),
+                    borderColor: "#bfbfbf",
+                    borderWidth: 3,
+                    borderRadius: 10
+                  }}
+                  // resizeMode="cover"
+                />
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 9,
+                    color: "black",
+                    margin: 10
+                  }}
+                >
+                  Australian Distillery
+                </Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+
+          <View style={{ marginVertical: 10, marginHorizontal: 20 }}>
+            <Text style={{ color: "black", margin: 5, marginBottom: 5 }}>
+              Upcoming Events
+            </Text>
+            <TouchableOpacity>
+              <Image
+                source={require("../android/app/images/wisky.png")}
+                style={{
+                  height: hp("20%"),
+                  width: wp("88.5%"),
+                  borderColor: "#bfbfbf",
+                  borderWidth: 3,
+                  borderRadius: 10
+                }}
+                // resizeMode="cover"
+              />
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+        {/* <Text>
       Hi { currentUser && currentUser.email}!
-      </Text>
-        <View style={styles.tilesBox}>
-          <View style={styles.tilesrow}>
-            <View style={styles.block}>
-              <TouchableOpacity style={{ padding: 1 }}>
-                <Icon
-                  name="infocirlce"
-                  type="antdesign"
-                  color="coral"
-                  size={75}
-                />
-                <Text style={styles.smalltitle}>WHISKYPEDIA</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.block}>
-              <TouchableOpacity>
-                <Icon
-                  name="industry"
-                  type="font-awesome"
-                  color="coral"
-                  size={75}
-                />
-                <Text style={styles.smalltitle}>DISTILLERIES</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.block}>
-              <TouchableOpacity>
-                <Icon name="feed" type="font-awesome" color="coral" size={75} />
-                <Text style={styles.smalltitle}>FEED</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.tilesrow}>
-            <View style={styles.block}>
-              <TouchableOpacity>
-                <Icon
-                  name="institution"
-                  type="font-awesome"
-                  color="coral"
-                  size={75}
-                />
-                <Text style={styles.smalltitle}>INSTITUTES</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.block}>
-              <TouchableOpacity>
-                <Icon
-                  name="calendar"
-                  type="antdesign"
-                  color="coral"
-                  size={75}
-                />
-                <Text style={styles.smalltitle}>EVENTS</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.block}>
-              <TouchableOpacity>
-                <Icon name="local-offer" color="coral" size={75} />
-                <Text style={styles.smalltitle}>OFFERS</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.tilesrow}>
-            <View style={styles.block}>
-              <TouchableOpacity>
-                <Icon name="video" type="entypo" color="coral" size={75} />
-                <Text style={styles.smalltitle}>WHISKYTUBE</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.block}>
-              <TouchableOpacity>
-                <Icon name="md-cart" type="ionicon" color="coral" size={75} />
-                <Text style={styles.smalltitle}>MERCHANDISE</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.block}>
-              <TouchableOpacity>
-                <Icon name="news" type="entypo" color="coral" size={75} />
-                <Text style={styles.smalltitle}>NEWS</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+      </Text> */}
       </View>
     );
   }
@@ -148,9 +201,9 @@ export default class ExploreOne extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "orange"
+    backgroundColor: "white"
   },
-  
+
   tilesBox: {
     flex: 1,
     backgroundColor: "coral"
@@ -177,5 +230,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontWeight: "100",
     fontStyle: "italic"
-  },
+  }
 });

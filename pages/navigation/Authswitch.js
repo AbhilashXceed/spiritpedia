@@ -18,6 +18,7 @@ import FAQ from "../sidedrawer/FAQ";
 import Feedback from "../sidedrawer/Feedback";
 import Points from "../sidedrawer/Points";
 import profile from "../sidedrawer/profile";
+import Setting from "../sidedrawer/Setting";
 
 import Drawermenu from '../navigation/Drawermenu';
 
@@ -40,19 +41,31 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 
 
-const Explore = createStackNavigator({
+const Home = createStackNavigator({
   ExploreOne: {
     screen: ExploreOne,
     navigationOptions: ({ navigation }) => {
       return {
-        title: "Explore",
+        // title: "Explore",
+        // header:(<View style={{backgroundColor:'orange'}}></View>),
+
+        headerStyle:( {backgroundColor:'#fdbd30'}),
+        headerLeftContainerStyle:({padding:10}),
+        headerRightContainerStyle:({padding:10}),
+        headerRight:(
+          <Icon
+            name="bell"
+            color="white"
+            type="material-community"
+            size={25}
+          />
+        ),
         headerLeft: (
           <Icon
             name="menu"
             type="entypo"
-            color="coral"
-            size={45}
-            style={{ paddingLeft: 15 }}
+            color="white"
+            size={40}
             onPress={() => navigation.openDrawer()}
           />
         )
@@ -103,10 +116,10 @@ const Offers = createStackNavigator({
   }
 });
 
-const Feed = createStackNavigator({
-  FeedOne: {
-    headerTitle: Feed,
-    screen: FeedOne,
+const Search = createStackNavigator({
+  OffersOne: {
+    headerTitle: Offers,
+    screen: OffersOne,
     navigationOptions: ({ navigation }) => {
       return {
         headerLeft: (
@@ -124,13 +137,35 @@ const Feed = createStackNavigator({
   }
 });
 
+// const Feed = createStackNavigator({
+//   FeedOne: {
+//     headerTitle: Feed,
+//     screen: FeedOne,
+//     navigationOptions: ({ navigation }) => {
+//       return {
+//         headerLeft: (
+//           <Icon
+//             name="menu"
+//             type="entypo"
+//             color="coral"
+//             size={45}
+//             style={{ paddingLeft: 15 }}
+//             onPress={() => navigation.openDrawer()}
+//           />
+//         )
+//       };
+//     }
+//   }
+// });
+
 
 const LandingTabNavigator = createBottomTabNavigator(
   {
-    Explore,
+    Home,
+    Search,
     Bookmarks,
+    // Feed,
     Offers,
-    Feed
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -138,29 +173,29 @@ const LandingTabNavigator = createBottomTabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         let iconType;
-        if (routeName === "Explore") {
-          iconName = "appstore1";
-          iconType = "antdesign";
+        if (routeName === "Home") {
+          iconName = "home";
+          iconType = "entypo";
         } else if (routeName === "Bookmarks") {
           iconName = "bookmark";
           iconType = "font-awesome";
         } else if (routeName === "Offers") {
-          iconName = "price-tag";
-          iconType = "entypo";
-        } else if (routeName === "Feed") {
-          iconName = "feed";
+          iconName = "tag";
+          iconType = "font-awesome";
+        } else if (routeName === "Search") {
+          iconName = "search";
           iconType = "font-awesome";
         }
         return (
-          <Icon name={iconName} type={iconType} size={20} color={tintColor} />
+          <Icon name={iconName} type={iconType} size={25} color={tintColor} />
         );
       }
     }),
     tabBarOptions: {
-      activeTintColor: "white",
-      inactiveTintColor: "coral",
-      activeBackgroundColor: "#263238",
-      inactiveBackgroundColor: "#263238"
+      activeTintColor: "#fdbd30",
+      inactiveTintColor: "#bfbfbf",
+      activeBackgroundColor: "white",
+      inactiveBackgroundColor: "white"
     }
   }
 );
@@ -275,6 +310,9 @@ const LandingDrawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerIcon: <Icon name="chat" type="entypo" size={20} color="white" />
       }
+    },
+    Setting: {
+      screen: Setting,
     }
   },
   drawerConfig

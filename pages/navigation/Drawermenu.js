@@ -11,6 +11,11 @@ import {
 import { Container, Content, Header, Body } from "native-base";
 import AsyncStorage from '@react-native-community/async-storage';
 
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+  } from "react-native-responsive-screen";
+
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -21,6 +26,7 @@ export default class Drawermenu extends React.Component{
         this.state={
             userName: null,
             userImg: null,
+           
         }
     }
 
@@ -33,14 +39,46 @@ export default class Drawermenu extends React.Component{
         let Bdash = JSON.parse(B);
         let Cdash = JSON.parse(C);
         this.setState({userName: Adash, userImg: Bdash});
-        console.warn(this.state.userImg);
-        console.log(this.state.userImg);
+        // console.warn(this.state.userImg);
+        // console.log(this.state.userImg);
 
     }
 
-    navlink ( text, nav ){
+     imagery = (namew) => {
+        //  let names = namew
+        //  console.log(names)
+         if (namew == 0){
+            return <Image source={require("../../android/app/icons/locate.png")} style={styles.icons}/> 
+        } else if (namew == 1){
+             return <Image source={require("../../android/app/icons/wallet.png")} style={styles.icons}/> 
+        } else if (namew==2){
+             return <Image source={require("../../android/app/icons/star.png")} style={styles.icons}/> 
+        } else if (namew==3){             
+             return <Image source={require("../../android/app/icons/share.png")} style={styles.icons}/> 
+        } else if (namew==4){             
+             return <Image source={require("../../android/app/icons/wallet.png")} style={styles.icons}/> 
+        } else if (namew==5){             
+             return <Image source={require("../../android/app/icons/headphones.png")} style={styles.icons}/>
+        } else if (namew==6){             
+             return <Image source={require("../../android/app/icons/question.png")} style={styles.icons}/> 
+        } else if (namew==7){             
+             return <Image source={require("../../android/app/icons/info.png")} style={styles.icons}/> 
+        } else if (namew==8){
+             return <Image source={require("../../android/app/icons/chat.png")} style={styles.icons}/> 
+        } else if (namew==9){
+             return <Image source={require("../../android/app/icons/setting.png")} style={styles.icons}/> 
+        } else if (namew==10){
+             return <Image source={require("../../android/app/icons/star.png")} style={styles.icons}/> 
+        } 
+    }
+
+    navlink ( text, nav, name ){
+        
+        
         return(
-            <TouchableOpacity style={{height: 50}} onPress={()=>{this.props.navigation.navigate(nav)}}>
+            <TouchableOpacity style={{height: 40, flexDirection:'row', justifyContent:'center', alignItems:'center'}} onPress={()=>{this.props.navigation.navigate(nav)}}>
+                {/* <Image source={require(name)} style={styles.icons}/> */}
+                {this.imagery(name)}
                 <Text style={styles.link}>{text}</Text>
             </TouchableOpacity>
 
@@ -52,32 +90,37 @@ export default class Drawermenu extends React.Component{
         return(
             
             <Container>
-            <StatusBar  androidStatusBarColor='orange' barStyle="light-content" />
+            <StatusBar  barStyle="light-content" />
 
-                <Header style={{ height: 100, backgroundColor: "#1c313a" }} androidStatusBarColor='orange'>
-                    <Body style={{flexDirection: 'row', }}>
-                        <View>
+                <Header style={{ height: hp("30%"), backgroundColor: "white", flexDirection:'column', justifyContent:'center', alignItems:'center' }} androidStatusBarColor='#fdbd30'>
+                    
+                        <View >
                             <Image style={styles.Imgview} 
-                            source={{uri: this.state.userImg}}/>
+                            // source={{uri: this.state.userImg}}
+                            source={require('../../android/app/images/drawer.png')}
+                            />
                         </View>
-                        <View style={{paddingLeft: 15}}>
-                            <Text style={styles.title}>{this.state.userName}</Text>
+                        <View style={{marginTop: 10, padding:6, width:wp("60%"), borderBottomColor: '#bfbfbf', borderBottomWidth:1}}>
+                        {/* {this.state.userName} */}
+                            <Text style={styles.title}>Hello!</Text>
+                            <Text style={styles.title}>Rohit Supe (Beginner)</Text>
                         </View>
-                    </Body>
+                   
                 </Header>
-                <Content style={{ backgroundColor: "#455a64" }}>
-                    {this.navlink('Home', 'LandingTabNavigator')}
-                    {this.navlink('Profile', 'profile')}
-                    {this.navlink('Location', 'Location')}
-                    {this.navlink('My Transactions', 'Transactions')}
-                    {this.navlink('Whisky Points', 'Points')}
-                    {this.navlink('Share App', 'Share')}
-                    {this.navlink('Refer & Earn', 'Refer')}
-                    {this.navlink('Customer Support', 'Support')}
-                    {this.navlink('FAQ', 'FAQ')}
-                    {this.navlink('About Us', 'About')}
-                    {this.navlink('Share Feedback', 'Feedback')}
-                    {this.navlink('Log Out', 'LogOut')}
+                <Content style={{ backgroundColor: "white" }}>
+                    {/* {this.navlink('Home', 'LandingTabNavigator')}
+                    {this.navlink('Profile', 'profile')} */}
+                    {this.navlink('Location', 'Location', 0)}
+                    {this.navlink('My Transactions', 'Transactions', 1)}
+                    {this.navlink('Whiskey Points', 'Points', 2)}
+                    {this.navlink('Share App', 'Share', 3)}
+                    {this.navlink('Refer and Earn!', 'Refer', 4)}
+                    {this.navlink('Customer Support', 'Support', 5)}
+                    {this.navlink("FAQ's", 'FAQ', 6)}
+                    {this.navlink('About Us', 'About', 7)}
+                    {this.navlink('Share Feedback', 'Feedback', 8)}
+                    {this.navlink('Settings', 'Setting', 9)}
+                    {this.navlink('Log Out', 'LogOut', 10)}
                 </Content>
             </Container>
         )
@@ -91,22 +134,29 @@ const styles = StyleSheet.create({
     },
     link: {
         flex: 1,
-        color: 'white',
+        // color: 'white',
         fontWeight: '300',
-        fontSize: 15, 
+        fontSize: 13, 
         padding: 6,
         paddingLeft: 14,
         margin: 5,
         textAlign: 'left'
     },
     Imgview: {
-        height: 70,
-        width: 70,
-        borderRadius: 35,
+        height: 90,
+        width: 90,
+        borderRadius: 45,
     },
     title:{
-        fontSize: 20,
-        color: 'white',
-        fontWeight: 'bold'
+        fontSize: 15,
+        color: 'black',
+        textAlign:'center',
+        margin:3
+        // fontWeight: 'bold'
+    },
+    icons:{
+        marginLeft:35,
+        height: 13,
+        width: 13,
     }
 })
