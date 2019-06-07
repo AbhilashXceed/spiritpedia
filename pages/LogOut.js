@@ -21,7 +21,7 @@ export default class LogOut extends React.Component {
   }
 
   componentDidMount(){
-    this.logout();
+    // this.logout();
     this.removeItemValue()
   }
   async removeItemValue() {
@@ -29,6 +29,7 @@ export default class LogOut extends React.Component {
       await AsyncStorage.removeItem('A');
       await AsyncStorage.removeItem('B');
       await AsyncStorage.removeItem('C');
+      await AsyncStorage.removeItem('LOGINDATA');
       return true;
     }
     catch(exception) {
@@ -36,14 +37,14 @@ export default class LogOut extends React.Component {
     }
   }
 
-  logout = () => {
-		firebase
-			.auth()
-			.signOut()
-			.then(()=>this.props.navigation.navigate('AuthScreen'))
-			.catch(error=>this.setState({errormessage: error.message}));
+  // logout = () => {
+	// 	firebase
+	// 		.auth()
+	// 		.signOut()
+	// 		.then(()=>this.props.navigation.navigate('AuthScreen'))
+	// 		.catch(error=>this.setState({errormessage: error.message}));
     
-  };
+  // };
 
   render() {
     return (

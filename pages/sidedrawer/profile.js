@@ -10,7 +10,7 @@ import {
     StatusBar
   } from "react-native";
 
-export default class profile extends React.Component {
+export default class Profile extends React.Component {
     render() {
         return(
             <View style={styles.container}>

@@ -93,11 +93,12 @@ export default class Drawermenu extends React.Component{
             <StatusBar  barStyle="light-content" />
 
                 <Header style={{ height: hp("30%"), backgroundColor: "white", flexDirection:'column', justifyContent:'center', alignItems:'center' }} androidStatusBarColor='#fdbd30'>
-                    
+                    <TouchableOpacity style={{flexDirection:'column', justifyContent:'center', alignItems:'center'}}
+                    onPress={()=>this.props.navigation.navigate('Profile')}>
                         <View >
                             <Image style={styles.Imgview} 
                             // source={{uri: this.state.userImg}}
-                            source={require('../../android/app/images/drawer.png')}
+                            source={require('../../assets/images/drawer.png')}
                             />
                         </View>
                         <View style={{marginTop: 10, padding:6, width:wp("60%"), borderBottomColor: '#bfbfbf', borderBottomWidth:1}}>
@@ -105,7 +106,8 @@ export default class Drawermenu extends React.Component{
                             <Text style={styles.title}>Hello!</Text>
                             <Text style={styles.title}>Rohit Supe (Beginner)</Text>
                         </View>
-                   
+                    </TouchableOpacity>
+
                 </Header>
                 <Content style={{ backgroundColor: "white" }}>
                     {/* {this.navlink('Home', 'LandingTabNavigator')}
@@ -113,10 +115,10 @@ export default class Drawermenu extends React.Component{
                     {this.navlink('Location', 'Location', 0)}
                     {this.navlink('My Transactions', 'Transactions', 1)}
                     {this.navlink('Whiskey Points', 'Points', 2)}
-                    {this.navlink('Share App', 'Share', 3)}
+                    {this.navlink('Share App', 'ShareService', 3)}
                     {this.navlink('Refer and Earn!', 'Refer', 4)}
                     {this.navlink('Customer Support', 'Support', 5)}
-                    {this.navlink("FAQ's", 'FAQ', 6)}
+                    {this.navlink("FAQ's", 'FAQbloc', 6)}
                     {this.navlink('About Us', 'About', 7)}
                     {this.navlink('Share Feedback', 'Feedback', 8)}
                     {this.navlink('Settings', 'Setting', 9)}
@@ -134,7 +136,6 @@ const styles = StyleSheet.create({
     },
     link: {
         flex: 1,
-        // color: 'white',
         fontWeight: '300',
         fontSize: 13, 
         padding: 6,
@@ -152,7 +153,6 @@ const styles = StyleSheet.create({
         color: 'black',
         textAlign:'center',
         margin:3
-        // fontWeight: 'bold'
     },
     icons:{
         marginLeft:35,

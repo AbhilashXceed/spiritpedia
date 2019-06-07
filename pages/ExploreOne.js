@@ -63,7 +63,7 @@ export default class ExploreOne extends React.Component {
       <View style={styles.container}>
         <ScrollView>
           <Image
-            source={require("../android/app/images/bottle1.png")}
+            source={require("../assets/images/bottle1.png")}
             style={{ height: hp("28.2%"), width: wp("100%"),  }}
             // resizeMode="contain"
           />
@@ -71,7 +71,7 @@ export default class ExploreOne extends React.Component {
             <Text style={{ color: "black", margin: 5 }}>Whiskey</Text>
             <TouchableOpacity>
               <Image
-                source={require("../android/app/images/bottle5.png")}
+                source={require("../assets/images/bottle5.png")}
                 style={{
                   height: hp("20%"),
                   width: wp("88.5%"),
@@ -98,7 +98,7 @@ export default class ExploreOne extends React.Component {
             <ScrollView horizontal={true}>
               <TouchableOpacity>
                 <Image
-                  source={require("../android/app/images/bottle2.png")}
+                  source={require("../assets/images/bottle2.png")}
                   style={{
                     height: hp("20%"),
                     width: wp("40%"),
@@ -122,7 +122,7 @@ export default class ExploreOne extends React.Component {
 
               <TouchableOpacity>
                 <Image
-                  source={require("../android/app/images/bottle3.png")}
+                  source={require("../assets/images/bottle3.png")}
                   style={{
                     height: hp("20%"),
                     width: wp("40%"),
@@ -147,7 +147,7 @@ export default class ExploreOne extends React.Component {
 
               <TouchableOpacity>
                 <Image
-                  source={require("../android/app/images/bottle4.png")}
+                  source={require("../assets/images/bottle4.png")}
                   style={{
                     height: hp("20%"),
                     width: wp("40%"),
@@ -177,7 +177,7 @@ export default class ExploreOne extends React.Component {
             </Text>
             <TouchableOpacity>
               <Image
-                source={require("../android/app/images/wisky.png")}
+                source={require("../assets/images/wisky.png")}
                 style={{
                   height: hp("20%"),
                   width: wp("88.5%"),

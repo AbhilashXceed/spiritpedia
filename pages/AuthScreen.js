@@ -9,13 +9,14 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   ScrollView,
-  Keyboard
+  Keyboard,
+  Alert
 } from "react-native";
 
 import AsyncStorage from "@react-native-community/async-storage";
 import { TextInput } from "react-native-gesture-handler";
 import { GoogleSignin, statusCodes } from "react-native-google-signin";
-import { LoginManager, AccessToken } from "react-native-fbsdk";
+import { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from "react-native-fbsdk";
 import InstagramLogin from "react-native-instagram-login";
 import firebase from "react-native-firebase";
 import SplashScreen from "react-native-splash-screen";
@@ -56,11 +57,20 @@ export default class AuthScreen extends React.Component {
       errorEmail: null,
       errorPassword: null,
       A: null,
-      toggle: true
+      toggle: true,
+            fbid: null,
+            fbname: null,
+            fbemail: null,
+            fbpic: null,
+            googleid: null,
+            googlename: null,
+            googlemail: null,
+            googlepic: null,
     };
   }
 
   async componentDidMount() {
+    AsyncStorage.setItem('REST', 'https://spiritpedia.xceedtech.in/index.php?r=site/');
     SplashScreen.hide();
     this._configureGoogleSignIn();
     // this.checkPermission();
@@ -91,29 +101,68 @@ export default class AuthScreen extends React.Component {
 
   signinGoogle = async () => {
     try {
+      console.warn("button pressed");
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
 
-      const credential = firebase.auth.GoogleAuthProvider.credential(
-        userInfo.idToken,
-        userInfo.accessToken
-      );
+      this.setState({
+        googleid: userInfo.user.id,
+        googlemail: userInfo.user.email,
+        googlepic: userInfo.user.photo,
+        googlename: userInfo.user.name,
+      })
 
-      const firebaseUserCredential = firebase
-        .auth()
-        .signInWithCredential(credential)
-        .then(() => this.props.navigation.navigate("Landingone"));
-
-      await AsyncStorage.multiSet([
-        ["A", JSON.stringify(userInfo.user.name)],
-        ["B", JSON.stringify(userInfo.user.photo)],
-        ["C", JSON.stringify(userInfo.user.email)]
-      ]);
-
-      let B = await AsyncStorage.getAllKeys();
-      console.warn(B);
+      // console.warn(this.state.googleid, this.state.googlemail, this.state.googlepic, this.state.googlename)
 
       console.warn("stringified item:::" + JSON.stringify(userInfo.user));
+      var url = "https://spiritpedia.xceedtech.in/index.php?r=api/GoogleLogin";
+
+      var MAIL = {
+        google_id: this.state.googleid,
+        name: this.state.googlename,
+        email: this.state.googlemail
+      }
+      let mailjson = JSON.stringify(MAIL);
+      console.warn(mailjson),
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: mailjson
+      }).then(response=>response.json())
+      .then(resJson=>{
+        alert( JSON.stringify(resJson));
+        console.warn("google request worked");
+        AsyncStorage.setItem('LOGINDATA', JSON.stringify(resJson));
+      })
+      .then(() => this.props.navigation.navigate("Landingone"))
+      .catch(error=>{
+        this.setState({ errorMessage: error.message });
+        console.warn(this.state.errorMessage);
+        alert(this.state.errorMessage);
+      })
+      // const credential = firebase.auth.GoogleAuthProvider.credential(
+      //   userInfo.idToken,
+      //   userInfo.accessToken
+      // );
+
+      // const firebaseUserCredential = firebase
+      //   .auth()
+      //   .signInWithCredential(credential)
+      //   .then(() => this.props.navigation.navigate("Landingone"));
+
+      // await AsyncStorage.multiSet([
+      //   ["A", JSON.stringify(userInfo.user.name)],
+      //   ["B", JSON.stringify(userInfo.user.photo)],
+      //   ["C", JSON.stringify(userInfo.user.email)]
+      // ]);
+
+      // let B = await AsyncStorage.getAllKeys();
+      // console.warn(B);
+
+      
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         Alert.alert("cancelled");
@@ -137,115 +186,187 @@ export default class AuthScreen extends React.Component {
         "public_profile",
         "email"
       ]);
-
       if (result.isCancelled) {
         alert("Login was cancelled");
       }
-
-      console.warn(AccessToken.name);
       alert(
         "Login was successful with permission: " +
           result.grantedPermissions.toString()
       );
-
       const data = await AccessToken.getCurrentAccessToken();
-
+    
+      let token = data.accessToken
+      let ID = data.userID
+   
       if (!data) {
         throw new Error(
-          "Something went wrong getting Acees Token, code needs to be checked"
+          "Something went wrong getting Access Token, code needs to be checked"
         );
+      } else {
+
+        let url = `https://graph.facebook.com/${ID}?fields=id,name,email,picture&access_token=${token}`
+
+        fetch( url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }).then(res=>res.json())
+        .then(resJson=>{
+          // console.warn(resJson)
+          // console.warn(resJson.id)
+          // console.warn(resJson.name)
+          // console.warn(resJson.email)
+          // console.warn(resJson.picture.data.url)
+          this.setState({
+            fbid: resJson.id,
+            fbname: resJson.name,
+            fbemail: resJson.email,
+            fbpic: resJson.picture.data.url
+          })
+            var url = "https://spiritpedia.xceedtech.in/index.php?r=api/FacebookLogin";
+            var MAIL = {
+            facebook_id: this.state.fbid,
+            name: this.state.fbname,
+            email: this.state.fbemail
+          }
+          let mailjson = JSON.stringify(MAIL);
+          // console.warn(mailjson)
+          // console.log(mailjson)
+
+          fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: mailjson
+          })
+          .then(response => response.json())
+          .then(responsejson => {
+            alert(JSON.stringify(responsejson));
+            AsyncStorage.setItem('LOGINDATA', JSON.stringify(responsejson));
+          })
+          .then(() => this.props.navigation.navigate("Landingone"))
+          .catch(error => {
+            this.setState({ errorMessage: error.message });
+            console.warn(this.state.errorMessage);
+            alert(this.state.errorMessage);
+          });
+        })
+
+        
       }
 
-      const credential = firebase.auth.FacebookAuthProvider.credential(
-        data.accessToken
-      );
+      // const credential = firebase.auth.FacebookAuthProvider.credential(
+      //   data.accessToken
+      // );
 
-      const firebaseUserCredential = await firebase
-        .auth()
-        .signInWithCredential(credential)
-        .then(() => this.props.navigation.navigate("Landingone"));
-      console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()));
+      // const firebaseUserCredential = await firebase
+      //   .auth()
+      //   .signInWithCredential(credential)
+      //   .then(() => this.props.navigation.navigate("Landingone"));
+
+      // console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()));
+
     } catch (error) {
       alert("Login failed with error:" + error);
     }
   }
 
+
+
   normalLogin = async () => {
     const { email, password } = this.state;
     const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (email == null) {
-      this.setState({ errorEmail: "Username field is Empty" });
-    } else if (email == "") {
-      this.setState({ errorEmail: "Username field is Empty" });
-    } else if (!regex.test(email)) {
-      console.warn("u r here");
-      this.setState({ errorEmail: "Unvalid Email ID" });
-    } else if (password == null) {
-      this.setState({ errorPassword: "Password field is empty" });
-      this.setState({ errorEmail: null });
-      console.warn("or here");
-    } else if (password == "") {
-      this.setState({ errorPassword: "Password field is empty" });
-      console.warn("and here");
-    } else if (password.toString().length < 6) {
-      this.setState({ errorPassword: "Password is invalid" });
-      console.warn("lalalala");
-    } else {
+    // if (email == null) {
+    //   this.setState({ errorEmail: "Username field is Empty" });
+    // } else if (email == "") {
+    //   this.setState({ errorEmail: "Username field is Empty" });
+    // } else if (!regex.test(email)) {
+    //   console.warn("u r here");
+    //   this.setState({ errorEmail: "Unvalid Email ID" });
+    // } else if (password == null) {
+    //   this.setState({ errorPassword: "Password field is empty" });
+    //   this.setState({ errorEmail: null });
+    //   console.warn("or here");
+    // } else if (password == "") {
+    //   this.setState({ errorPassword: "Password field is empty" });
+    //   console.warn("and here");
+    // } else if (password.toString().length < 6) {
+    //   this.setState({ errorPassword: "Password is invalid" });
+    //   console.warn("lalalala");
+    // } else 
+    // {
       this.setState({ errorPassword: null });
       this.setState({ errorEmail: null });
       console.warn("this is email", email, password);
 
-      var url = "http://192.168.0.103/User_Project/login.php";
+      var url = "https://spiritpedia.xceedtech.in/index.php?r=api/login";
+      var MAIL = {
+        username: this.state.email,
+        password: this.state.password,
+      }
+      let mailjson = JSON.stringify(MAIL);
 
-      // fetch(url, {
-      //   method: "POST",
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Content-Type": "application/json"
-      //   },
-      //   body: JSON.stringify({
-      //     email: email,
-      //     pass: password
-      //   })
-      // })
-      //   .then(response => response.json())
-      //   .then(responsejson => {
-      //     alert(responsejson);
-      //   })
-      //   .catch(error => {
-      //     this.setState({ errorMessage: error.message });
-      //     console.warn(this.state.errorMessage);
-      //     alert(this.state.errorMessage);
-      //   });
+      console.warn(mailjson)
+      console.log(mailjson)
 
-      firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(
-        fetch(url,{
-          method: "POST",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          },
-          body:JSON.stringify({
-            emailphp: email,
-            passwordphp: password
-          })
-        })
-      )
-      .then((response)=>response.json())
-      .then((responsejson)=>{
-        alert(responsejson)
+      fetch(url, {
+        method: "POST",
+        headers: {
+          // "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: mailjson
+        
       })
-      .then(() => this.props.navigation.navigate("Landingone"))
-      .catch(error => {
-        this.setState({ errorMessage: error.message });
-        console.warn(this.state.errorMessage);
-        alert(this.state.errorMessage);
-      });
-    }
+        .then(response => response.json())
+        .then(responsejson => {
+          alert(JSON.stringify(responsejson));
+          AsyncStorage.setItem('LOGINDATA', JSON.stringify(responsejson));
+        })
+        .then(() => this.props.navigation.navigate("Landingone"))
+        .catch(error => {
+          this.setState({ errorMessage: error.message });
+          console.warn(this.state.errorMessage);
+          alert(this.state.errorMessage);
+        });
+
+
+
+        // body: JSON.stringify({
+        //   email: email,
+        //   pass: password
+        // })
+      // firebase
+      // .auth()
+      // .signInWithEmailAndPassword(email, password)
+      // .then(
+      //   fetch(url,{
+      //     method: "POST",
+      //     headers: {
+      //       "Accept": "application/json",
+      //       "Content-Type": "application/json"
+      //     },
+      //     body:JSON.stringify({
+      //       emailphp: email,
+      //       passwordphp: password
+      //     })
+      //   })
+      // )
+      // .then((response)=>response.json())
+      // .then((responsejson)=>{
+      //   alert(responsejson)
+      // })
+      // .then(() => this.props.navigation.navigate("Landingone"))
+      // .catch(error => {
+      //   this.setState({ errorMessage: error.message });
+      //   console.warn(this.state.errorMessage);
+      //   alert(this.state.errorMessage);
+      // });
+
+    // }
     Keyboard.dismiss();
   };
 
@@ -278,9 +399,9 @@ export default class AuthScreen extends React.Component {
           <View style={styles.body}>
             <View style={{ width: wp("85.52%") }}>
               <Form>
-                <TouchableOpacity onPress={()=>this.props.navigation.navigate('Landingone')} >
+                {/* <TouchableOpacity onPress={()=>this.props.navigation.navigate('Landingone')} >
                 <Icon name="logo-google" style={{ fontSize: 22 }} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               
                 <View
                   style={{
@@ -444,10 +565,9 @@ export default class AuthScreen extends React.Component {
                 </Text>
                 <Button
                   iconLeft
+                  onPress={()=>this.loginFacebook()}
                   style={{
                     alignSelf: "center",
-                    // width: 270,
-                    // height: 35,
                     width: wp("58.66%"),
                     height: hp("4%"),
                     margin: 5,

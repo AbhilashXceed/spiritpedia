@@ -82,6 +82,8 @@
 		24AB572D91AF40909BCDC899 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B79D53AED3F44AEE92F892A4 /* rubicon-icon-font.ttf */; };
 		B74E0E6DBC1D422FADFEA999 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BEB58F02D76B42718FDAEC1A /* SimpleLineIcons.ttf */; };
 		9C70E6A672484A7AA2A87832 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A91F648C6F548A1A36201BD /* Zocial.ttf */; };
+		C00FC815A7FC44C0B6D189C4 /* Myriad Pro Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 85BE429FCF8E4EF6B5ED9EED /* Myriad Pro Regular.ttf */; };
+		C7EBA116A0DB41E5A79D2553 /* MyriadProRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83541BEED26541E2A66A3FA4 /* MyriadProRegular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -441,6 +443,8 @@
 		B79D53AED3F44AEE92F892A4 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		BEB58F02D76B42718FDAEC1A /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		4A91F648C6F548A1A36201BD /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		85BE429FCF8E4EF6B5ED9EED /* Myriad Pro Regular.ttf */ = {isa = PBXFileReference; name = "Myriad Pro Regular.ttf"; path = "../assets/fonts/Myriad Pro Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		83541BEED26541E2A66A3FA4 /* MyriadProRegular.ttf */ = {isa = PBXFileReference; name = "MyriadProRegular.ttf"; path = "../assets/fonts/MyriadProRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -761,6 +765,8 @@
 				B79D53AED3F44AEE92F892A4 /* rubicon-icon-font.ttf */,
 				BEB58F02D76B42718FDAEC1A /* SimpleLineIcons.ttf */,
 				4A91F648C6F548A1A36201BD /* Zocial.ttf */,
+				85BE429FCF8E4EF6B5ED9EED /* Myriad Pro Regular.ttf */,
+				83541BEED26541E2A66A3FA4 /* MyriadProRegular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1245,6 +1251,8 @@
 				24AB572D91AF40909BCDC899 /* rubicon-icon-font.ttf in Resources */,
 				B74E0E6DBC1D422FADFEA999 /* SimpleLineIcons.ttf in Resources */,
 				9C70E6A672484A7AA2A87832 /* Zocial.ttf in Resources */,
+				C00FC815A7FC44C0B6D189C4 /* Myriad Pro Regular.ttf in Resources */,
+				C7EBA116A0DB41E5A79D2553 /* MyriadProRegular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

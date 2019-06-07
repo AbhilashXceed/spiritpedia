@@ -6,21 +6,29 @@ import OffersOne from "../OffersOne";
 import FeedOne from "../FeedOne";
 import AuthLoad from "../AuthLoad";
 import LogOut from "../LogOut";
+import Boarding from "../Boarding";
+
 
 
 import Transactions from "../sidedrawer/Transactions";
 import Location from "../sidedrawer/Location";
-import Share from "../sidedrawer/Share";
+import ShareService from "../sidedrawer/ShareService";
 import Refer from "../sidedrawer/Refer";
 import Support from "../sidedrawer/Support";
 import About from "../sidedrawer/About";
-import FAQ from "../sidedrawer/FAQ";
+import FAQ from "../sidedrawer/FAQblock/FAQ";
+import FAQanswer from "../sidedrawer/FAQblock/FAQanswer";
 import Feedback from "../sidedrawer/Feedback";
 import Points from "../sidedrawer/Points";
-import profile from "../sidedrawer/profile";
+import Profile from "../sidedrawer/Profile";
 import Setting from "../sidedrawer/Setting";
 
 import Drawermenu from '../navigation/Drawermenu';
+
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 
 import { Icon } from "react-native-elements";
 
@@ -41,15 +49,14 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 
 
+
 const Home = createStackNavigator({
+  
   ExploreOne: {
     screen: ExploreOne,
     navigationOptions: ({ navigation }) => {
       return {
-        // title: "Explore",
-        // header:(<View style={{backgroundColor:'orange'}}></View>),
-
-        headerStyle:( {backgroundColor:'#fdbd30'}),
+        headerStyle:({backgroundColor:'#fdbd30'}),
         headerLeftContainerStyle:({padding:10}),
         headerRightContainerStyle:({padding:10}),
         headerRight:(
@@ -71,7 +78,8 @@ const Home = createStackNavigator({
         )
       };
     }
-  }
+  },
+
 });
 
 const Bookmarks = createStackNavigator({
@@ -116,17 +124,17 @@ const Offers = createStackNavigator({
   }
 });
 
-const Search = createStackNavigator({
-  OffersOne: {
-    headerTitle: Offers,
-    screen: OffersOne,
+const Feed = createStackNavigator({
+  FeedOne: {
+    screen: FeedOne,
     navigationOptions: ({ navigation }) => {
       return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
         headerLeft: (
           <Icon
             name="menu"
             type="entypo"
-            color="coral"
+            color="white"
             size={45}
             style={{ paddingLeft: 15 }}
             onPress={() => navigation.openDrawer()}
@@ -137,34 +145,12 @@ const Search = createStackNavigator({
   }
 });
 
-// const Feed = createStackNavigator({
-//   FeedOne: {
-//     headerTitle: Feed,
-//     screen: FeedOne,
-//     navigationOptions: ({ navigation }) => {
-//       return {
-//         headerLeft: (
-//           <Icon
-//             name="menu"
-//             type="entypo"
-//             color="coral"
-//             size={45}
-//             style={{ paddingLeft: 15 }}
-//             onPress={() => navigation.openDrawer()}
-//           />
-//         )
-//       };
-//     }
-//   }
-// });
-
 
 const LandingTabNavigator = createBottomTabNavigator(
   {
     Home,
-    Search,
+    Feed,
     Bookmarks,
-    // Feed,
     Offers,
   },
   {
@@ -182,7 +168,7 @@ const LandingTabNavigator = createBottomTabNavigator(
         } else if (routeName === "Offers") {
           iconName = "tag";
           iconType = "font-awesome";
-        } else if (routeName === "Search") {
+        } else if (routeName === "Feed") {
           iconName = "search";
           iconType = "font-awesome";
         }
@@ -201,7 +187,51 @@ const LandingTabNavigator = createBottomTabNavigator(
 );
 
 
+const FAQstack = createStackNavigator({
+  FAQone: {
+    screen: FAQ,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+        headerLeftContainerStyle:({padding:5, }),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>FAQ's</Text>),
+        headerLeft: (
+          <Icon
+            name="chevron-left"
+            type="feather"
+            color="white"
+            size={wp('10%')}
+            // onPress={() => this.props.navigation.navigate('Landingone')}
+          />
+        )
+      };
+    }
+  },
+  
+  FAQtwo: {
+    screen: FAQanswer,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+        headerLeftContainerStyle:({padding:5, }),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>FAQ's</Text>),
+        headerLeft: (
+          <Icon
+            name="chevron-left"
+            type="feather"
+            color="white"
+            size={wp('10%')}
+            // onPress={() => this.props.navigation.navigate('FAQone')}
+          />
+        )
+      };
+    }
+  }
+
+})
+
 const WrapperStackTab = createStackNavigator({
+
   LandingTabNavigator: {
     screen: LandingTabNavigator,
     navigationOptions: {
@@ -223,115 +253,72 @@ const LandingDrawerNavigator = createDrawerNavigator(
   {
     Home: {
       screen: WrapperStackTab,
-      navigationOptions: {
-        drawerIcon: <Icon name="home" type="entypo" size={20} color="white" />
-      }
+      // navigationOptions: {
+      //   drawerIcon: <Icon name="home" type="entypo" size={20} color="white" />
+      // }
     },
 
-    profile: {
-      screen: profile,
-      navigationOptions: {
-        drawerIcon: <Icon name="home" type="entypo" size={20} color="white" />
-      }
+    Profile: {
+      screen: Profile,
+      
     },
 
-    
     LogOut: {
       screen: LogOut,
-      navigationOptions: {
-        drawerIcon: <Icon name="power" type="feather" size={20} color="white" />
-      }
+      
     },
     Location: {
       screen: Location,
-      navigationOptions: {
-        drawerIcon: (
-          <Icon name="location-pin" type="entypo" size={20} color="white" />
-        )
-      }
+      
     },
     Transactions: {
       screen: Transactions,
-      navigationOptions: {
-        drawerIcon: (
-          <Icon name="calculator" type="entypo" size={20} color="white" />
-        )
-      }
+      
     },
     Points: {
       screen: Points,
-      navigationOptions: {
-        drawerIcon: <Icon name="wallet" type="entypo" size={20} color="white" />
-      }
+      
     },
-    Share: {
-      screen: Share,
-      navigationOptions: {
-        drawerIcon: <Icon name="share" type="entypo" size={20} color="white" />
-      }
+    ShareService: {
+      screen: ShareService,
+      
     },
     Refer: {
       screen: Refer,
-      navigationOptions: {
-        drawerIcon: <Icon name="credit" type="entypo" size={20} color="white" />
-      }
+      
     },
     Support: {
       screen: Support,
-      navigationOptions: {
-        drawerIcon: (
-          <Icon name="support" type="font-awesome" size={20} color="white" />
-        )
-      }
+      
     },
-    FAQ: {
-      screen: FAQ,
-      navigationOptions: {
-        drawerIcon: (
-          <Icon
-            name="questioncircle"
-            type="antdesign"
-            size={20}
-            color="white"
-          />
-        )
-      }
+    FAQbloc: {
+      screen: FAQstack,
+    
     },
     About: {
       screen: About,
-      navigationOptions: {
-        drawerIcon: (
-          <Icon name="info" type="font-awesome" size={20} color="white" />
-        )
-      }
+      
     },
     Feedback: {
       screen: Feedback,
-      navigationOptions: {
-        drawerIcon: <Icon name="chat" type="entypo" size={20} color="white" />
-      }
+      
     },
     Setting: {
       screen: Setting,
     }
   },
   drawerConfig
-  // {
-  //   initialRouteName: "Home",
-  //   drawerOpenRoute: "DrawerOpen",
-  //   drawerCloseRoute: "DrawerClose",
-  //   drawerToggleRoute: "DrawerToggle",
-
-  //   contentOptions: {
-  //     activeTintColor: "white",
-  //     inactiveTintColor: "white",
-  //     activeBackgroundColor: "#ff9800"
-  //   }
-  // }
+  
 );
 
 
 const AuthStack = createStackNavigator({
+  Boarding: {
+    screen: Boarding,
+    navigationOptions: {
+      header: null
+    }
+  },
   AuthScreen: {
     screen: AuthScreen,
     navigationOptions: {
@@ -342,9 +329,6 @@ const AuthStack = createStackNavigator({
     screen: RegisterUser,
     navigationOptions: {
       header: null,
-      title: "Register User",
-      headerStyle: { backgroundColor: "orange" },
-      headerTintColor: "white"
     }
   }
 });
@@ -355,7 +339,7 @@ const AuthSwitchNavigator = createSwitchNavigator(
     AuthLoad: {
       screen: AuthLoad
     },
-    AuthScreen: {
+    AuthBloc: {
       screen: AuthStack
     },
     Landingone: {
@@ -363,7 +347,7 @@ const AuthSwitchNavigator = createSwitchNavigator(
     }
   },
   {
-    initialRouteName: "AuthLoad"
+    initialRouteName: "AuthBloc"
   }
 );
 
