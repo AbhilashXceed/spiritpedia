@@ -15,7 +15,10 @@ import {
   Item,
   Input,
   Label,
-  Text
+  Text,
+  Accordion,
+  Title,
+  Content
 } from "native-base";
 
 import {
@@ -38,14 +41,75 @@ export default class FAQ extends React.Component {
       "What are Whiskey karma Points",
       "Problems sending and receiving"
     ];
+    this.dataArray = [
+      {title: "What is Whisky App?", content: "jshbfiajbf kajwfnd akwjf awkfj nawkjfn aakwj dnakwjfn awkawkjfn akwjfn "},
+      {title: "What is One Time Password?", content: "jshbfiajbf kajwfnd akwjf awkfj nawkjfn aakwj dnakwjfn awkawkjfn akwjfn "},
+      {title: "Why do I need to provide my E-mail", content: "jshbfiajbf kajwfnd akwjf awkfj nawkjfn aakwj dnakwjfn awkawkjfn akwjfn "},
+      {title: "What are Whiskey karma Points", content: "jshbfiajbf kajwfnd akwjf awkfj nawkjfn aakwj dnakwjfn awkawkjfn akwjfn "},
+      {title: "Problems sending and receiving", content: "jshbfiajbf kajwfnd akwjf awkfj nawkjfn aakwj dnakwjfn awkawkjfn akwjfn "}
+    ];
   }
+
+  _renderHeader(item, expanded) {
+    return (
+      <View style={{
+        height: hp("5%"),
+        width: wp("88%"),
+        borderWidth: 1,
+        borderColor: "black",
+        borderRadius: 5,
+        alignItems: "center",
+        marginTop: wp("5%"),
+        // marginBottom: wp("2%"),
+        flexDirection: "row"
+        }}>
+          <View  style={{ paddingLeft: wp("2%"), flex:9 }}>
+            <Text style={{ fontSize: wp("3%") }}>
+            {" "}{item.title}
+            </Text>
+          </View>
+      
+          <View style={{ flex: 1 }}>
+            {expanded
+            ? <Icon name="chevron-up" type="feather" color="black" size={wp("4%")} />
+            : <Icon name="chevron-down" type="feather" color="black" size={wp("4%")} />}
+          </View>
+      </View>
+    );
+  }
+
+
+  _renderContent(item) {
+    return (
+      <View
+        style={{
+          // height: hp("5%"),
+              width: wp("88%"),
+              borderWidth: 1,
+              borderColor: "black",
+              borderRadius: 5,
+              alignItems: "center",
+              borderTopWidth:0,
+              // marginTop: wp("5%"),
+              // marginBottom: wp("2%"),
+              flexDirection: "row"
+        }}>
+        <Text style={{ fontSize: wp("3%"), padding:wp("2%") }} >
+        {item.content}
+      </Text>
+      </View>
+      
+    );
+  }
+
 
   render() {
     return (
+      <ScrollView  showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
       <View style={{ height: hp("100%"), alignItems: "center" }}>
-        <ScrollView>
+        
           <View style={{ height: hp("2.5%"), backgroundColor: "white" }} />
-          {this.questionarray.map((question, key) => (
+          {/* {this.questionarray.map((question, key) => (
             <TouchableOpacity key={key} onPress={()=>console.warn(key)}>
               <View
                 style={{
@@ -74,9 +138,21 @@ export default class FAQ extends React.Component {
                 </View>
               </View>
             </TouchableOpacity>
-          ))}
-        </ScrollView>
+          ))} */}
+
+         
+          <Accordion
+            style={{borderWidth:1, borderColor:'white'}}
+            dataArray={this.dataArray}
+            animation={true}
+            expanded={true}
+            renderHeader={this._renderHeader}
+            renderContent={this._renderContent}
+          />
+           
+            
       </View>
+      </ScrollView>
     );
   }
 }

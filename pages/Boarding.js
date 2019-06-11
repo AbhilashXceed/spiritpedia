@@ -69,7 +69,7 @@ export default class Boarding extends React.Component {
             </View>
             <View style={{margin: 17}}>
               <Button rounded 
-              onPress={()=>{this.props.navigation.navigate('Feed')}}
+              onPress={()=>{this.props.navigation.navigate('Profilebloc')}}
               style={{
               backgroundColor:'white', 
               width: wp("33%"),
@@ -87,3 +87,5 @@ export default class Boarding extends React.Component {
 }
 
 // AuthScreen
+// Register
+// FAQbloc

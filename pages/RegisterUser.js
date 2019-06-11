@@ -155,21 +155,22 @@ export default class RegisterUser extends React.Component {
       <KeyboardAwareScrollView
         contentContainerStyle={styles.container}
         resetScrollToCoords={{ x: 0, y: 0 }}
-        scrollEnabled={true}
+        scrollEnabled={false}
         enableOnAndroid={true}
         enableAutomaticScroll={true}
+        showsVerticalScrollIndicator={false}
       >
         <Image 
         source={require("../assets/images/registerback.png")}
-        // resizeMode='cover'
+        resizeMode='cover'
         style={{
           width:wp('100%'),
-          height:hp('105%'),
+          height:hp('106%'),
           position:'absolute',
           top:0,
-          left:0,
-          right:0,
-          bottom:0
+          // left:0,
+          // right:0,
+          // bottom:0
         }}
         >
           </Image>
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     width:wp('100%'),
     position:'absolute',
-    top:hp('33%')
+    top:hp('22%')
   },
   header: {
     color: "black",

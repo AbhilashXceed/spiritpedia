@@ -17,8 +17,6 @@ import {
   } from "react-native-responsive-screen";
 
 
-const WIDTH = Dimensions.get('window').width;
-const HEIGHT = Dimensions.get('window').height;
 
 export default class Drawermenu extends React.Component{
     constructor(props){
@@ -48,27 +46,27 @@ export default class Drawermenu extends React.Component{
         //  let names = namew
         //  console.log(names)
          if (namew == 0){
-            return <Image source={require("../../android/app/icons/locate.png")} style={styles.icons}/> 
+            return <Image source={require("../../assets/icons/locate.png")} style={styles.icons}/> 
         } else if (namew == 1){
-             return <Image source={require("../../android/app/icons/wallet.png")} style={styles.icons}/> 
+             return <Image source={require("../../assets/icons/wallet.png")} style={styles.icons}/> 
         } else if (namew==2){
-             return <Image source={require("../../android/app/icons/star.png")} style={styles.icons}/> 
+             return <Image source={require("../../assets/icons/star.png")} style={styles.icons}/> 
         } else if (namew==3){             
-             return <Image source={require("../../android/app/icons/share.png")} style={styles.icons}/> 
+             return <Image source={require("../../assets/icons/share.png")} style={styles.icons}/> 
         } else if (namew==4){             
-             return <Image source={require("../../android/app/icons/wallet.png")} style={styles.icons}/> 
+             return <Image source={require("../../assets/icons/referearn.png")} style={styles.icons}/> 
         } else if (namew==5){             
-             return <Image source={require("../../android/app/icons/headphones.png")} style={styles.icons}/>
+             return <Image source={require("../../assets/icons/headphones.png")} style={styles.icons}/>
         } else if (namew==6){             
-             return <Image source={require("../../android/app/icons/question.png")} style={styles.icons}/> 
+             return <Image source={require("../../assets/icons/question.png")} style={styles.icons}/> 
         } else if (namew==7){             
-             return <Image source={require("../../android/app/icons/info.png")} style={styles.icons}/> 
+             return <Image source={require("../../assets/icons/info.png")} style={styles.icons}/> 
         } else if (namew==8){
-             return <Image source={require("../../android/app/icons/chat.png")} style={styles.icons}/> 
+             return <Image source={require("../../assets/icons/chat.png")} style={styles.icons}/> 
         } else if (namew==9){
-             return <Image source={require("../../android/app/icons/setting.png")} style={styles.icons}/> 
+             return <Image source={require("../../assets/icons/setting.png")} style={styles.icons}/> 
         } else if (namew==10){
-             return <Image source={require("../../android/app/icons/star.png")} style={styles.icons}/> 
+             return <Image source={require("../../assets/icons/logout.png")} style={styles.icons}/> 
         } 
     }
 
@@ -94,7 +92,7 @@ export default class Drawermenu extends React.Component{
 
                 <Header style={{ height: hp("30%"), backgroundColor: "white", flexDirection:'column', justifyContent:'center', alignItems:'center' }} androidStatusBarColor='#fdbd30'>
                     <TouchableOpacity style={{flexDirection:'column', justifyContent:'center', alignItems:'center'}}
-                    onPress={()=>this.props.navigation.navigate('Profile')}>
+                    onPress={()=>this.props.navigation.navigate('Profilebloc')}>
                         <View >
                             <Image style={styles.Imgview} 
                             // source={{uri: this.state.userImg}}

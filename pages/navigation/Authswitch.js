@@ -8,7 +8,7 @@ import AuthLoad from "../AuthLoad";
 import LogOut from "../LogOut";
 import Boarding from "../Boarding";
 
-
+import  MyBackButton  from "../MyBackButton";
 
 import Transactions from "../sidedrawer/Transactions";
 import Location from "../sidedrawer/Location";
@@ -17,11 +17,12 @@ import Refer from "../sidedrawer/Refer";
 import Support from "../sidedrawer/Support";
 import About from "../sidedrawer/About";
 import FAQ from "../sidedrawer/FAQblock/FAQ";
-import FAQanswer from "../sidedrawer/FAQblock/FAQanswer";
 import Feedback from "../sidedrawer/Feedback";
 import Points from "../sidedrawer/Points";
-import Profile from "../sidedrawer/Profile";
+import Profile from "../sidedrawer/Profilebloc/Profile";
+import Followers from "../sidedrawer/Profilebloc/Followers"
 import Setting from "../sidedrawer/Setting";
+
 
 import Drawermenu from '../navigation/Drawermenu';
 
@@ -196,38 +197,40 @@ const FAQstack = createStackNavigator({
         headerLeftContainerStyle:({padding:5, }),
         headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>FAQ's</Text>),
         headerLeft: (
-          <Icon
-            name="chevron-left"
-            type="feather"
-            color="white"
-            size={wp('10%')}
-            // onPress={() => this.props.navigation.navigate('Landingone')}
-          />
+          <MyBackButton navigation={navigation} />
         )
       };
     }
   },
-  
-  FAQtwo: {
-    screen: FAQanswer,
+})
+
+const Profilestack = createStackNavigator({
+  Profileone: {
+    screen: Profile,
     navigationOptions: ({ navigation }) => {
       return {
         headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
         headerLeftContainerStyle:({padding:5, }),
-        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>FAQ's</Text>),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Profile</Text>),
         headerLeft: (
-          <Icon
-            name="chevron-left"
-            type="feather"
-            color="white"
-            size={wp('10%')}
-            // onPress={() => this.props.navigation.navigate('FAQone')}
-          />
+          <MyBackButton navigation={navigation} />
         )
       };
     }
-  }
-
+  },
+  Profiletwo: {
+    screen: Followers,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+        headerLeftContainerStyle:({padding:5, }),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Followers</Text>),
+        headerLeft: (
+          <MyBackButton navigation={navigation} />
+        )
+      };
+    }
+  },
 })
 
 const WrapperStackTab = createStackNavigator({
@@ -258,8 +261,8 @@ const LandingDrawerNavigator = createDrawerNavigator(
       // }
     },
 
-    Profile: {
-      screen: Profile,
+    Profilebloc: {
+      screen: Profilestack,
       
     },
 

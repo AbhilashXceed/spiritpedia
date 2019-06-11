@@ -15,8 +15,11 @@ export default class Profile extends React.Component {
         return(
             <View style={styles.container}>
                 <Text style={styles.trial}>
-                    profile In Progress
+                    this is profile page
                 </Text>
+                    <Button onPress={()=>this.props.navigation.navigate('Profiletwo')}
+                    title="go to followers"/>
+                
             </View>
         )
     }
