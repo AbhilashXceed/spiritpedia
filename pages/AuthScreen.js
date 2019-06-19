@@ -390,7 +390,7 @@ export default class AuthScreen extends React.Component {
           <View style={styles.upperportion}>
           
             <Image
-              source={require("../android/app/images/spiritpedia-logo.png")}
+              source={require("../assets/images/spiritpedia-logo.png")}
               style={{ height: hp("17.94%"), marginTop: hp("13.75%") }}
               resizeMode="contain"
             />

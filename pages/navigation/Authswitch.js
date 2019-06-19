@@ -57,7 +57,7 @@ const Home = createStackNavigator({
     screen: ExploreOne,
     navigationOptions: ({ navigation }) => {
       return {
-        headerStyle:({backgroundColor:'#fdbd30'}),
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
         headerLeftContainerStyle:({padding:10}),
         headerRightContainerStyle:({padding:10}),
         headerRight:(

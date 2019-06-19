@@ -52,17 +52,9 @@ export default class FAQ extends React.Component {
 
   _renderHeader(item, expanded) {
     return (
-      <View style={{
-        height: hp("5%"),
-        width: wp("88%"),
-        borderWidth: 1,
-        borderColor: "black",
-        borderRadius: 5,
-        alignItems: "center",
-        marginTop: wp("5%"),
-        // marginBottom: wp("2%"),
-        flexDirection: "row"
-        }}>
+      <View style={
+        expanded? styles.openstyle : styles.closedstyle
+      }>
           <View  style={{ paddingLeft: wp("2%"), flex:9 }}>
             <Text style={{ fontSize: wp("3%") }}>
             {" "}{item.title}
@@ -87,7 +79,8 @@ export default class FAQ extends React.Component {
               width: wp("88%"),
               borderWidth: 1,
               borderColor: "black",
-              borderRadius: 5,
+              borderBottomLeftRadius:5,
+              borderBottomRightRadius:5,
               alignItems: "center",
               borderTopWidth:0,
               // marginTop: wp("5%"),
@@ -157,4 +150,29 @@ export default class FAQ extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  closedstyle:{
+    height: hp("5%"),
+    width: wp("88%"),
+        borderWidth: 1,
+        borderColor: "black",
+        borderRadius: 5,
+        alignItems: "center",
+        marginTop: wp("5%"),
+        flexDirection: "row"
+  },
+  openstyle:{
+    height: hp("5%"),
+        width: wp("88%"),
+        borderColor: "black",
+        borderTopWidth:1,
+        borderLeftWidth:1,
+        borderRightWidth:1,
+        borderTopLeftRadius:5,
+        borderTopRightRadius:5,
+        // borderBottomWidth:1,
+        alignItems: "center",
+        marginTop: wp("5%"),
+        flexDirection: "row"
+  }
+});

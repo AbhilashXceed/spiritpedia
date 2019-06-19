@@ -32,7 +32,7 @@ export default class Followers extends React.Component {
       "Kiran Vedpathak",
       "Rahul Joshi"
     ]
-    
+
   }
 
   render() {
@@ -61,16 +61,25 @@ export default class Followers extends React.Component {
               width: hp("8%"),
               borderColor: "#fdbd30",
               borderWidth: 2,
-              borderRadius: hp("4%")
+              borderRadius: hp("4%"),
+              justifyContent:'center',
+              alignItems:'center'
             }}
-          />
+          >
+            <Text style={{fontSize:wp('6%'), color:'lightgray'}}>
+              {follower.charAt(0)}
+            </Text>
+            
+          </View>
           <View style={{marginLeft:wp('5%')}}>
             <Text style={{ fontSize: wp("4%"),  }}>{follower}</Text>
           </View>
         </View>
         ))}
           
-        
+        <View
+          style={{height:hp('4%')}}
+        />
       </ScrollView>
       </View>
     );

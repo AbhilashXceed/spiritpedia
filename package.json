@@ -11,6 +11,7 @@
     "native-base": "^2.12.1",
     "react": "16.8.3",
     "react-native": "0.59.1",
+    "react-native-app-intro-slider": "^2.0.1",
     "react-native-elements": "^1.1.0",
     "react-native-fbsdk": "^0.8.0",
     "react-native-firebase": "^5.2.3",

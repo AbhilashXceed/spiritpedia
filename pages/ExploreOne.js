@@ -61,134 +61,62 @@ export default class ExploreOne extends React.Component {
     const { currentUser } = this.state;
     return (
       <View style={styles.container}>
-        <ScrollView>
-          <Image
-            source={require("../assets/images/bottle1.png")}
-            style={{ height: hp("28.2%"), width: wp("100%"),  }}
+        <ScrollView showsVerticalScrollIndicator={false}>
+
+        <TouchableOpacity>
+          <View style={styles.tile}>            
+            <View style={[styles.titlebox, {width:wp('28%')}]}>
+              <Text style={styles.titles}>Whiskeypedia</Text>
+            </View>
+              <Image
+              source={require("../assets/images/whiskey9.jpg")}
+              style={styles.image}
+              // resizeMode="contain"
+              />           
+          </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity>
+          <View style={styles.tile}>
+            
+            <View style={[styles.titlebox, {width:wp('39%')}]}>
+              <Text style={styles.titles}>Whiskey's of the world</Text>
+            </View>
+              <Image
+              source={require("../assets/images/whiskey10.jpg")}
+              style={styles.image}
+              // resizeMode="contain"
+              />          
+            </View>
+          </TouchableOpacity>
+
+
+          <TouchableOpacity>
+          <View style={styles.tile}>
+          <View style={[styles.titlebox, {width:wp('40%')}]}>
+              <Text style={styles.titles}>Distilleries of the world</Text>
+            </View>
+              <Image
+              source={require("../assets/images/whiskey16.png")}
+              style={styles.image}
+              // resizeMode="contain"
+              />
+          </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity>
+          <View style={styles.tile}>
+            <View style={[styles.titlebox, {width:wp('27%')}]}>
+              <Text style={styles.titles}>Events</Text>
+            </View>
+            <Image
+            source={require("../assets/images/whiskey14.jpg")}
+            style={styles.image}
             // resizeMode="contain"
-          />
-          <View style={{ marginVertical: 10, marginHorizontal: 20 }}>
-            <Text style={{ color: "black", margin: 5 }}>Whiskey</Text>
-            <TouchableOpacity>
-              <Image
-                source={require("../assets/images/bottle5.png")}
-                style={{
-                  height: hp("20%"),
-                  width: wp("88.5%"),
-                  borderColor: "#bfbfbf",
-                  borderWidth: 3,
-                  borderRadius: 10
-                }}
-                // resizeMode="cover"
-              />
-            </TouchableOpacity>
-          </View>
+            />
+          </View>         
+          </TouchableOpacity>
 
-          <View>
-            <Text
-              style={{
-                color: "black",
-                margin: 5,
-                marginBottom: 5,
-                marginHorizontal: 25
-              }}
-            >
-              Distilleries
-            </Text>
-            <ScrollView horizontal={true}>
-              <TouchableOpacity>
-                <Image
-                  source={require("../assets/images/bottle2.png")}
-                  style={{
-                    height: hp("20%"),
-                    width: wp("40%"),
-                    borderColor: "#bfbfbf",
-                    borderWidth: 3,
-                    borderRadius: 10
-                  }}
-                  // resizeMode="cover"
-                />
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 9,
-                    color: "black",
-                    margin: 10
-                  }}
-                >
-                  Australian Distillery
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity>
-                <Image
-                  source={require("../assets/images/bottle3.png")}
-                  style={{
-                    height: hp("20%"),
-                    width: wp("40%"),
-                    borderColor: "#bfbfbf",
-                    borderWidth: 3,
-                    borderRadius: 10,
-                    marginHorizontal: 12
-                  }}
-                  // resizeMode="center"
-                />
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 9,
-                    color: "black",
-                    margin: 10
-                  }}
-                >
-                  Australian Distillery
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity>
-                <Image
-                  source={require("../assets/images/bottle4.png")}
-                  style={{
-                    height: hp("20%"),
-                    width: wp("40%"),
-                    borderColor: "#bfbfbf",
-                    borderWidth: 3,
-                    borderRadius: 10
-                  }}
-                  // resizeMode="cover"
-                />
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 9,
-                    color: "black",
-                    margin: 10
-                  }}
-                >
-                  Australian Distillery
-                </Text>
-              </TouchableOpacity>
-            </ScrollView>
-          </View>
-
-          <View style={{ marginVertical: 10, marginHorizontal: 20 }}>
-            <Text style={{ color: "black", margin: 5, marginBottom: 5 }}>
-              Upcoming Events
-            </Text>
-            <TouchableOpacity>
-              <Image
-                source={require("../assets/images/wisky.png")}
-                style={{
-                  height: hp("20%"),
-                  width: wp("88.5%"),
-                  borderColor: "#bfbfbf",
-                  borderWidth: 3,
-                  borderRadius: 10
-                }}
-                // resizeMode="cover"
-              />
-            </TouchableOpacity>
-          </View>
         </ScrollView>
         {/* <Text>
       Hi { currentUser && currentUser.email}!
@@ -203,32 +131,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white"
   },
-
-  tilesBox: {
-    flex: 1,
-    backgroundColor: "coral"
+  image:{
+    height: hp("28.2%"),
+    width: wp("100%"),  
+    position:'absolute', 
+    top:0, 
+    zIndex:-1 
   },
-  tilesrow: {
-    flex: 1,
-    backgroundColor: "coral",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 1
+  titles:{
+    color:'black', 
+    fontSize:wp('3%'), 
+    textAlign:'center', 
+    marginTop:hp('0.5%')
   },
-  block: {
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: "#263238",
-    justifyContent: "space-around",
-    alignItems: "center",
-    padding: 1
+  titlebox:{
+    height:hp('3.5%'), 
+    backgroundColor:'#fdbd30', 
+    left:wp('3.5%'),
   },
-  smalltitle: {
-    color: "coral",
-    fontSize: 15,
-    textAlign: "center",
-    marginTop: 10,
-    fontWeight: "100",
-    fontStyle: "italic"
+  tile:{
+    height:hp("28%"), 
+    width:wp("100%"), 
+    marginTop:hp('1.5%')
   }
 });
