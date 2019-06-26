@@ -16,6 +16,8 @@ import About from "./pages/sidedrawer/About";
 import Feedback from "./pages/sidedrawer/Feedback";
 import Points from "./pages/sidedrawer/Points";
 
+// import AutocompleteExample from "./pages/trial"
+
 
 import AuthSwitchNavigator from "./pages/navigation/Authswitch";
 import {

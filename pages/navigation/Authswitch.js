@@ -9,6 +9,7 @@ import LogOut from "../LogOut";
 import Boarding from "../Boarding";
 
 import  MyBackButton  from "../MyBackButton";
+import  MyBackTwo  from "../MyBackTwo";
 
 import Transactions from "../sidedrawer/Transactions";
 import Location from "../sidedrawer/Location";
@@ -19,8 +20,12 @@ import About from "../sidedrawer/About";
 import FAQ from "../sidedrawer/FAQblock/FAQ";
 import Feedback from "../sidedrawer/Feedback";
 import Points from "../sidedrawer/Points";
+
 import Profile from "../sidedrawer/Profilebloc/Profile";
 import Followers from "../sidedrawer/Profilebloc/Followers"
+import Profileedit from "../sidedrawer/Profilebloc/Profileedit"
+import Autocomplete from "../Autocomplete";
+
 import Setting from "../sidedrawer/Setting";
 
 
@@ -226,11 +231,17 @@ const Profilestack = createStackNavigator({
         headerLeftContainerStyle:({padding:5, }),
         headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Followers</Text>),
         headerLeft: (
-          <MyBackButton navigation={navigation} />
+          <MyBackTwo navigation={navigation} />
         )
       };
     }
   },
+  Profilethree:{
+    screen: Profileedit
+  },
+  Autocomplete:{
+    screen: Autocomplete
+  }
 })
 
 const WrapperStackTab = createStackNavigator({
