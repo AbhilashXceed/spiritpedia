@@ -11,6 +11,7 @@ import { NavigationEvents } from 'react-navigation';
 import AutocompleteView from './AutocompleteView';
 import debounced from '../../utils/debounced';
 
+
 const DEBOUNCE_MS = 500;
 const NAVIGATION_HEIGHT_LANDSCAPE = 32;
 const IOS_NAVIGATION_HEIGHT_PORTRAIT = 64;

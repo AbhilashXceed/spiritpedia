@@ -398,11 +398,7 @@ export default class AuthScreen extends React.Component {
 
           <View style={styles.body}>
             <View style={{ width: wp("85.52%") }}>
-              <Form>
-                {/* <TouchableOpacity onPress={()=>this.props.navigation.navigate('Landingone')} >
-                <Icon name="logo-google" style={{ fontSize: 22 }} />
-                </TouchableOpacity> */}
-              
+              <Form>              
                 <View
                   style={{
                     flexDirection: "row",

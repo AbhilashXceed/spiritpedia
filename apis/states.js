@@ -1,5 +1,6 @@
 import stateData from './stateData';
 
+
 const stateNames = stateData.map(state => state.name);
 
 const filterStates = value => stateNames.filter(
@@ -15,6 +16,6 @@ const fetchStates = (value) => {
   });
   return promise;
 };
-
-
 export default fetchStates;
+
+

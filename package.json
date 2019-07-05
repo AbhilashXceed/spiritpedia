@@ -17,6 +17,7 @@
     "react-native-firebase": "^5.2.3",
     "react-native-gesture-handler": "~1.0.14",
     "react-native-google-signin": "^1.2.1",
+    "react-native-htmlview": "^0.14.0",
     "react-native-image-picker": "^0.28.1",
     "react-native-instagram-login": "^1.1.1",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",

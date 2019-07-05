@@ -1,134 +1,134 @@
 const statesData = [
   {
-    name: 'Alabama',
+    name: 'Whiskey',
     abbreviation: 'AL',
   },
   {
-    name: 'Alaska',
+    name: 'Vodka',
     abbreviation: 'AK',
   },
   {
-    name: 'American Samoa',
+    name: 'Beer',
     abbreviation: 'AS',
   },
   {
-    name: 'Arizona',
+    name: 'Gin',
     abbreviation: 'AZ',
   },
   {
-    name: 'Arkansas',
+    name: 'Rum',
     abbreviation: 'AR',
   },
   {
-    name: 'California',
+    name: 'Wine',
     abbreviation: 'CA',
   },
   {
-    name: 'Colorado',
+    name: 'Breezer',
     abbreviation: 'CO',
   },
   {
-    name: 'Connecticut',
+    name: 'Cider',
     abbreviation: 'CT',
   },
   {
-    name: 'Delaware',
+    name: 'Coffee',
     abbreviation: 'DE',
   },
   {
-    name: 'District Of Columbia',
+    name: 'Energy drinks',
     abbreviation: 'DC',
   },
   {
-    name: 'Federated States Of Micronesia',
+    name: 'Iced Tea',
     abbreviation: 'FM',
   },
   {
-    name: 'Florida',
+    name: 'Tonic Water',
     abbreviation: 'FL',
   },
   {
-    name: 'Georgia',
+    name: 'Cola',
     abbreviation: 'GA',
   },
   {
-    name: 'Guam Gu',
+    name: 'Ginger Ale',
     abbreviation: 'GU',
   },
   {
-    name: 'Hawaii',
+    name: 'Juice',
     abbreviation: 'HI',
   },
   {
-    name: 'Idaho',
+    name: 'Syrups',
     abbreviation: 'ID',
   },
   {
-    name: 'Illinois',
+    name: 'Seekh Kebab',
     abbreviation: 'IL',
   },
   {
-    name: 'Indiana',
+    name: 'Tikka Kebab',
     abbreviation: 'IN',
   },
   {
-    name: 'Iowa',
+    name: 'Tandoori Kebab',
     abbreviation: 'IA',
   },
   {
-    name: 'Kansas',
+    name: 'Pizza',
     abbreviation: 'KS',
   },
   {
-    name: 'Kentucky',
+    name: 'Burgers',
     abbreviation: 'KY',
   },
   {
-    name: 'Louisiana',
+    name: 'Cigarettes',
     abbreviation: 'LA',
   },
   {
-    name: 'Maine',
+    name: 'Light Cigarettes',
     abbreviation: 'ME',
   },
   {
-    name: 'Marshall Islands',
+    name: 'Cigars',
     abbreviation: 'MH',
   },
   {
-    name: 'Maryland',
+    name: 'Pipes',
     abbreviation: 'MD',
   },
   {
-    name: 'Massachusetts',
+    name: 'Kretek',
     abbreviation: 'MA',
   },
   {
-    name: 'Michigan',
+    name: 'Folk Music',
     abbreviation: 'MI',
   },
   {
-    name: 'Minnesota',
+    name: 'Contemporary',
     abbreviation: 'MN',
   },
   {
-    name: 'Mississippi',
+    name: 'Progressive',
     abbreviation: 'MS',
   },
   {
-    name: 'Missouri',
+    name: 'Psychedelic',
     abbreviation: 'MO',
   },
   {
-    name: 'Montana',
+    name: 'Visual Key',
     abbreviation: 'MT',
   },
   {
-    name: 'Nebraska',
+    name: 'Acoustic',
     abbreviation: 'NE',
   },
   {
-    name: 'Nevada',
+    name: 'Outisder',
     abbreviation: 'NV',
   },
   {
@@ -215,26 +215,7 @@ const statesData = [
     name: 'Virgin Islands',
     abbreviation: 'VI',
   },
-  {
-    name: 'Virginia',
-    abbreviation: 'VA',
-  },
-  {
-    name: 'Washington',
-    abbreviation: 'WA',
-  },
-  {
-    name: 'West Virginia',
-    abbreviation: 'WV',
-  },
-  {
-    name: 'Wisconsin',
-    abbreviation: 'WI',
-  },
-  {
-    name: 'Wyoming',
-    abbreviation: 'WY',
-  }
+  
 ];
-
 export default statesData;
+

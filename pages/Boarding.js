@@ -79,7 +79,8 @@ export default class Boarding extends React.Component {
       
       <View>
         <TouchableOpacity onPress={()=>this.props.navigation.navigate('Profilethree')}>
-          <View style={{backgroundColor: "white",
+          <View style={{
+            backgroundColor: "white",
            width: wp("33.33%"),
            height: hp("4.3%"),
            borderRadius:wp('5%'),
@@ -147,6 +148,7 @@ const styles = StyleSheet.create({
 // FAQbloc
 // Landingone
 // Profilebloc
+// Profilethree
 
 const slides = [
   {

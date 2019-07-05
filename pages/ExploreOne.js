@@ -23,6 +23,7 @@ import { Icon } from "react-native-elements";
 import SplashScreen from "react-native-splash-screen";
 import firebase from "react-native-firebase";
 
+
 export default class ExploreOne extends React.Component {
   constructor(props) {
     super(props);
@@ -31,22 +32,26 @@ export default class ExploreOne extends React.Component {
       googleToken: null,
       currentUser: null,
       insta: null,
-      instaname: null
+      instaname: null,
+      ImageArray: [],
+
+      ImageOne: null,
+      ImageTwo: null,
+      ImageThree: null,
+      ImageFour: null,
+      ImageFive: null
     };
   }
 
   componentDidMount = async () => {
+    this.servercaller();
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
     SplashScreen.hide();
     // console.warn(this.state.currentUser);
     let A = await AsyncStorage.getItem("insta");
     let insta = JSON.parse(A);
-    if (insta) {
-      console.warn("Hello" + insta.data.username);
-      this.setState({ insta: insta });
-      this.setState({ instaname: insta.data.username });
-    }
+    
     // let A = await AsyncStorage.getItem("user");
     // let B = await AsyncStorage.getItem("googleToken");
     // if (A) {
@@ -56,6 +61,73 @@ export default class ExploreOne extends React.Component {
     //   console.warn("There is no userdata, something went wrong");
     // }
   };
+
+
+  servercaller = () => {
+    const URL = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/getMobileDashboard";
+
+    fetch(URL, {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response=>response.json())
+    .then(resJson=>{
+      this.setState({ImageArray:resJson})
+      this.setState({
+        // ImageOne: JSON.stringify(this.state.ImageArray[0].image),
+        ImageOne: this.state.ImageArray[0].image,
+        ImageTwo: this.state.ImageArray[1].image,
+        ImageThree: this.state.ImageArray[2].image,
+        ImageFour: this.state.ImageArray[3].image,
+        ImageFive: this.state.ImageArray[4].image
+      })
+    })
+  }
+
+  Imagesetter = (value) => {
+
+    // console.warn(this.state.ImageOne)
+    if(value=='1'){
+      return(
+        <Image
+          source={{uri: this.state.ImageOne}}
+          style={styles.image}
+          />
+        )
+    } else if (value=='2') {
+      return(
+        <Image
+          source={{uri: this.state.ImageTwo}}
+          style={styles.image}
+          />
+        )
+    } else if (value=='3') {
+      return(
+        <Image
+          source={{uri: this.state.ImageThree}}
+          style={styles.image}
+          />
+        )
+    } else if (value=='4') {
+      return(
+        <Image
+          source={{uri: this.state.ImageFour}}
+          style={styles.image}
+          />
+        )
+    } else if (value=='5') {
+      return(
+        <Image
+          source={{uri: this.state.ImageFive}}
+          style={styles.image}
+          />
+        )
+    }
+    
+      
+  }
 
   render() {
     const { currentUser } = this.state;
@@ -68,11 +140,12 @@ export default class ExploreOne extends React.Component {
             <View style={[styles.titlebox, {width:wp('28%')}]}>
               <Text style={styles.titles}>Whiskeypedia</Text>
             </View>
-              <Image
+              {/* <Image
               source={require("../assets/images/whiskey9.jpg")}
               style={styles.image}
               // resizeMode="contain"
-              />           
+              />   */}
+              {this.Imagesetter('1')}
           </View>
           </TouchableOpacity>
 
@@ -82,11 +155,12 @@ export default class ExploreOne extends React.Component {
             <View style={[styles.titlebox, {width:wp('39%')}]}>
               <Text style={styles.titles}>Whiskey's of the world</Text>
             </View>
-              <Image
+              {/* <Image
               source={require("../assets/images/whiskey10.jpg")}
               style={styles.image}
               // resizeMode="contain"
-              />          
+              />           */}
+              {this.Imagesetter('2')}
             </View>
           </TouchableOpacity>
 
@@ -96,11 +170,12 @@ export default class ExploreOne extends React.Component {
           <View style={[styles.titlebox, {width:wp('40%')}]}>
               <Text style={styles.titles}>Distilleries of the world</Text>
             </View>
-              <Image
+              {/* <Image
               source={require("../assets/images/whiskey16.png")}
               style={styles.image}
               // resizeMode="contain"
-              />
+              /> */}
+              {this.Imagesetter('3')}
           </View>
           </TouchableOpacity>
 
@@ -109,11 +184,26 @@ export default class ExploreOne extends React.Component {
             <View style={[styles.titlebox, {width:wp('27%')}]}>
               <Text style={styles.titles}>Events</Text>
             </View>
-            <Image
+            {/* <Image
             source={require("../assets/images/whiskey14.jpg")}
             style={styles.image}
             // resizeMode="contain"
-            />
+            /> */}
+            {this.Imagesetter('4')}
+          </View>         
+          </TouchableOpacity>
+
+          <TouchableOpacity>
+          <View style={styles.tile}>
+            <View style={[styles.titlebox, {width:wp('27%')}]}>
+              <Text style={styles.titles}>Offers</Text>
+            </View>
+            {/* <Image
+            source={require("../assets/images/whiskey14.jpg")}
+            style={styles.image}
+            // resizeMode="contain"
+            /> */}
+            {this.Imagesetter('5')}
           </View>         
           </TouchableOpacity>
 

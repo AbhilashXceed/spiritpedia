@@ -1,5 +1,7 @@
 import React from "react";
 import fetchStates from "../../../apis/states";
+import fetchSpirits from "../../../apis/spirit";
+
 import { PropTypes } from "prop-types";
 import { NavigationEvents } from "react-navigation";
 
@@ -61,7 +63,19 @@ export default class Profileedit extends React.Component {
       Bio: null,
       chosenDate: new Date(),
       valueD: "",
-      spiritArray:[]
+      keyOne: '',
+      spiritArray:[],
+      spiritLength:0,
+      mixerArray:[],
+      mixerLength:0,
+      foodArray:[],
+      foodLength:0,
+      smokeArray:[],
+      smokeLength:0,
+      musicArray:[],
+      musicLength:0,
+      somekey:null,
+      arraynumber: null,
     };
   }
 
@@ -117,25 +131,140 @@ export default class Profileedit extends React.Component {
   //
   //
 
-  handleDPress = () => {
+  arrayChecker=(key)=>{
+    const {spiritLength, mixerLength, musicLength, smokeLength, foodLength} = this.state
+
+    if(key=='1'){
+      if (spiritLength<3) {
+        this.handleDPress(key)
+      } else { alert("You can not have more than 3 Spirits")}
+    } else if (key=='2'){
+      if (mixerLength<3) {
+        this.handleDPress(key)
+      } else { alert("You can not have more than 3 Mixers")}
+    } else if (key=='3'){
+      if (foodLength<3) {
+        this.handleDPress(key)
+      } else { alert("You can not have more than 3 Foods")}
+    } else if (key=='4'){
+      if (smokeLength<2) {
+        this.handleDPress(key)
+      } else { alert("You can not have more than 2 Smokes")}
+    } else if (key=='5'){
+      if (musicLength<2) {
+        this.handleDPress(key)
+      } else { alert("You can not have more than 2 Music")}
+    }
+  }
+
+
+  handleDPress = (key) => {
+    let fetchfunction;
     const {
       navigation: { navigate }
     } = this.props;
+    this.setState({keyOne: key})
     const { valueD } = this.state;
+    if (key=='1') {
+      fetchfunction = fetchStates
+    } else {
+      fetchfunction = fetchSpirits
+    }
     navigate("Autocomplete", {
-      fetchOptions: fetchStates,
+      // fetchOptions: fetchStates,
+      fetchOptions: fetchfunction,
       returnRoute: "Profilethree",
-      value: valueD
+      value: valueD,
     });
   };
 
-  handleDidFocus = ({ state: { params: { value } = {} } }) => {
+  handleDidFocusOne = ({ state: { params: { value} = {} } }) => {
+    const { keyOne, spiritLength, valueD } = this.state;
     if (value === undefined) return;
-    this.state.spiritArray.push(value)
-    this.setState({
-      valueD: value,
-    });
+    if (value === valueD) return;
+    if (keyOne=='1') {    
+      this.setState({valueD: value});
+      if (spiritLength <3){
+        this.setState({spiritLength: spiritLength+1})
+        this.state.spiritArray.push(value)
+      }
+    } 
   };
+
+  handleDidFocusTwo = ({ state: { params: { value} = {} } }) => {
+    const { keyOne, mixerLength, valueD } = this.state;
+    if (value === undefined) return;
+    if (value === valueD) return;
+    if (keyOne=='2') {    
+      this.setState({valueD: value});
+      if (mixerLength <3){
+        this.setState({mixerLength: mixerLength+1})
+        this.state.mixerArray.push(value)      
+      }
+    }
+  };
+
+  handleDidFocusThree = ({ state: { params: { value} = {} } }) => {
+    const { keyOne, foodLength, valueD } = this.state;
+    if (value === undefined) return;
+    if (value === valueD) return;
+    if (keyOne=='3') { 
+      this.setState({valueD: value});
+      if (foodLength <3){
+        this.setState({foodLength: foodLength+1})
+        this.state.foodArray.push(value)
+      }
+    }
+  };
+
+  handleDidFocusFour = ({ state: { params: { value} = {} } }) => {
+    const { keyOne, smokeLength, valueD } = this.state;
+    if (value === undefined) return;
+    if (value === valueD) return;
+    if (keyOne=='4') {
+      this.setState({valueD: value});
+      if (smokeLength <2){
+        this.setState({smokeLength: smokeLength+1})
+        this.state.smokeArray.push(value)      
+      }
+    }
+  };
+
+  handleDidFocusFive = ({ state: { params: { value} = {} } }) => {
+    const { keyOne, musicLength, valueD } = this.state;
+    if (value === undefined) return;
+    if (value === valueD) return;
+    if (keyOne=='5') {
+      this.setState({valueD: value});
+      if (musicLength <2){
+        this.setState({musicLength: musicLength+1})
+        this.state.musicArray.push(value)     
+      }
+    }
+  };
+
+  deleteTab = (key, arraynumber) => {
+    const {spiritLength, mixerLength, musicLength, smokeLength, foodLength} = this.state;
+    if (arraynumber=='1') {
+      this.setState({somekey: key, spiritLength:spiritLength-1, arraynumber:arraynumber})
+      this.state.spiritArray.splice(key, 1);
+    } else if (arraynumber=='2') {
+      this.setState({somekey: key, mixerLength:mixerLength-1, arraynumber:arraynumber})
+      this.state.mixerArray.splice(key, 1);
+    } else if (arraynumber=='3') {
+      this.setState({somekey: key, foodLength:foodLength-1, arraynumber:arraynumber})
+      this.state.foodArray.splice(key, 1);
+    } else if (arraynumber=='4') {
+      this.setState({somekey: key, smokeLength:smokeLength-1, arraynumber:arraynumber})
+      this.state.smokeArray.splice(key, 1);
+    } else if (arraynumber=='5') {
+      this.setState({somekey: key, musicLength:musicLength-1, arraynumber:arraynumber})
+      this.state.musicArray.splice(key, 1);
+    }
+    
+
+  }
+
 
   render() {
     const { valueD } = this.state;
@@ -163,15 +292,6 @@ export default class Profileedit extends React.Component {
                     alignItems: "center"
                   }}
                 >
-                  {/* <Image
-                    source={this.state.avatarSource}
-                    style={{
-                      height: wp("38%"),
-                      width: wp("38%"),
-                      borderRadius: wp("19%")
-                    }}
-                  /> */}
-
                   {this.state.avatarSource ? (
                     <Image
                       source={this.state.avatarSource}
@@ -286,77 +406,137 @@ export default class Profileedit extends React.Component {
 
           <View style={{ alignSelf: "center" }}>
             <View style={styles.headedtabs}>
-              <Text style={styles.label}>What's your favourite spirit?</Text>
-              <NavigationEvents onDidFocus={this.handleDidFocus} />
+              <Text style={styles.label}>What's your favourite spirit?  (max 3)</Text>
+              <NavigationEvents onDidFocus={this.handleDidFocusOne} />
               <View style={{flexDirection:'row'}}>
-                <TouchableOpacity onPress={this.handleDPress}>
+                <TouchableOpacity onPress={()=>this.arrayChecker('1')}>
+                  <View  style={{marginTop:hp('1.5%'), marginRight:wp('2%')}}>
+                    <Icon name="pluscircleo" type="antdesign" color="black" size={wp("6%")}/>
+                  </View>                 
+                </TouchableOpacity>
+                {this.state.spiritArray.map((elements, key)=>(
+                  <View 
+                  key={key}
+                  style={styles.autoselecttab}>
+                    <Text style={{fontSize: wp("2.7%"), color: "black", textAlign:'center'}}>
+                      {elements}
+                    </Text>
+                      <TouchableOpacity style={{marginLeft:wp('1.5%')}} onPress={()=>this.deleteTab(key, '1')}>
+                        <Icon name="close" type="antdesign" color="black" size={wp("4%")}/>
+                      </TouchableOpacity>
+                  </View>
+                ))}
+                { this.state.spiritLength==0 && (<Text style={styles.trialstyle}></Text>)}
+              </View>
+            </View>
+
+
+            <View style={styles.headedtabs}>
+              <Text style={styles.label}>What's your favourite mixer?  (max 3)</Text>
+              <NavigationEvents onDidFocus={this.handleDidFocusTwo} />
+              <View style={{flexDirection:'row'}}>
+                <TouchableOpacity onPress={()=>this.arrayChecker('2')}>
+                  <View  style={{marginTop:hp('1.5%'), marginRight:wp('2%')}}>
+                    <Icon name="pluscircleo" type="antdesign" color="black" size={wp("6%")}/>
+                  </View>                 
+                </TouchableOpacity>
+                {this.state.mixerArray.map((elements, key)=>(
+                  <View 
+                  key={key}
+                  style={styles.autoselecttab}>
+                    <Text style={{fontSize: wp("2.7%"), color: "black", textAlign:'center'}}>
+                      {elements}
+                    </Text>
+                      <TouchableOpacity style={{marginLeft:wp('1.5%')}} onPress={()=>this.deleteTab(key, '2')}>
+                        <Icon name="close" type="antdesign" color="black" size={wp("4%")}/>
+                      </TouchableOpacity>
+                  </View>
+                ))}
+                { this.state.mixerLength==0 && (<Text style={styles.trialstyle}></Text>)}
+            </View>
+
+
+              
+            </View>
+            <View style={styles.headedtabs}>
+              <Text style={styles.label}>What's your favourite finger food?  (max 3)</Text>
+              <NavigationEvents onDidFocus={this.handleDidFocusThree} />
+              <View style={{flexDirection:'row'}}>
+                <TouchableOpacity onPress={()=>this.arrayChecker('3')}>
                   <View  style={{marginTop:hp('1.5%'), marginRight:wp('2%')}}>
                     <Icon name="pluscircleo" type="antdesign" color="black" size={wp("6%")}/>
                   </View>                 
                 </TouchableOpacity>
 
-                {this.state.spiritArray.map((elements, key)=>(
+                {this.state.foodArray.map((elements, key)=>(
                   <View 
                   key={key}
-                  style={{
-                  color: "black",
-                  height: hp("3.5%"),
-                  flexWrap:'wrap',
-                  // width: wp("40%"),
-                  backgroundColor: "#e3e3e3",
-                  borderRadius: hp("1.65%"),
-                  padding: 0,
-                  paddingLeft: wp("3%"),
-                  marginTop: hp("1.5%"),
-                  marginRight:wp('3%')}}>
-                    <Text style={{fontSize: wp("2.7%"), color: "black",}}>
+                  style={styles.autoselecttab}>
+                    <Text style={{fontSize: wp("2.7%"), color: "black", textAlign:'center'}}>
                       {elements}
                     </Text>
-
+                      <TouchableOpacity style={{marginLeft:wp('1.5%')}} onPress={()=>this.deleteTab(key, '3')}>
+                        <Icon name="close" type="antdesign" color="black" size={wp("4%")}/>
+                      </TouchableOpacity>
                   </View>
                 ))}
-                <Text
-                  style={{
-                    fontSize: wp("2.7%"),
-                    color: "black",
-                    height: hp("3.5%"),
-                    width: wp("40%"),
-                    backgroundColor: "#e3e3e3",
-                    borderRadius: hp("1.65%"),
-                    padding: 0,
-                    paddingLeft: wp("3%"),
-                    marginTop: hp("1.5%")
-                  }}
-                >
-                  {valueD}
-                </Text>
+                { this.state.foodLength==0 && (<Text style={styles.trialstyle}></Text>)}
               </View>
-
-              {/* <TextInput placeholderTextColor={"gray"} style={styles.tabtwo} /> */}
             </View>
 
-            <View style={styles.headedtabs}>
-              <Text style={styles.label}>What's your favourite mixer?</Text>
-              <TextInput placeholderTextColor={"gray"} style={styles.tabtwo} />
-            </View>
 
             <View style={styles.headedtabs}>
-              <Text style={styles.label}>
-                What's your favourite finger food?
-              </Text>
-              <TextInput placeholderTextColor={"gray"} style={styles.tabtwo} />
+              <Text style={styles.label}>What's your favourite smoke?  (max 2)</Text>
+              <NavigationEvents onDidFocus={this.handleDidFocusFour} />
+              <View style={{flexDirection:'row'}}>
+                <TouchableOpacity onPress={()=>this.arrayChecker('4')}>
+                  <View  style={{marginTop:hp('1.5%'), marginRight:wp('2%')}}>
+                    <Icon name="pluscircleo" type="antdesign" color="black" size={wp("6%")}/>
+                  </View>                 
+                </TouchableOpacity>
+                {this.state.smokeArray.map((elements, key)=>(
+                  <View 
+                  key={key}
+                  style={styles.autoselecttab}>
+                    <Text style={{fontSize: wp("2.7%"), color: "black", textAlign:'center'}}>
+                      {elements}
+                    </Text>
+                      <TouchableOpacity style={{marginLeft:wp('1.5%')}} onPress={()=>this.deleteTab(key, '4')}>
+                        <Icon name="close" type="antdesign" color="black" size={wp("4%")}/>
+                      </TouchableOpacity>
+                  </View>
+                ))}
+                { this.state.smokeLength==0 && (<Text style={styles.trialstyle}></Text>)}
+              </View>
             </View>
 
-            <View style={styles.headedtabs}>
-              <Text style={styles.label}>What's your favourite smoke?</Text>
-              <TextInput placeholderTextColor={"gray"} style={styles.tabtwo} />
-            </View>
 
             <View style={styles.headedtabs}>
-              <Text style={styles.label}>What's your favourite music?</Text>
-              <TextInput placeholderTextColor={"gray"} style={styles.tabtwo} />
+              <Text style={styles.label}>What's your favourite music?  (max 2)</Text>
+              <NavigationEvents onDidFocus={this.handleDidFocusFive} />
+              <View style={{flexDirection:'row'}}>
+                <TouchableOpacity onPress={()=>this.arrayChecker('5')}>
+                  <View  style={{marginTop:hp('1.5%'), marginRight:wp('2%')}}>
+                    <Icon name="pluscircleo" type="antdesign" color="black" size={wp("6%")}/>
+                  </View>                 
+                </TouchableOpacity>
+                {this.state.musicArray.map((elements, key)=>(
+                  <View 
+                  key={key}
+                  style={styles.autoselecttab}>
+                    <Text style={{fontSize: wp("2.7%"), color: "black", textAlign:'center'}}>
+                      {elements}
+                    </Text>
+                      <TouchableOpacity style={{marginLeft:wp('1.5%')}} onPress={()=>this.deleteTab(key, '5')}>
+                        <Icon name="close" type="antdesign" color="black" size={wp("4%")}/>
+                      </TouchableOpacity>
+                  </View>
+                ))}
+                { this.state.musicLength==0 && (<Text style={styles.trialstyle}></Text>)}
+              </View>
             </View>
           </View>
+          <View style={{height:hp('3%')}} />
         </ScrollView>
       </View>
     );
@@ -397,5 +577,29 @@ const styles = StyleSheet.create({
   headedtabs: {
     width: wp("80%"),
     marginTop: hp("1%")
+  },
+  autoselecttab: {
+    flexDirection:'row',
+    height: hp("3.5%"),
+    flexWrap:'wrap',
+    backgroundColor: "#e3e3e3",
+    borderRadius: hp("1.65%"),
+    padding: 0,
+    paddingLeft: wp("3%"),
+    paddingTop: wp("1%"),
+    paddingRight: wp("3%"),
+    marginTop: hp("1.5%"),
+    marginRight:wp('3%')
+    },
+  trialstyle:{
+    fontSize: wp("2.7%"),
+    color: "black",
+    height: hp("3.5%"),
+    width: wp("40%"),
+    backgroundColor: "#e3e3e3",
+    borderRadius: hp("1.65%"),
+    padding: 0,
+    paddingLeft: wp("3%"),
+    marginTop: hp("1.5%")
   }
 });

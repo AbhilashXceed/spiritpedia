@@ -7,6 +7,8 @@ import {
 
 import { ScrollView } from "react-native-gesture-handler";
 
+import SplashScreen from "react-native-splash-screen";
+
 import {
   Container,
   Header,
@@ -30,10 +32,14 @@ import {
   // ScrollView
 } from "react-native";
 import { Icon } from "react-native-elements";
+import HTMLView from 'react-native-htmlview';
 
 export default class FAQ extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      arraytwo: []
+    }
     this.questionarray = [
       "What is Whisky App?",
       "What is One Time Password?",
@@ -50,6 +56,30 @@ export default class FAQ extends React.Component {
     ];
   }
 
+  componentDidMount(){
+    SplashScreen.hide();
+    this.serverCaller();
+  }
+
+  serverCaller = () => {
+    const URL = 'http://admin.spiritpedia.xceedtech.in/index.php?r=API/getFAQ'
+
+    fetch(URL, {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response=>response.json())
+    .then(resJson=>{
+      this.setState({
+        arraytwo: resJson
+      })
+      // console.warn(this.state.arraytwo);
+    })
+  }
+
+
   _renderHeader(item, expanded) {
     return (
       <View style={
@@ -57,7 +87,7 @@ export default class FAQ extends React.Component {
       }>
           <View  style={{ paddingLeft: wp("2%"), flex:9 }}>
             <Text style={{ fontSize: wp("3%") }}>
-            {" "}{item.title}
+            {" "}{item.question}
             </Text>
           </View>
       
@@ -85,11 +115,18 @@ export default class FAQ extends React.Component {
               borderTopWidth:0,
               // marginTop: wp("5%"),
               // marginBottom: wp("2%"),
-              flexDirection: "row"
+              flexDirection: "row",
+              // flexWrap:'wrap'
         }}>
-        <Text style={{ fontSize: wp("3%"), padding:wp("2%") }} >
-        {item.content}
-      </Text>
+        {/* <Text style={{ fontSize: wp("3%"), padding:wp("2%") }} >
+        {item.answer}
+      </Text> */}
+      <HTMLView
+        value={item.answer}
+        stylesheet={styleshtml}
+        addLineBreaks={false}
+        // paragraphBreak
+      />
       </View>
       
     );
@@ -136,7 +173,7 @@ export default class FAQ extends React.Component {
          
           <Accordion
             style={{borderWidth:1, borderColor:'white'}}
-            dataArray={this.dataArray}
+            dataArray={this.state.arraytwo}
             animation={true}
             expanded={true}
             renderHeader={this._renderHeader}
@@ -176,3 +213,19 @@ const styles = StyleSheet.create({
         flexDirection: "row"
   }
 });
+
+const styleshtml = StyleSheet.create({
+  p: {
+    flexWrap:'wrap',
+    fontSize: wp("3%"),
+    paddingTop:wp("2%"),
+    paddingLeft:wp("2.2%"),
+    paddingRight:wp("2.2%"),
+    paddingBottom:wp("2%"),
+  },
+  // n: {
+  //   padding:0,
+  //   height: null,
+  //   width: null
+  // }
+})
