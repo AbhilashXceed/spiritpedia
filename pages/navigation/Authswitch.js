@@ -3,7 +3,10 @@ import RegisterUser from "../RegisterUser";
 import ExploreOne from "../ExploreOne";
 import BookmarksOne from "../BookmarksOne";
 import OffersOne from "../OffersOne";
-import FeedOne from "../FeedOne";
+
+import FeedOne from "../feedbloc/FeedOne";
+import FeedTwo from "../feedbloc/FeedTwo";
+
 import AuthLoad from "../AuthLoad";
 import LogOut from "../LogOut";
 import Boarding from "../Boarding";
@@ -86,6 +89,36 @@ const Home = createStackNavigator({
     }
   },
 
+  FeedOne: {
+    screen: FeedOne,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+        headerLeftContainerStyle:({paddingLeft:2}),
+        headerRightContainerStyle:({padding:10}),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Feed</Text>),
+        headerLeft: (
+          <MyBackTwo navigation={navigation} />
+        )
+      };
+    }
+  },
+
+  FeedTwo: {
+    screen: FeedTwo,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+        headerLeftContainerStyle:({paddingLeft:2}),
+        headerRightContainerStyle:({padding:10}),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Feed</Text>),
+        headerLeft: (
+          <MyBackTwo navigation={navigation} />
+        )
+      };
+    }
+  }
+
 });
 
 const Bookmarks = createStackNavigator({
@@ -130,32 +163,32 @@ const Offers = createStackNavigator({
   }
 });
 
-const Feed = createStackNavigator({
-  FeedOne: {
-    screen: FeedOne,
-    navigationOptions: ({ navigation }) => {
-      return {
-        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
-        headerLeft: (
-          <Icon
-            name="menu"
-            type="entypo"
-            color="white"
-            size={45}
-            style={{ paddingLeft: 15 }}
-            onPress={() => navigation.openDrawer()}
-          />
-        )
-      };
-    }
-  }
-});
+// const Feed = createStackNavigator({
+//   FeedOne: {
+//     screen: FeedOne,
+//     navigationOptions: ({ navigation }) => {
+//       return {
+//         headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+//         headerLeft: (
+//           <Icon
+//             name="menu"
+//             type="entypo"
+//             color="white"
+//             size={45}
+//             style={{ paddingLeft: 15 }}
+//             onPress={() => navigation.openDrawer()}
+//           />
+//         )
+//       };
+//     }
+//   }
+// });
 
 
 const LandingTabNavigator = createBottomTabNavigator(
   {
     Home,
-    Feed,
+    // Feed,
     Bookmarks,
     Offers,
   },
@@ -174,10 +207,11 @@ const LandingTabNavigator = createBottomTabNavigator(
         } else if (routeName === "Offers") {
           iconName = "tag";
           iconType = "font-awesome";
-        } else if (routeName === "Feed") {
-          iconName = "search";
-          iconType = "font-awesome";
         }
+        //  else if (routeName === "Feed") {
+        //   iconName = "search";
+        //   iconType = "font-awesome";
+        // }
         return (
           <Icon name={iconName} type={iconType} size={25} color={tintColor} />
         );
@@ -272,54 +306,29 @@ const LandingDrawerNavigator = createDrawerNavigator(
       // }
     },
 
-    Profilebloc: {
-      screen: Profilestack,
-      
-    },
+    Profilebloc: { screen: Profilestack },
 
-    LogOut: {
-      screen: LogOut,
-      
-    },
-    Location: {
-      screen: Location,
-      
-    },
-    Transactions: {
-      screen: Transactions,
-      
-    },
-    Points: {
-      screen: Points,
-      
-    },
-    ShareService: {
-      screen: ShareService,
-      
-    },
-    Refer: {
-      screen: Refer,
-      
-    },
-    Support: {
-      screen: Support,
-      
-    },
-    FAQbloc: {
-      screen: FAQstack,
-    
-    },
-    About: {
-      screen: About,
-      
-    },
-    Feedback: {
-      screen: Feedback,
-      
-    },
-    Setting: {
-      screen: Setting,
-    }
+    LogOut: { screen: LogOut },
+
+    Location: { screen: Location },
+
+    Transactions: { screen: Transactions },
+
+    Points: { screen: Points },
+
+    ShareService: { screen: ShareService },
+
+    Refer: { screen: Refer },
+
+    Support: { screen: Support },
+
+    FAQbloc: { screen: FAQstack },
+
+    About: { screen: About },
+
+    Feedback: { screen: Feedback },
+
+    Setting: { screen: Setting }
   },
   drawerConfig
   
@@ -350,15 +359,11 @@ const AuthStack = createStackNavigator({
 
 const AuthSwitchNavigator = createSwitchNavigator(
   {
-    AuthLoad: {
-      screen: AuthLoad
-    },
-    AuthBloc: {
-      screen: AuthStack
-    },
-    Landingone: {
-      screen: LandingDrawerNavigator
-    }
+    AuthLoad: { screen: AuthLoad },
+
+    AuthBloc: { screen: AuthStack }, 
+
+    Landingone: { screen: LandingDrawerNavigator }
   },
   {
     initialRouteName: "AuthBloc"

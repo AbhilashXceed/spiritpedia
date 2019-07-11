@@ -1,6 +1,10 @@
 import React from "react";
 import fetchStates from "../../../apis/states";
 import fetchSpirits from "../../../apis/spirit";
+import fetchMixers from "../../../apis/mixers";
+import fetchFoods from "../../../apis/food";
+import fetchSmokes from "../../../apis/smoke";
+import fetchMusics from "../../../apis/music";
 
 import { PropTypes } from "prop-types";
 import { NavigationEvents } from "react-navigation";
@@ -110,10 +114,6 @@ export default class Profileedit extends React.Component {
         console.warn("User tapped custom button: ", response.customButton);
       } else {
         const source = { uri: response.uri };
-
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
         this.setState({
           avatarSource: source
         });
@@ -166,9 +166,15 @@ export default class Profileedit extends React.Component {
     this.setState({keyOne: key})
     const { valueD } = this.state;
     if (key=='1') {
-      fetchfunction = fetchStates
-    } else {
       fetchfunction = fetchSpirits
+    } else if (key=='2'){
+      fetchfunction = fetchMixers
+    } else if (key=='3'){
+      fetchfunction = fetchFoods
+    } else if (key=='4'){
+      fetchfunction = fetchSmokes
+    } else if (key=='5'){
+      fetchfunction = fetchMusics
     }
     navigate("Autocomplete", {
       // fetchOptions: fetchStates,
@@ -179,9 +185,12 @@ export default class Profileedit extends React.Component {
   };
 
   handleDidFocusOne = ({ state: { params: { value} = {} } }) => {
-    const { keyOne, spiritLength, valueD } = this.state;
+    const { keyOne, spiritLength, valueD} = this.state;
+    let catchFunction = (spirit) => {return spirit == value;}
+    const arrayResult = this.state.spiritArray.some(catchFunction);
+    if (arrayResult) return;
     if (value === undefined) return;
-    if (value === valueD) return;
+    // if (value === valueD) return;
     if (keyOne=='1') {    
       this.setState({valueD: value});
       if (spiritLength <3){
@@ -193,8 +202,11 @@ export default class Profileedit extends React.Component {
 
   handleDidFocusTwo = ({ state: { params: { value} = {} } }) => {
     const { keyOne, mixerLength, valueD } = this.state;
+    let catchFunction = (mixer) => {return mixer == value;}
+    const arrayResult = this.state.mixerArray.some(catchFunction);
+    if (arrayResult) return;
     if (value === undefined) return;
-    if (value === valueD) return;
+    // if (value === valueD) return;
     if (keyOne=='2') {    
       this.setState({valueD: value});
       if (mixerLength <3){
@@ -206,8 +218,11 @@ export default class Profileedit extends React.Component {
 
   handleDidFocusThree = ({ state: { params: { value} = {} } }) => {
     const { keyOne, foodLength, valueD } = this.state;
+    let catchFunction = (food) => {return food == value;}
+    const arrayResult = this.state.foodArray.some(catchFunction);
+    if (arrayResult) return;
     if (value === undefined) return;
-    if (value === valueD) return;
+    // if (value === valueD) return;
     if (keyOne=='3') { 
       this.setState({valueD: value});
       if (foodLength <3){
@@ -219,8 +234,11 @@ export default class Profileedit extends React.Component {
 
   handleDidFocusFour = ({ state: { params: { value} = {} } }) => {
     const { keyOne, smokeLength, valueD } = this.state;
+    let catchFunction = (smoke) => {return smoke == value;}
+    const arrayResult = this.state.smokeArray.some(catchFunction);
+    if (arrayResult) return;
     if (value === undefined) return;
-    if (value === valueD) return;
+    // if (value === valueD ) return;
     if (keyOne=='4') {
       this.setState({valueD: value});
       if (smokeLength <2){
@@ -232,8 +250,11 @@ export default class Profileedit extends React.Component {
 
   handleDidFocusFive = ({ state: { params: { value} = {} } }) => {
     const { keyOne, musicLength, valueD } = this.state;
+    let catchFunction = (music) => {return music == value;}
+    const arrayResult = this.state.musicArray.some(catchFunction);
+    if (arrayResult) return;
     if (value === undefined) return;
-    if (value === valueD) return;
+    // if (value === valueD) return;
     if (keyOne=='5') {
       this.setState({valueD: value});
       if (musicLength <2){

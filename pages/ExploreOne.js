@@ -39,7 +39,8 @@ export default class ExploreOne extends React.Component {
       ImageTwo: null,
       ImageThree: null,
       ImageFour: null,
-      ImageFive: null
+      ImageFive: null,
+      ImageSix: null,
     };
   }
 
@@ -81,7 +82,8 @@ export default class ExploreOne extends React.Component {
         ImageTwo: this.state.ImageArray[1].image,
         ImageThree: this.state.ImageArray[2].image,
         ImageFour: this.state.ImageArray[3].image,
-        ImageFive: this.state.ImageArray[4].image
+        ImageFive: this.state.ImageArray[4].image,
+        ImageSix: this.state.ImageArray[5].image
       })
     })
   }
@@ -121,6 +123,13 @@ export default class ExploreOne extends React.Component {
       return(
         <Image
           source={{uri: this.state.ImageFive}}
+          style={styles.image}
+          />
+        )
+    } else if (value=='6') {
+      return(
+        <Image
+          source={{uri: this.state.ImageSix}}
           style={styles.image}
           />
         )
@@ -204,6 +213,20 @@ export default class ExploreOne extends React.Component {
             // resizeMode="contain"
             /> */}
             {this.Imagesetter('5')}
+          </View>         
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('FeedOne')}>
+          <View style={styles.tile}>
+            <View style={[styles.titlebox, {width:wp('27%')}]}>
+              <Text style={styles.titles}>Feeds</Text>
+            </View>
+            {/* <Image
+            source={require("../assets/images/whiskey14.jpg")}
+            style={styles.image}
+            // resizeMode="contain"
+            /> */}
+            {this.Imagesetter('6')}
           </View>         
           </TouchableOpacity>
 
