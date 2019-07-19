@@ -26,10 +26,11 @@ export default class LogOut extends React.Component {
   }
   async removeItemValue() {
     try {
-      await AsyncStorage.removeItem('A');
-      await AsyncStorage.removeItem('B');
-      await AsyncStorage.removeItem('C');
-      await AsyncStorage.removeItem('LOGINDATA');
+      // await AsyncStorage.removeItem('A');
+      // await AsyncStorage.removeItem('B');
+      // await AsyncStorage.removeItem('C');
+      await AsyncStorage.removeItem('LOGINDATA').then(()=>this.props.navigation.navigate('AuthScreen'))
+      .catch(error=>this.setState({errormessage: error.message}));
       return true;
     }
     catch(exception) {

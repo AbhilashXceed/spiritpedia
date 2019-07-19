@@ -35,6 +35,25 @@ export default class Followers extends React.Component {
 
   }
 
+  componentDidMount(){
+    pullFollowers()
+  }
+
+  pullFollowers(){
+
+    const url='';
+    fetch(url, {
+      method: '',
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(response=>response.json())
+    .then(resjson=>{
+
+    })
+    
+  }
+
   render() {
     return (
       <View style={{ alignItems:'center' }}>

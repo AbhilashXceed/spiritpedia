@@ -13,21 +13,40 @@ import firebase, { Firebase } from "react-native-firebase";
 export default class AuthLoad extends React.Component {
     constructor(props) {
       super(props);
-      // this._bootstrapAsync();
+      this._bootstrap();
+      // this.getAllKeys();
     }
 
 
-  //   _bootstrapAsync = async () => {
-  //       const userToken = await AsyncStorage.getItem('user');
-  //       this.props.navigation.navigate(userToken ? 'Landingone' : 'AuthScreen');
-  // }
+    _bootstrap = async () => {
+      // console.warn('inside funtion')
+      const LOGINDATA = await AsyncStorage.getItem('LOGINDATA');
+        // console.warn(LOGINDATA);
+        this.props.navigation.navigate(LOGINDATA ? 'Landingone' : 'AuthBloc')
+
+        
+  }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      this.props.navigation.navigate(user ? 'Landingone' : 'AuthBloc');
-      })
+    // this._bootstrapAsync();
+    // firebase.auth().onAuthStateChanged(user => {
+    //   this.props.navigation.navigate(user ? 'Landingone' : 'AuthBloc');
+    //   })
   }
   
+
+  // getAllKeys = async () => {
+  //   let keys = []
+  //   try {
+  //     keys = await AsyncStorage.getAllKeys()
+  //   } catch(e) {
+  //     // read key error
+  //   }
+  
+  //   console.warn(keys)
+  //   // example console.log result:
+  //   // ['@MyApp_user', '@MyApp_key']
+  // }
 
 render() {
     return (

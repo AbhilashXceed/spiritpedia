@@ -78,7 +78,7 @@ export default class Boarding extends React.Component {
     return (
       
       <View>
-        <TouchableOpacity onPress={()=>this.props.navigation.navigate('Landingone')}>
+        <TouchableOpacity onPress={()=>this.props.navigation.navigate('AuthScreen')}>
           <View style={{
             backgroundColor: "white",
            width: wp("33.33%"),
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
 // Landingone
 // Profilebloc
 // Profilethree
+// Register
 
 const slides = [
   {

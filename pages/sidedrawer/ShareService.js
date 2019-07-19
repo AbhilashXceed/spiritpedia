@@ -45,11 +45,11 @@ export default class ShareService extends React.Component {
 
   render() {
 
-    let shareOptions = {
-      title: "SPIRITPEDIA",
-      message: "HELLO YOGESH SIR",
-      url: "http://facebook.github.io/react-native/",
-    };
+    // let shareOptions = {
+    //   title: "SPIRITPEDIA",
+    //   message: "HELLO YOGESH SIR",
+    //   url: "http://facebook.github.io/react-native/",
+    // };
   
     // let shareImageBase64 = {
     //   message: "test 1",
@@ -66,8 +66,8 @@ export default class ShareService extends React.Component {
           source={require('../../assets/images/sharelogo.png')}
           resizeMode='contain'
         />
-        <Text numberOfLines={3} 
-        style={{fontSize:wp('2.8%'), textAlign:'center', width:wp('60%'), color:'black'}}
+        <Text numberOfLines={6} 
+        style={{fontSize:wp('5%'), textAlign:'center', fontWeight:'600', width:wp('80%'), color:'white'}}
         >
           Hey, I came across this awesome app!
           You can talk, share, offers, buy, order, find, best
@@ -75,12 +75,21 @@ export default class ShareService extends React.Component {
         </Text>
       </View>
 
-      <View>
-        <Button
-          title={'share'}
-          onPress={()=>this.send()}
-        />
-      </View>
+      
+      <TouchableOpacity
+        onPress={()=>this.send()}
+        style={{
+          height:wp('40%'),
+          width:wp('40%'),
+          borderColor: 'white',
+          borderWidth:wp('2%'), 
+          alignSelf:'center',
+          justifyContent:'center',
+          alignItems:'center',
+        }}>
+          <Text style={{color:'white', fontSize:wp('5%'), fontWeight:'600'}}>SHARE APP</Text>
+      </TouchableOpacity>
+      
 
         {/* <TouchableOpacity onPress={()=>{Share.open(shareOptions);}}>
           <View>

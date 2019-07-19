@@ -46,13 +46,16 @@ export default class RegisterUser extends React.Component {
   constructor(props) {
     super(props),
       (this.state = {
-        name: "",
+        fname: "",
+        lname: "",
         email: "",
         password: "",
         phone: "",
         radiovalue: "",
         referralcode:"",
-        errorname: null,
+
+        errorfname: null,
+        errorlname: null,
         erroremail: null,
         errorpass: null,
         errorphone: null,
@@ -65,7 +68,7 @@ export default class RegisterUser extends React.Component {
 
   pusher() {
     console.warn("button is pressed");
-    const { name, email, password, phone } = this.state;
+    const { fname, lname, email, password, phone } = this.state;
     const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 
@@ -82,43 +85,58 @@ export default class RegisterUser extends React.Component {
       this.setState({
         errorpass: "password should be at least 6 letters long"
       });
-    } else if (name == "") {
+    } else if (fname == "") {
       this.setState({ errorpass: null });
-      this.setState({ errorname: "please enter the name" });
-    } else if (phone == "") {
+      this.setState({ errorfname: "please enter the first name" });
+    } else if (lname == "") {
+      this.setState({ errorfname: null, errorpass: null });
+      this.setState({ errorlname: "please enter the last name" });
+    }
+     else if (phone == "") {
       this.setState({ errorphone: "please enter the phonenumber" });
     } else if (phone.toString().length < 10) {
       this.setState({ errorphone: "unvalid phone number" });
     } else {
       console.warn("one");
-      var url = "https://spiritpedia.xceedtech.in/index.php?r=api/Register";
+      const url = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/Create";
 
-      let MAIL = JSON.stringify({
-        fullname: this.state.name,
+      let MAIL = {
+        first_name: this.state.fname,
+        last_name: this.state.lname,
         email: this.state.email,
         password: this.state.password,
         mobile: this.state.phone,
         gender: this.state.radiovalue,
-        referal_code: this.state.referralcode
+        referal_code: this.state.referralcode,
+        fullname: 'trial'
+      }
+
+      let MAILTWO = JSON.stringify({
+        model: "Register",
+        params: MAIL
       })
-      console.warn(MAIL)
-      console.log(MAIL)
+      console.warn(MAILTWO)
+      // console.log(MAIL)
 
       fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: MAIL,
+        body: MAILTWO,
       })
         .then(response => response.json())
         .then(responseJson => {
           alert(JSON.stringify(responseJson));
-          console.warn("Success:", responseJson);
+          console.warn("Success:", JSON.stringify(responseJson), responseJson);
+          AsyncStorage.setItem('LOGINDATA', JSON.stringify(resJson));
         })
         .then(()=>this.props.navigation.navigate('Landingone'))
-        .catch(error => 
-          {console.warn(error)})
+        .catch(error => {
+            this.setState({ errorMessage: error.message });
+            console.warn(this.state.errorMessage);
+            alert(this.state.errorMessage);
+          })
         // .then(
         //   firebase
         //     .auth()
@@ -155,7 +173,7 @@ export default class RegisterUser extends React.Component {
       <KeyboardAwareScrollView
         contentContainerStyle={styles.container}
         resetScrollToCoords={{ x: 0, y: 0 }}
-        scrollEnabled={false}
+        scrollEnabled={true}
         enableOnAndroid={true}
         enableAutomaticScroll={true}
         showsVerticalScrollIndicator={false}
@@ -198,6 +216,7 @@ export default class RegisterUser extends React.Component {
                 <Input
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  style={styles.inputtext}
                   onChangeText={text =>
                     this.setState({ email: text.replace(/\s/g, "") })
                   }
@@ -227,6 +246,7 @@ export default class RegisterUser extends React.Component {
                   </Label>
                   <Input
                     autoCapitalize="none"
+                    style={styles.inputtext}
                     onChangeText={text =>
                       this.setState({ password: text.replace(/\s/g, "") })
                     }
@@ -269,19 +289,48 @@ export default class RegisterUser extends React.Component {
                 }}
               >
                 <Label style={{ color: "grey", fontSize: 10 }}>
-                  Full Name*
+                  First Name*
                 </Label>
                 <Input
                   autoCapitalize="none"
+                  style={styles.inputtext}
                   onChangeText={text =>
-                    this.setState({ name: text.replace(/\s/g, "") })
+                    this.setState({ fname: text.replace(/\s/g, "") })
                   }
                 />
               </Item>
 
-              {this.state.errorname && (
+              {this.state.errorfname && (
                 <Text style={{ color: "red", fontSize: 10 }}>
-                  {this.state.errorname}
+                  {this.state.errorfname}
+                </Text>
+              )}
+
+              <Item
+                floatingLabel
+                style={{
+                  borderBottomColor: "black",
+                  borderBottomWidth: 1,
+                  marginBottom: 0,
+                  marginTop: 0,
+                  marginLeft: 0
+                }}
+              >
+                <Label style={{ color: "grey", fontSize: 10 }}>
+                  Last Name*
+                </Label>
+                <Input
+                  autoCapitalize="none"
+                  style={styles.inputtext}
+                  onChangeText={text =>
+                    this.setState({ lname: text.replace(/\s/g, "") })
+                  }
+                />
+              </Item>
+
+              {this.state.errorlname && (
+                <Text style={{ color: "red", fontSize: 10 }}>
+                  {this.state.errorlname}
                 </Text>
               )}
 
@@ -302,6 +351,7 @@ export default class RegisterUser extends React.Component {
                   autoCapitalize="none"
                   maxLength={10}
                   keyboardType={"phone-pad"}
+                  style={styles.inputtext}
                   onChangeText={text =>
                     this.setState({ phone: text.replace(/\s/g, "") })
                   }
@@ -364,17 +414,16 @@ export default class RegisterUser extends React.Component {
                 </Text>
 
 
-                <Item style={{paddingTop:0, marginTop:0, borderBottomColor:'black',  width: wp('40%'), height:hp('5%'), marginRight: wp('4%')}}>
+                <Item style={{paddingTop:0, marginTop:0,  borderBottomColor:'black',  width: wp('40%'), height:hp('5%'), marginRight: wp('4%')}}>
                 <Input 
                 onChangeText={(text)=>{this.setState({referralcode:text})}}
-                style={{ paddingTop:0, marginTop:0 }} />
+                style={[styles.inputtext, { paddingTop:0, marginTop:0, paddingBottom:0, marginBottom:0, }]} />
                 </Item>
 
 
               </View>
-            </Form>
 
-            <Button
+              <Button
               rounded
               onPress={() => this.pusher()}
               style={{
@@ -392,16 +441,83 @@ export default class RegisterUser extends React.Component {
                 Create Account
               </Text>
             </Button>
+
+            <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    // paddingTop: 5,
+                    paddingLeft: 10,
+                    bottom:10
+                  }}
+                >
+                  <Text style={{ fontSize: 10, paddingTop: 15 }}>
+                    Have an Account?
+                  </Text>
+                  <Button
+                    transparent
+                    dark
+                    style={{}}
+                    onPress={() => this.props.navigation.navigate("AuthScreen")}
+                  >
+                    <Text style={{ fontSize: 10, paddingLeft: 5 }}>
+                      Log in
+                    </Text>
+                  </Button>
+                </View>
+            </Form>
+
+            {/* <Button
+              rounded
+              onPress={() => this.pusher()}
+              style={{
+                alignSelf: "center",
+                width: wp("77%"),
+                height: hp("5.3%"),
+                backgroundColor: "#fab430",
+                elevation: 0,
+                margin: 10,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Text style={{ color: "black", fontSize: 11 }}>
+                Create Account
+              </Text>
+            </Button>
+
+            <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    paddingTop: 5,
+                    paddingLeft: 10
+                  }}
+                >
+                  <Text style={{ fontSize: 10, paddingTop: 15 }}>
+                    Have an Account?
+                  </Text>
+                  <Button
+                    transparent
+                    dark
+                    style={{}}
+                    onPress={() => this.props.navigation.navigate("")}
+                  >
+                    <Text style={{ fontSize: 10, paddingLeft: 5 }}>
+                      Log in
+                    </Text>
+                  </Button>
+                </View> */}
           </View>
-        </View>
-        
+        </View>       
       </KeyboardAwareScrollView>
     );
   }
 }
 const styles = StyleSheet.create({
   container: {
-    height:hp('105%'),
+    // flex:1,
+    height:hp('104%'),
     backgroundColor: "white",
     justifyContent: "center"
   },
@@ -428,5 +544,8 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 18
+  },
+  inputtext: {
+    fontSize:wp('4%')
   }
 });

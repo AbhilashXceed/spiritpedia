@@ -60,17 +60,23 @@ export default class AuthScreen extends React.Component {
       toggle: true,
             fbid: null,
             fbname: null,
+            fbfname: null,
+            fblname: null,
             fbemail: null,
             fbpic: null,
+
             googleid: null,
             googlename: null,
+            googlefname: null,
+            googlelname: null,
             googlemail: null,
             googlepic: null,
+
     };
   }
 
   async componentDidMount() {
-    AsyncStorage.setItem('REST', 'https://spiritpedia.xceedtech.in/index.php?r=site/');
+    AsyncStorage.setItem('REST', 'http://admin.spiritpedia.xceedtech.in/index.php?r=API/');
     SplashScreen.hide();
     this._configureGoogleSignIn();
     // this.checkPermission();
@@ -101,7 +107,7 @@ export default class AuthScreen extends React.Component {
 
   signinGoogle = async () => {
     try {
-      console.warn("button pressed");
+      // console.warn("button pressed");
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
 
@@ -110,20 +116,27 @@ export default class AuthScreen extends React.Component {
         googlemail: userInfo.user.email,
         googlepic: userInfo.user.photo,
         googlename: userInfo.user.name,
+        googlefname: userInfo.user.givenName,
+        googlelname: userInfo.user.familyName,
       })
 
-      // console.warn(this.state.googleid, this.state.googlemail, this.state.googlepic, this.state.googlename)
+      // console.warn(this.state.googleid, this.state.googlemail, this.state.googlepic, this.state.googlename, this.state.googlefname, this.state.googlelname)
 
-      console.warn("stringified item:::" + JSON.stringify(userInfo.user));
-      var url = "https://spiritpedia.xceedtech.in/index.php?r=api/GoogleLogin";
+      // console.warn("stringified item:::" + JSON.stringify(userInfo.user));
+      var url = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/GoogleLogin";
 
       var MAIL = {
-        google_id: this.state.googleid,
+        first_name: this.state.googlefname,
+        last_name: this.state.googlelname,
+        email: this.state.googlemail,
         name: this.state.googlename,
-        email: this.state.googlemail
+        google_id: this.state.googleid,
+        
+        
       }
       let mailjson = JSON.stringify(MAIL);
       console.warn(mailjson),
+      // console.log(mailjson),
 
       fetch(url, {
         method: "POST",
@@ -204,7 +217,7 @@ export default class AuthScreen extends React.Component {
         );
       } else {
 
-        let url = `https://graph.facebook.com/${ID}?fields=id,name,email,picture&access_token=${token}`
+        let url = `https://graph.facebook.com/${ID}?fields=id,name,first_name,last_name,email,picture&access_token=${token}`
 
         fetch( url, {
           method: "GET",
@@ -214,24 +227,28 @@ export default class AuthScreen extends React.Component {
         }).then(res=>res.json())
         .then(resJson=>{
           // console.warn(resJson)
-          // console.warn(resJson.id)
-          // console.warn(resJson.name)
-          // console.warn(resJson.email)
-          // console.warn(resJson.picture.data.url)
+          console.warn(resJson.id)
+          console.warn(resJson.name)
+          console.warn(resJson.email)
+          console.warn(resJson.picture.data.url)
           this.setState({
             fbid: resJson.id,
             fbname: resJson.name,
             fbemail: resJson.email,
+            fbfname: resJson.first_name,
+            fblname: resJson.last_name,
             fbpic: resJson.picture.data.url
           })
-            var url = "https://spiritpedia.xceedtech.in/index.php?r=api/FacebookLogin";
+            var url = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/FacebookLogin";
             var MAIL = {
-            facebook_id: this.state.fbid,
+            first_name: this.state.fbfname,
+            last_name: this.state.fblname,
+            email: this.state.fbemail,
             name: this.state.fbname,
-            email: this.state.fbemail
+            facebook_id: this.state.fbid,
           }
           let mailjson = JSON.stringify(MAIL);
-          // console.warn(mailjson)
+          console.warn(mailjson)
           // console.log(mailjson)
 
           fetch(url, {
@@ -302,7 +319,7 @@ export default class AuthScreen extends React.Component {
       this.setState({ errorEmail: null });
       console.warn("this is email", email, password);
 
-      var url = "https://spiritpedia.xceedtech.in/index.php?r=api/login";
+      var url = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/Login";
       var MAIL = {
         username: this.state.email,
         password: this.state.password,
@@ -383,9 +400,6 @@ export default class AuthScreen extends React.Component {
         {/* <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled  > */}
         {/* <ScrollView > */}
 
-        {/* <ImageBackground
-            source={require("../android/app/images/login-bg.png")}
-            style={styles.backgroundimage}> */}
         <View style={styles.container}>
           <View style={styles.upperportion}>
           

@@ -159,7 +159,7 @@ class Autocomplete extends PureComponent {
         <NavigationEvents
           onWillBlur={this.handleWillBlur}
         />
-        <AutocompleteView
+        <AutocompleteView 
           onBlur={this.handleInputBlur}
           onChangeText={this.handleChangeText}
           onOptionPress={this.handleOptionPress}

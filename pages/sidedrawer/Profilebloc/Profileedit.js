@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { PureComponent } from 'react';
 import fetchStates from "../../../apis/states";
 import fetchSpirits from "../../../apis/spirit";
 import fetchMixers from "../../../apis/mixers";
@@ -16,13 +17,13 @@ import {
   Alert,
   StatusBar,
   Image,
-  ScrollView
+  ScrollView,
+  Button,
 } from "react-native";
 
 import {
   Container,
   Header,
-  Button,
   Form,
   Item,
   Input,
@@ -37,13 +38,14 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 
-import MyBackButton from "../../MyBackButton";
 import MyBackTwo from "../../MyBackTwo";
 import { TextInput } from "react-native-gesture-handler";
 
 import ImagePicker from "react-native-image-picker";
 
 import { Icon } from "react-native-elements";
+
+import AsyncStorage from "@react-native-community/async-storage";
 
 // import { ScrollView } from "react-native-gesture-handler";
 
@@ -53,19 +55,32 @@ const options = {
   chooseFromLibraryButtonTitle: "Gallery"
 };
 
+
+class Savebutton extends React.Component{
+	render(){  
+		return(
+			<TouchableOpacity onPress={()=>this.props.navigation.goBack()}>
+				<Text style={{color:'white'}}>Save</Text>
+			</TouchableOpacity>
+		)
+	}
+}
+
 export default class Profileedit extends React.Component {
   constructor(props) {
     super(props);
+    // this.updateProfile = this.updateProfile.bind(this);
     this.state = {
       avatarSource: null,
+      profilePicture: null,
+      ID: null,
       FirstName: null,
       LastName: null,
       Email: null,
       Phone: null,
       City: null,
-      DOB: null,
-      Bio: null,
       chosenDate: new Date(),
+      Bio: null,
       valueD: "",
       keyOne: '',
       spiritArray:[],
@@ -95,12 +110,67 @@ export default class Profileedit extends React.Component {
       ),
       headerLeft: <MyBackTwo navigation={navigation} />,
       headerRight: (
-        <TouchableOpacity>
-          <Text style={{ color: "white" }}>Save</Text>
-        </TouchableOpacity>
+        <Savebutton navigation={navigation} />
       )
     };
   };
+  componentDidMount() {
+    this.getID()
+  }
+
+  componentWillUnmount(){
+    this.updateProfile()
+  }
+
+  getID = async () => {
+    var LOGINDATA = await AsyncStorage.getItem('LOGINDATA')
+		let DATA = JSON.parse(LOGINDATA);
+		let id = DATA.id; 
+
+    this.setState({ID:id});
+  }
+
+  updateProfile = () => {
+    const url = 'http://admin.spiritpedia.xceedtech.in/index.php?r=API/Update';
+    const { profilePicture, ID, FirstName, LastName, Phone, Email, City, chosenDate, Bio, spiritArray, mixerArray, foodArray, smokeArray, musicArray } = this.state;
+
+    let profile = {
+      first_name: FirstName,
+      last_name: LastName,
+      mobile: Phone,
+      email: Email,
+      gender: "",
+      city: City,
+      dob: chosenDate,
+      referal_code: "",
+      about: Bio,
+      favorite_spirit: spiritArray,
+      favorite_mixer: mixerArray,
+      favorite_food: foodArray,
+      favorite_smoke: smokeArray,
+      favorite_music: musicArray,
+    }
+    let MAIL = JSON.stringify({
+      model: "Profile",
+      id: ID,
+      params: profile,
+      profile_photo: profilePicture,
+    })
+
+    console.log(MAIL);
+
+    fetch( url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body:MAIL
+    }).then(response=>response.json())
+    .then(resjson=>console.warn(JSON.stringify(resjson)))
+    .catch(error=>console.warn(error.message))
+
+  }
+
 
   ImageFunction = () => {
     ImagePicker.showImagePicker(options, response => {
@@ -113,9 +183,11 @@ export default class Profileedit extends React.Component {
       } else if (response.customButton) {
         console.warn("User tapped custom button: ", response.customButton);
       } else {
-        const source = { uri: response.uri };
+        // const source = { uri: response.uri };
+        const source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.setState({
-          avatarSource: source
+          avatarSource: source,
+          profilePicture: response.data,
         });
       }
     });
@@ -190,7 +262,7 @@ export default class Profileedit extends React.Component {
     const arrayResult = this.state.spiritArray.some(catchFunction);
     if (arrayResult) return;
     if (value === undefined) return;
-    // if (value === valueD) return;
+    if (arrayResult && (value === valueD)) return;
     if (keyOne=='1') {    
       this.setState({valueD: value});
       if (spiritLength <3){
@@ -206,7 +278,7 @@ export default class Profileedit extends React.Component {
     const arrayResult = this.state.mixerArray.some(catchFunction);
     if (arrayResult) return;
     if (value === undefined) return;
-    // if (value === valueD) return;
+    if (arrayResult && (value === valueD)) return;
     if (keyOne=='2') {    
       this.setState({valueD: value});
       if (mixerLength <3){
@@ -222,7 +294,7 @@ export default class Profileedit extends React.Component {
     const arrayResult = this.state.foodArray.some(catchFunction);
     if (arrayResult) return;
     if (value === undefined) return;
-    // if (value === valueD) return;
+    if (arrayResult && (value === valueD)) return;
     if (keyOne=='3') { 
       this.setState({valueD: value});
       if (foodLength <3){
@@ -238,7 +310,7 @@ export default class Profileedit extends React.Component {
     const arrayResult = this.state.smokeArray.some(catchFunction);
     if (arrayResult) return;
     if (value === undefined) return;
-    // if (value === valueD ) return;
+    if (arrayResult && (value === valueD)) return;
     if (keyOne=='4') {
       this.setState({valueD: value});
       if (smokeLength <2){
@@ -254,7 +326,7 @@ export default class Profileedit extends React.Component {
     const arrayResult = this.state.musicArray.some(catchFunction);
     if (arrayResult) return;
     if (value === undefined) return;
-    // if (value === valueD) return;
+    if (arrayResult && (value === valueD)) return;
     if (keyOne=='5') {
       this.setState({valueD: value});
       if (musicLength <2){
@@ -288,10 +360,10 @@ export default class Profileedit extends React.Component {
 
 
   render() {
-    const { valueD } = this.state;
-
+    const { valueD, } = this.state;
     return (
       <View style={styles.container}>
+        {/* <NavigationEvents onDidBlur={this.updateProfile} onWillBlur={this.updateProfile}/> */}
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <View
@@ -336,6 +408,7 @@ export default class Profileedit extends React.Component {
                   placeholder={"First Name"}
                   placeholderTextColor={"gray"}
                   style={styles.tab}
+                  onChangeText={text => {this.setState({ FirstName: text.replace(/\s/g, "") })}}
                 />
               </View>
 
@@ -344,6 +417,7 @@ export default class Profileedit extends React.Component {
                   placeholder={"Last Name"}
                   placeholderTextColor={"gray"}
                   style={styles.tab}
+                  onChangeText={text => {this.setState({ LastName: text.replace(/\s/g, "") })}}
                 />
               </View>
 
@@ -352,6 +426,7 @@ export default class Profileedit extends React.Component {
                   placeholder={"Email Address"}
                   placeholderTextColor={"gray"}
                   style={styles.tab}
+                  onChangeText={text => {this.setState({ Email: text.replace(/\s/g, "") })}}
                 />
               </View>
 
@@ -360,6 +435,7 @@ export default class Profileedit extends React.Component {
                   placeholder={"+91-"}
                   placeholderTextColor={"gray"}
                   style={styles.tab}
+                  onChangeText={text => {this.setState({ Phone: text.replace(/\s/g, "") })}}
                 />
               </View>
 
@@ -368,6 +444,7 @@ export default class Profileedit extends React.Component {
                   placeholder={"City"}
                   placeholderTextColor={"gray"}
                   style={styles.tab}
+                  onChangeText={text => {this.setState({ City: text.replace(/\s/g, "") })}}
                 />
               </View>
 
@@ -386,7 +463,7 @@ export default class Profileedit extends React.Component {
                   modalTransparent={false}
                   animationType={"fade"}
                   androidMode={"default"}
-                  placeHolderText="Select date"
+                  placeHolderText="Date of Birth"
                   textStyle={{ color: "black", fontSize: wp("2.7%") }}
                   placeHolderTextStyle={{ color: "gray", fontSize: wp("2.7%") }}
                   onDateChange={this.setDate}
@@ -412,6 +489,7 @@ export default class Profileedit extends React.Component {
                 placeholder={"Bio upto 300 words"}
                 placeholderTextColor={"gray"}
                 maxLength={300}
+                onChangeText={text=> this.setState({Bio:text})}
                 style={{
                   fontSize: wp("3%"),
                   color: "black",

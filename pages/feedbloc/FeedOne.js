@@ -83,7 +83,7 @@ export default class FeedOne extends React.Component {
           <TouchableOpacity style={{ flex: 1, paddingTop:hp('1%'), }}>
             <Image
               style={styles.Imgview}
-              source={require("./../assets/images/drawer.png")}
+              source={require("../../assets/images/drawer.png")}
             />
           </TouchableOpacity>       
           <TouchableOpacity style={{flex: 6, justifyContent: "flex-end", marginLeft:wp('3%')}}>
@@ -101,8 +101,8 @@ export default class FeedOne extends React.Component {
           	</Text>
 					</View>
           <View style={{width:wp('87.5%'), height:wp('8%'), borderTopColor: 'lightgray', borderTopWidth: 1, flexDirection:'row-reverse'}}>
-            <View style={styles.IconsStyle}><Icon name="adduser" type="antdesign" color="gray" size={wp('4%')} onPress={()=>console.warn('clicked')}/></View>
-            <View style={styles.IconsStyle}><Icon name="message-square" type="feather" color="gray" size={wp('4%')} /></View>
+            <View style={styles.IconsStyle}><Icon name="adduser" type="antdesign" color="gray" size={wp('4%')} /></View>
+            <View style={styles.IconsStyle}><Icon name="message-square" type="feather" color="gray" size={wp('4%')} onPress={()=>this.props.navigation.navigate('FeedTwo')} /></View>
             <View style={styles.IconsStyle}><Icon name="hearto" type="antdesign" color="gray" size={wp('4%')} /></View>
           </View>
         </View>

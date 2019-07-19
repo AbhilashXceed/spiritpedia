@@ -35,41 +35,30 @@ export default class FeedTwo extends React.Component {
     this.state={}
   }
 
-  componentDidMount(){}
+  // componentDidMount(){}
 
-  Feeder = () => {
-    const URL='';
+  // Feeder = () => {
+  //   const URL='';
     
-    fetch(URL, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(response=>response.json())
-    .then(resjson=>{
-      // console.warn(JSON.stringify(resjson))
-      console.warn('clicked');
-    })
-  }
+  //   fetch(URL, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   }).then(response=>response.json())
+  //   .then(resjson=>{
+  //     // console.warn(JSON.stringify(resjson))
+  //     console.warn('clicked');
+  //   })
+  // }
 
   render() {
     return (
-      <View
-        style={{
-          height: hp("102%"),
-          alignItems: "center",
-          marginTop: hp("4%")
-        }}
-      >
+      <View style={{height: hp("102%"), alignItems: "center"}}>
+        <View style={{width: wp('100%'), alignItems: "center", flexWrap:'wrap', backgroundColor:'#f0f0f0'}}>
+
         <View
-          style={{
-            width: wp("88%"),
-            borderWidth: 1,
-            borderColor: "lightgray",
-						flexWrap:'wrap',
-            marginTop: wp("4%"),
-            flexDirection: "column"
-          }}
+          style={styles.questionbox}
         >
           <View
             style={{
@@ -83,7 +72,7 @@ export default class FeedTwo extends React.Component {
           <TouchableOpacity style={{ flex: 1, paddingTop:hp('1%'), }}>
             <Image
               style={styles.Imgview}
-              source={require("./../assets/images/drawer.png")}
+              source={require("../../assets/images/drawer.png")}
             />
           </TouchableOpacity>       
           <TouchableOpacity style={{flex: 6, justifyContent: "flex-end", marginLeft:wp('3%')}}>
@@ -106,38 +95,12 @@ export default class FeedTwo extends React.Component {
             <View style={styles.IconsStyle}><Icon name="hearto" type="antdesign" color="gray" size={wp('4%')} /></View>
           </View>
         </View>
+      </View>
+      <ScrollView showsVerticalScrollIndicator={false}>   
+        <View>
 
-
-				
-        {/* <View
-          style={{
-            width: wp("88%"),
-            borderWidth: 1,
-            borderColor: "gray",
-						flexWrap:'wrap',
-            marginTop: wp("5%"),
-            flexDirection: "column"
-          }}
-        >
-	
-					<View style={{flexWrap:'wrap'}}>
-						<Text style={{ marginHorizontal: wp("5%"), marginTop:wp('1%'), marginBottom:wp('8%'), fontSize: wp("3%")}}>
-            	this is simple answer lkajfoa akf lakmfoa awlfk malkfn laknfla lfkaw lkawnfl absolute afjawnf alignItemsn
-							laknfl aknfl aknfaelgf
-							al fknalf alfk malkfnklawjnflawjkn flajwnfl awkjnflaw 
-							lawnf lawjnf laknfleakngleskmflawknf lawkjnfl akjnfklajen laejng laknfleakngleskmflawknfalkwnf lawknf laejng
-							akljnf lajkwnf lakwnfl ajkngleak
-							 lakwfnlawknf laknfla wknflawjnf lawmf lakn
-          	</Text>
-					</View>
-
-
-					<View style={{ position:'absolute', bottom:wp('2%'), right:hp('2%') }}>
-						<Text style={{fontSize:wp('3%'),}}>Some Icons here</Text>
-					</View>
-        </View>	 */}
-
-
+        </View>
+      </ScrollView>
       </View>
     );
   }
@@ -148,6 +111,15 @@ const styles = StyleSheet.create({
     fontSize: wp("3.8%"),
     color: "black",
     textAlign: "left"
+  },
+  questionbox:{
+    width: wp("88%"),
+    borderWidth: 1,
+    borderColor: "lightgray",
+    flexWrap:'wrap',
+    marginTop: wp("6%"),
+    flexDirection: "column",
+    marginBottom:hp('4%'),
   },
   subtitle: {
     fontSize: wp("2.8%"),

@@ -46,12 +46,12 @@ export default class ExploreOne extends React.Component {
 
   componentDidMount = async () => {
     this.servercaller();
-    const { currentUser } = firebase.auth();
-    this.setState({ currentUser });
+    // const { currentUser } = firebase.auth();
+    // this.setState({ currentUser });
     SplashScreen.hide();
     // console.warn(this.state.currentUser);
-    let A = await AsyncStorage.getItem("insta");
-    let insta = JSON.parse(A);
+    // let A = await AsyncStorage.getItem("insta");
+    // let insta = JSON.parse(A);
     
     // let A = await AsyncStorage.getItem("user");
     // let B = await AsyncStorage.getItem("googleToken");
@@ -227,6 +227,20 @@ export default class ExploreOne extends React.Component {
             // resizeMode="contain"
             /> */}
             {this.Imagesetter('6')}
+          </View>         
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Tour')}>
+          <View style={styles.tile}>
+            <View style={[styles.titlebox, {width:wp('38%')}]}>
+              <Text style={styles.titles}>Distillery Tour</Text>
+            </View>
+            <Image
+            source={require("../assets/images/whiskey11.jpg")}
+            style={styles.image}
+            // resizeMode="contain"
+            />
+            {/* {this.Imagesetter('7')} */}
           </View>         
           </TouchableOpacity>
 

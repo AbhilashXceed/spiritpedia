@@ -7,6 +7,8 @@ import OffersOne from "../OffersOne";
 import FeedOne from "../feedbloc/FeedOne";
 import FeedTwo from "../feedbloc/FeedTwo";
 
+import Tour from "../Tour";
+
 import AuthLoad from "../AuthLoad";
 import LogOut from "../LogOut";
 import Boarding from "../Boarding";
@@ -19,10 +21,14 @@ import Location from "../sidedrawer/Location";
 import ShareService from "../sidedrawer/ShareService";
 import Refer from "../sidedrawer/Refer";
 import Support from "../sidedrawer/Support";
-import About from "../sidedrawer/About";
 import FAQ from "../sidedrawer/FAQblock/FAQ";
 import Feedback from "../sidedrawer/Feedback";
 import Points from "../sidedrawer/Points";
+
+
+import About from "../sidedrawer/Aboutbloc/About";
+import TermConditions from "../sidedrawer/Aboutbloc/TermConditions";
+import PrivacyPolicy from "../sidedrawer/Aboutbloc/PrivacyPolicy";
 
 import Profile from "../sidedrawer/Profilebloc/Profile";
 import Followers from "../sidedrawer/Profilebloc/Followers"
@@ -48,13 +54,15 @@ import {
   createSwitchNavigator,
   createDrawerNavigator,
   createBottomTabNavigator,
-  DrawerItems
+  DrawerItems,
+  createNavigator
 } from "react-navigation";
 
 import { Container, Content, Header, Body } from "native-base";
 import { View, Image, StyleSheet, Text, TouchableOpacity, Dimensions } from "react-native";
 import React from "react";
 import AsyncStorage from "@react-native-community/async-storage";
+
 
 
 
@@ -112,6 +120,21 @@ const Home = createStackNavigator({
         headerLeftContainerStyle:({paddingLeft:2}),
         headerRightContainerStyle:({padding:10}),
         headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Feed</Text>),
+        headerLeft: (
+          <MyBackTwo navigation={navigation} />
+        )
+      };
+    }
+  },
+
+  Tour: {
+    screen: Tour,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+        headerLeftContainerStyle:({paddingLeft:2}),
+        headerRightContainerStyle:({padding:10}),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Distillery Tour</Text>),
         headerLeft: (
           <MyBackTwo navigation={navigation} />
         )
@@ -278,6 +301,85 @@ const Profilestack = createStackNavigator({
   }
 })
 
+const ReferStack = createStackNavigator({
+  ReferScreen:{
+    screen: Refer,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+        headerLeftContainerStyle:({paddingLeft:2}),
+        headerRightContainerStyle:({padding:10}),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Refer and Earn</Text>),
+        headerLeft: (
+          <MyBackButton navigation={navigation} />
+        )
+      };
+    }
+  }
+})
+
+const PointsStack = createStackNavigator({
+  PointsScreen:{
+    screen: Points,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+        headerLeftContainerStyle:({paddingLeft:2}),
+        headerRightContainerStyle:({padding:10}),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Refer and Earn</Text>),
+        headerLeft: (
+          <MyBackButton navigation={navigation} />
+        )
+      };
+    }
+  }
+})
+
+const AboutStack = createStackNavigator({
+  AboutScreen:{
+    screen: About,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+        headerLeftContainerStyle:({paddingLeft:2}),
+        headerRightContainerStyle:({padding:10}),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>About Us</Text>),
+        headerLeft: (
+          <MyBackButton navigation={navigation} />
+        )
+      };
+    }
+  },
+  TermsScreen:{
+    screen: TermConditions,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+        headerLeftContainerStyle:({paddingLeft:2}),
+        headerRightContainerStyle:({padding:10}),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Terms and Conditions</Text>),
+        headerLeft: (
+          <MyBackTwo navigation={navigation} />
+        )
+      };
+    }
+  },
+  PrivacyScreen:{
+    screen: PrivacyPolicy,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+        headerLeftContainerStyle:({paddingLeft:2}),
+        headerRightContainerStyle:({padding:10}),
+        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Privacy Policy</Text>),
+        headerLeft: (
+          <MyBackTwo navigation={navigation} />
+        )
+      };
+    }
+  }
+})
+
 const WrapperStackTab = createStackNavigator({
 
   LandingTabNavigator: {
@@ -314,17 +416,17 @@ const LandingDrawerNavigator = createDrawerNavigator(
 
     Transactions: { screen: Transactions },
 
-    Points: { screen: Points },
+    Points: { screen: PointsStack },
 
     ShareService: { screen: ShareService },
 
-    Refer: { screen: Refer },
+    Refer: { screen: ReferStack },
 
     Support: { screen: Support },
 
     FAQbloc: { screen: FAQstack },
 
-    About: { screen: About },
+    About: { screen: AboutStack },
 
     Feedback: { screen: Feedback },
 
@@ -366,7 +468,7 @@ const AuthSwitchNavigator = createSwitchNavigator(
     Landingone: { screen: LandingDrawerNavigator }
   },
   {
-    initialRouteName: "AuthBloc"
+    initialRouteName: "AuthLoad"
   }
 );
 
