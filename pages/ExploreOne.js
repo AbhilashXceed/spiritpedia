@@ -244,6 +244,20 @@ export default class ExploreOne extends React.Component {
           </View>         
           </TouchableOpacity>
 
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Institutebloc')}>
+          <View style={styles.tile}>
+            <View style={[styles.titlebox, {width:wp('38%')}]}>
+              <Text style={styles.titles}>Institutes</Text>
+            </View>
+            <Image
+            source={require("../assets/images/whiskey11.jpg")}
+            style={styles.image}
+            // resizeMode="contain"
+            />
+            {/* {this.Imagesetter('7')} */}
+          </View>         
+          </TouchableOpacity>
+
         </ScrollView>
         {/* <Text>
       Hi { currentUser && currentUser.email}!

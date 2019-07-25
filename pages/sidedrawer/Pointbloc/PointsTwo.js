@@ -30,17 +30,20 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import  MyBackButton  from "../../MyBackButton";
+import  MyBackTwo  from "../../MyBackTwo";
 
 const trial =
   'The art of distillation spread to Ireland and Scotland no later than the 15th century, as did the common European practice of distilling "aqua vitae", spirit alcohol, primarily for medicinal purposes. The practice of medicinal distillation eventually passed from a monastic setting to the secular via professional medical practitioners of th';
 
-export default class Points extends React.Component {
+
+export default class PointsTwo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-  }
-
-  static navigationOPtions = ({navigation, navigationOPtions}) => {
+	}
+	
+	static navigationOptions = ({ navigation, navigationOptions }) => {
     const { params } = navigation.state;
     return {
       headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
@@ -48,10 +51,10 @@ export default class Points extends React.Component {
       headerRightContainerStyle:({padding:10}),
       headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Whiskey Points</Text>),
       headerLeft: (
-        <MyBackButton navigation={navigation} />
+        <MyBackTwo navigation={navigation} />
       )
     };
-  }
+  };
 
   render() {
     return (

@@ -5,7 +5,6 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 
-import { ScrollView } from "react-native-gesture-handler";
 
 import {
   Container,
@@ -24,50 +23,67 @@ import {
   TouchableOpacity,
   Alert,
   StatusBar,
-  Image
-  // ScrollView
+  Image,
+  ScrollView
 } from "react-native";
 import { Icon } from "react-native-elements";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default class FeedOne extends React.Component {
   constructor(props){
     super(props)
-    this.state={}
+    this.state={
+      questionarray: []
+    }
   }
 
-  componentDidMount(){}
+  componentDidMount(){
+    this.Feeder();
+  }
 
-  Feeder = () => {
-    const URL='';
+  Feeder = async () => {
+    const URL='http://admin.spiritpedia.xceedtech.in/index.php?r=API/GetFeeds';
+    
+    var LOGINDATA = await AsyncStorage.getItem('LOGINDATA')
+		let DATA = JSON.parse(LOGINDATA);
+    let id = DATA.id;
+    
+    let MAIL = JSON.stringify({user_id:id})
+    console.log(MAIL)
     
     fetch(URL, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      body: MAIL
     }).then(response=>response.json())
     .then(resjson=>{
-      // console.warn(JSON.stringify(resjson))
-      console.warn('clicked');
+      this.setState({questionarray:resjson})
+      console.warn(resjson)
     })
+    .catch(error=>console.warn(error.message))
   }
 
   render() {
     return (
       <View
         style={{
-          height: hp("102%"),
+          flex:1,
+          // height: hp("102%"),
           alignItems: "center",
-          marginTop: hp("4%")
+          // marginTop: hp("4%")
         }}
       >
+        <ScrollView showsVerticalScrollIndicator={false}>
+        
         <View
           style={{
             width: wp("88%"),
             borderWidth: 1,
             borderColor: "lightgray",
 						flexWrap:'wrap',
-            marginTop: wp("4%"),
+            marginTop: wp("6%"),
             flexDirection: "column"
           }}
         >
@@ -106,8 +122,57 @@ export default class FeedOne extends React.Component {
             <View style={styles.IconsStyle}><Icon name="hearto" type="antdesign" color="gray" size={wp('4%')} /></View>
           </View>
         </View>
+          {this.state.questionarray.map((question, key)=>(
 
+            <View
+            key={key}
+            style={{
+              width: wp("88%"),
+              borderWidth: 1,
+              borderColor: "lightgray",
+              flexWrap:'wrap',
+              marginTop: wp("4%"),
+              flexDirection: "column"
+            }}
+            >
+            <View
+              style={{
+                flexDirection: "row",
+                width: wp("88%"),
+                paddingBottom: hp("3%"),
+                paddingLeft: wp('2%'),
+              }}
+            >
 
+            <TouchableOpacity style={{ flex: 1, paddingTop:hp('1%'), }}>
+              <Image
+                style={styles.Imgview}
+                source={require("../../assets/images/drawer.png")}
+              />
+            </TouchableOpacity>       
+            <TouchableOpacity style={{flex: 6, justifyContent: "flex-end", marginLeft:wp('3%')}}>
+              <Text style={styles.title}>{question.user.fullname}</Text>
+              <Text style={styles.subtitle}>12.4 K Followers</Text>
+              <Text style={styles.subtitle}>05 June at 21:14 pm</Text>
+            </TouchableOpacity>         
+            </View>
+            <View style={{flexWrap:'wrap'}}>
+              <Text style={{ marginHorizontal: wp("3%"), textAlign:'left', marginBottom:wp('4%'), fontSize: wp("3%"), color:'gray'}}>
+                What would be the best mild beer for house party?
+                I prefer lights over towers. The ones on my mind right now are 
+                bira blonde, KF draught, bira white and REPEAT. Let me know If you people know 
+                some deadly combo here.???
+              </Text>
+            </View>
+            <View style={{width:wp('87.5%'), height:wp('8%'), borderTopColor: 'lightgray', borderTopWidth: 1, flexDirection:'row-reverse'}}>
+              <View style={styles.IconsStyle}><Icon name="adduser" type="antdesign" color="gray" size={wp('4%')} /></View>
+              <View style={styles.IconsStyle}><Icon name="message-square" type="feather" color="gray" size={wp('4%')} onPress={()=>this.props.navigation.navigate('FeedTwo')} /></View>
+              <View style={styles.IconsStyle}><Icon name="hearto" type="antdesign" color="gray" size={wp('4%')} /></View>
+            </View>
+            </View>
+
+          ))}
+        </ScrollView>
 				
         {/* <View
           style={{
@@ -136,8 +201,7 @@ export default class FeedOne extends React.Component {
 						<Text style={{fontSize:wp('3%'),}}>Some Icons here</Text>
 					</View>
         </View>	 */}
-
-
+        
       </View>
     );
   }

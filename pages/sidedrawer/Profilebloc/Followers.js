@@ -36,7 +36,7 @@ export default class Followers extends React.Component {
   }
 
   componentDidMount(){
-    pullFollowers()
+    // pullFollowers()
   }
 
   pullFollowers(){

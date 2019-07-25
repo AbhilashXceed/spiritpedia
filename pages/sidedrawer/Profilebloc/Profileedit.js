@@ -100,7 +100,6 @@ export default class Profileedit extends React.Component {
 
   static navigationOptions = ({ navigation, navigationOptions }) => {
     const { params } = navigation.state;
-
     return {
       headerStyle: { backgroundColor: "#fdbd30", elevation: 0 },
       headerLeftContainerStyle: { padding: 5 },
@@ -114,6 +113,8 @@ export default class Profileedit extends React.Component {
       )
     };
   };
+
+  
   componentDidMount() {
     this.getID()
   }

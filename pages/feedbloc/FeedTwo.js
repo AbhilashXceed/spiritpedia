@@ -32,7 +32,43 @@ import { Icon } from "react-native-elements";
 export default class FeedTwo extends React.Component {
   constructor(props){
     super(props)
-    this.state={}
+    this.followerarray=[
+
+      {
+        name:'Rohit Supe',
+        firstname: 'Rohit',
+        lastname: 'Supe',
+        followers: '270',
+        id: '3',
+        answer: 'This is is answer 1 awljkfn wala lwfn awlf  alwfk nawlk na wlfknaw '
+      },
+      {
+        name:'Guru Agavane',
+        firstname: 'Guru',
+        lastname: 'Agavanee',
+        followers: '130',
+        id: '5',
+        answer: 'This is answer 2 lawd awfjdnawk awljkfn wala lwfn awlf  alwfk nawlk na wlfknaw '
+      },
+      {
+        name:'Nikhil Khanse',
+        firstname: 'Nikhil',
+        lastname: 'Khanse',
+        followers: '230',
+        id: '6',
+        answer: 'This is answer 3 lawd awfjdnawk awljkfn wala lwfn awlf  alwfk nawlk na wlfknaw awfjdnawk awljkfn wala lwfn awlf  alwfk nawlk na wlfknaw'
+      },
+      // "Rohit Supe",
+      // "Guru Agavane",
+      // "Nikhil Khanse",
+      // "Arindam Ghosh",
+      // "Sagar Agarwal",
+      // "Kishor Kumar",
+      // "Rupesh Mane",
+      // "Kiran Vedpathak",
+      // "Rahul Joshi"
+    ]
+
   }
 
   // componentDidMount(){}
@@ -98,7 +134,52 @@ export default class FeedTwo extends React.Component {
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>   
         <View>
+        {this.followerarray.map((follower, key) => (
+          <View
+          key={key}
+          style={{
+            // height: hp("10%"),
+            width: wp("88%"),
+            // justifyContent: "center",
+            alignItems:'center',
+            flexDirection: "row",     
+            marginTop:hp('2%'),
+          }}
+        >
 
+          
+          <View
+            style={{
+              // flex: 1,
+              height: hp("6%"),
+              width: hp("6%"),
+              backgroundColor:'#f0f0f0',
+              borderRadius: hp("3%"),
+              justifyContent:'center',
+              alignItems:'center',
+              alignSelf:'flex-start'
+            }}
+          >
+            <Text style={{fontSize:wp('4%'), color:'gray'}}>
+              {follower.firstname.charAt(0) + follower.lastname.charAt(0)}
+            </Text>
+            
+          </View>
+
+          <View style={{flexWrap:'wrap', backgroundColor:'#f0f0f0', width:wp('76%'), marginLeft:wp('2%'),
+            borderRadius:wp('2%')}}>
+            <View style={{marginLeft:wp('3%'), flexDirection:'row'}}>
+              <Text style={{ fontSize: wp("4%"), marginTop:wp('2%') }}>{follower.name}</Text>
+              <Text style={{ fontSize: wp("3%"), marginTop:wp('3%'), marginLeft:wp('2%')  }}>{follower.followers + ' followers'}</Text>
+            </View>
+            <View>
+            <Text style={{ fontSize: wp("3%"), marginHorizontal:wp('3%'), marginBottom:wp('2%'), color:'gray'}}>{follower.answer}</Text>
+            </View>
+          </View>
+
+          
+        </View>
+        ))}
         </View>
       </ScrollView>
       </View>

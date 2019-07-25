@@ -23,8 +23,11 @@ import Refer from "../sidedrawer/Refer";
 import Support from "../sidedrawer/Support";
 import FAQ from "../sidedrawer/FAQblock/FAQ";
 import Feedback from "../sidedrawer/Feedback";
-import Points from "../sidedrawer/Points";
 
+import PointsOne from "../sidedrawer/Pointbloc/PointsOne";
+import PointsTwo from "../sidedrawer/Pointbloc/PointsTwo";
+
+import InstituteOne from "../institutebloc/InstituteOne";
 
 import About from "../sidedrawer/Aboutbloc/About";
 import TermConditions from "../sidedrawer/Aboutbloc/TermConditions";
@@ -65,6 +68,10 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 
 
+
+const InstituteStack = createStackNavigator({
+  screen: InstituteOne
+})
 
 
 const Home = createStackNavigator({
@@ -120,9 +127,7 @@ const Home = createStackNavigator({
         headerLeftContainerStyle:({paddingLeft:2}),
         headerRightContainerStyle:({padding:10}),
         headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Feed</Text>),
-        headerLeft: (
-          <MyBackTwo navigation={navigation} />
-        )
+        headerLeft: (<MyBackTwo navigation={navigation} />)
       };
     }
   },
@@ -135,11 +140,17 @@ const Home = createStackNavigator({
         headerLeftContainerStyle:({paddingLeft:2}),
         headerRightContainerStyle:({padding:10}),
         headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Distillery Tour</Text>),
-        headerLeft: (
-          <MyBackTwo navigation={navigation} />
-        )
+        headerLeft: (<MyBackTwo navigation={navigation} />)
       };
     }
+  },
+
+  Institutebloc:{
+    screen: InstituteStack,
+    navigationOptions: {
+      header: null
+    }
+
   }
 
 });
@@ -186,32 +197,10 @@ const Offers = createStackNavigator({
   }
 });
 
-// const Feed = createStackNavigator({
-//   FeedOne: {
-//     screen: FeedOne,
-//     navigationOptions: ({ navigation }) => {
-//       return {
-//         headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
-//         headerLeft: (
-//           <Icon
-//             name="menu"
-//             type="entypo"
-//             color="white"
-//             size={45}
-//             style={{ paddingLeft: 15 }}
-//             onPress={() => navigation.openDrawer()}
-//           />
-//         )
-//       };
-//     }
-//   }
-// });
-
 
 const LandingTabNavigator = createBottomTabNavigator(
   {
     Home,
-    // Feed,
     Bookmarks,
     Offers,
   },
@@ -231,10 +220,6 @@ const LandingTabNavigator = createBottomTabNavigator(
           iconName = "tag";
           iconType = "font-awesome";
         }
-        //  else if (routeName === "Feed") {
-        //   iconName = "search";
-        //   iconType = "font-awesome";
-        // }
         return (
           <Icon name={iconName} type={iconType} size={25} color={tintColor} />
         );
@@ -319,20 +304,25 @@ const ReferStack = createStackNavigator({
 })
 
 const PointsStack = createStackNavigator({
-  PointsScreen:{
-    screen: Points,
-    navigationOptions: ({ navigation }) => {
-      return {
-        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
-        headerLeftContainerStyle:({paddingLeft:2}),
-        headerRightContainerStyle:({padding:10}),
-        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Refer and Earn</Text>),
-        headerLeft: (
-          <MyBackButton navigation={navigation} />
-        )
-      };
-    }
+  PointsOne:{
+    screen: PointsOne,
+    // navigationOptions: ({ navigation }) => {
+    //   return {
+    //     headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+    //     headerLeftContainerStyle:({paddingLeft:2}),
+    //     headerRightContainerStyle:({padding:10}),
+    //     headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Whiskey Points</Text>),
+    //     headerLeft: (
+    //       <MyBackButton navigation={navigation} />
+    //     )
+    //   };
+    // }
+  },
+
+  PointsTwo:{
+    screen: PointsTwo,
   }
+
 })
 
 const AboutStack = createStackNavigator({
