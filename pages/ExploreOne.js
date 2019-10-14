@@ -188,7 +188,7 @@ export default class ExploreOne extends React.Component {
           </View>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Eventbloc')}>
           <View style={styles.tile}>
             <View style={[styles.titlebox, {width:wp('27%')}]}>
               <Text style={styles.titles}>Events</Text>
@@ -202,7 +202,7 @@ export default class ExploreOne extends React.Component {
           </View>         
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity >
           <View style={styles.tile}>
             <View style={[styles.titlebox, {width:wp('27%')}]}>
               <Text style={styles.titles}>Offers</Text>
@@ -230,7 +230,7 @@ export default class ExploreOne extends React.Component {
           </View>         
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Tour')}>
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Tourbloc')}>
           <View style={styles.tile}>
             <View style={[styles.titlebox, {width:wp('38%')}]}>
               <Text style={styles.titles}>Distillery Tour</Text>
@@ -250,7 +250,21 @@ export default class ExploreOne extends React.Component {
               <Text style={styles.titles}>Institutes</Text>
             </View>
             <Image
-            source={require("../assets/images/whiskey11.jpg")}
+            source={require("../assets/images/Universityone.jpg")}
+            style={styles.image}
+            // resizeMode="contain"
+            />
+            {/* {this.Imagesetter('7')} */}
+          </View>         
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Newsbloc')}>
+          <View style={styles.tile}>
+            <View style={[styles.titlebox, {width:wp('28%')}]}>
+              <Text style={styles.titles}>News</Text>
+            </View>
+            <Image
+            source={require("../assets/images/News1.png")}
             style={styles.image}
             // resizeMode="contain"
             />
@@ -283,12 +297,14 @@ const styles = StyleSheet.create({
     color:'black', 
     fontSize:wp('3%'), 
     textAlign:'center', 
-    marginTop:hp('0.5%')
+    marginTop:hp('0.5%'),
+    marginHorizontal:wp('3%')
   },
   titlebox:{
     height:hp('3.5%'), 
     backgroundColor:'#fdbd30', 
     left:wp('3.5%'),
+    flexWrap:'wrap'
   },
   tile:{
     height:hp("28%"), 

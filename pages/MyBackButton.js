@@ -17,7 +17,7 @@ export default class MyBackButton extends React.Component {
             type="feather"
             color="white"
             size={wp('10%')}
-            onPress={() => {this.props.navigation.navigate('Home');
+            onPress={() => {this.props.navigation.navigate('ExploreOne');
             console.warn("button is pressed")}}
       />
         

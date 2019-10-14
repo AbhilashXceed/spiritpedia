@@ -271,7 +271,6 @@ export default class AuthScreen extends React.Component {
           });
         })
 
-        
       }
 
       // const credential = firebase.auth.FacebookAuthProvider.credential(
@@ -290,7 +289,12 @@ export default class AuthScreen extends React.Component {
     }
   }
 
-
+  handleErrors = response => {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
+  }
 
   normalLogin = async () => {
     const { email, password } = this.state;
@@ -317,7 +321,6 @@ export default class AuthScreen extends React.Component {
     // {
       this.setState({ errorPassword: null });
       this.setState({ errorEmail: null });
-      console.warn("this is email", email, password);
 
       var url = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/Login";
       var MAIL = {
@@ -332,23 +335,22 @@ export default class AuthScreen extends React.Component {
       fetch(url, {
         method: "POST",
         headers: {
-          // "Accept": "application/json",
           "Content-Type": "application/json"
         },
         body: mailjson
-        
       })
-        .then(response => response.json())
-        .then(responsejson => {
-          alert(JSON.stringify(responsejson));
-          AsyncStorage.setItem('LOGINDATA', JSON.stringify(responsejson));
-        })
-        .then(() => this.props.navigation.navigate("Landingone"))
-        .catch(error => {
-          this.setState({ errorMessage: error.message });
-          console.warn(this.state.errorMessage);
-          alert(this.state.errorMessage);
-        });
+      .then(this.handleErrors)
+      .then(response => response.json())
+      .then(response => {
+          alert(JSON.stringify(response));
+          AsyncStorage.setItem('LOGINDATA', JSON.stringify(response));
+      })
+      .then(() => this.props.navigation.navigate("Landingone"))
+      .catch(error => {
+        this.setState({ errorMessage: error.message });
+        console.warn(this.state.errorMessage);
+        alert(this.state.errorMessage);
+      });
 
 
 

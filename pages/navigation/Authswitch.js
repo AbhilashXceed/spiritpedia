@@ -4,10 +4,15 @@ import ExploreOne from "../ExploreOne";
 import BookmarksOne from "../BookmarksOne";
 import OffersOne from "../OffersOne";
 
+import EventOne from "../eventbloc/EventOne";
+import EventFilter from "../eventbloc/EventFilter";
+import EventTwo from "../eventbloc/EventTwo";
+
 import FeedOne from "../feedbloc/FeedOne";
 import FeedTwo from "../feedbloc/FeedTwo";
 
-import Tour from "../Tour";
+import TourOne from "../tourbloc/TourOne";
+import TourTwo from "../tourbloc/TourTwo";
 
 import AuthLoad from "../AuthLoad";
 import LogOut from "../LogOut";
@@ -16,18 +21,24 @@ import Boarding from "../Boarding";
 import  MyBackButton  from "../MyBackButton";
 import  MyBackTwo  from "../MyBackTwo";
 
-import Transactions from "../sidedrawer/Transactions";
-import Location from "../sidedrawer/Location";
 import ShareService from "../sidedrawer/ShareService";
 import Refer from "../sidedrawer/Refer";
 import Support from "../sidedrawer/Support";
 import FAQ from "../sidedrawer/FAQblock/FAQ";
 import Feedback from "../sidedrawer/Feedback";
 
+import AddressOne from "../sidedrawer/Addressbloc/AddressOne"
+import AddressTwo from "../sidedrawer/Addressbloc/AddressTwo"
+
 import PointsOne from "../sidedrawer/Pointbloc/PointsOne";
 import PointsTwo from "../sidedrawer/Pointbloc/PointsTwo";
 
+import MerchandiseOne from "../sidedrawer/Merchandisebloc/MerchandiseOne";
+import MerchandiseTwo from "../sidedrawer/Merchandisebloc/MerchandiseTwo";
+
 import InstituteOne from "../institutebloc/InstituteOne";
+
+import NewsOne from "../newsbloc/NewsOne"
 
 import About from "../sidedrawer/Aboutbloc/About";
 import TermConditions from "../sidedrawer/Aboutbloc/TermConditions";
@@ -72,6 +83,41 @@ import AsyncStorage from "@react-native-community/async-storage";
 const InstituteStack = createStackNavigator({
   screen: InstituteOne
 })
+
+const TourStack = createStackNavigator({
+  TourOne: {
+    screen: TourOne,
+  },
+  TourTwo: {
+    screen: TourTwo,
+  }
+})
+
+const NewsStack = createStackNavigator({
+  NewsOne: {
+    screen: NewsOne
+  }
+})
+
+const EventStack = createStackNavigator({
+  EventOne: {
+    screen: EventOne,
+    navigationOptions: {
+      header: null
+    }
+  },
+  EventFilter: {
+    screen: EventFilter,
+    navigationOptions: {
+      header: null
+    }
+  },
+  EventTwo: {
+    screen: EventTwo,
+  }
+
+})
+
 
 
 const Home = createStackNavigator({
@@ -132,16 +178,11 @@ const Home = createStackNavigator({
     }
   },
 
-  Tour: {
-    screen: Tour,
-    navigationOptions: ({ navigation }) => {
-      return {
-        headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
-        headerLeftContainerStyle:({paddingLeft:2}),
-        headerRightContainerStyle:({padding:10}),
-        headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Distillery Tour</Text>),
-        headerLeft: (<MyBackTwo navigation={navigation} />)
-      };
+
+  Tourbloc: {
+    screen: TourStack,
+    navigationOptions: {
+      header: null
     }
   },
 
@@ -150,7 +191,20 @@ const Home = createStackNavigator({
     navigationOptions: {
       header: null
     }
+  },
 
+  Newsbloc:{
+    screen: NewsStack,
+    navigationOptions: {
+      header: null
+    }
+  },
+
+  Eventbloc:{
+    screen:EventStack,
+    navigationOptions: {
+      header: null,
+    }
   }
 
 });
@@ -197,6 +251,21 @@ const Offers = createStackNavigator({
   }
 });
 
+// Home.navigationOptions = ({ navigation }) => {
+//   let tabBarVisible = true;
+//   if (navigation.state.index > 0) {
+//     tabBarVisible = false;
+//   }
+
+//   return {
+//     tabBarVisible,
+//   };
+// };
+
+// Home.navigationOptions={
+//   tabBarVisible: false
+// }
+
 
 const LandingTabNavigator = createBottomTabNavigator(
   {
@@ -206,6 +275,7 @@ const LandingTabNavigator = createBottomTabNavigator(
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
+      
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
         let iconName;
@@ -230,7 +300,7 @@ const LandingTabNavigator = createBottomTabNavigator(
       inactiveTintColor: "#bfbfbf",
       activeBackgroundColor: "white",
       inactiveBackgroundColor: "white"
-    }
+    },
   }
 );
 
@@ -278,12 +348,10 @@ const Profilestack = createStackNavigator({
       };
     }
   },
-  Profilethree:{
-    screen: Profileedit
-  },
-  Autocomplete:{
-    screen: Autocomplete
-  }
+
+  Profilethree:{ screen: Profileedit },
+
+  Autocomplete:{ screen: Autocomplete }
 })
 
 const ReferStack = createStackNavigator({
@@ -304,24 +372,8 @@ const ReferStack = createStackNavigator({
 })
 
 const PointsStack = createStackNavigator({
-  PointsOne:{
-    screen: PointsOne,
-    // navigationOptions: ({ navigation }) => {
-    //   return {
-    //     headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
-    //     headerLeftContainerStyle:({paddingLeft:2}),
-    //     headerRightContainerStyle:({padding:10}),
-    //     headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Whiskey Points</Text>),
-    //     headerLeft: (
-    //       <MyBackButton navigation={navigation} />
-    //     )
-    //   };
-    // }
-  },
-
-  PointsTwo:{
-    screen: PointsTwo,
-  }
+  PointsOne:{ screen: PointsOne },
+  PointsTwo:{ screen: PointsTwo }
 
 })
 
@@ -370,6 +422,23 @@ const AboutStack = createStackNavigator({
   }
 })
 
+
+const TransactionStack = createStackNavigator({
+  MerchandiseOne: { 
+    screen: MerchandiseOne,
+    navigationOptions: { header: null } 
+  },
+  MerchandiseTwo: { 
+    screen: MerchandiseTwo,
+    navigationOptions: { header: null }
+  }
+})
+
+const AddressStack = createStackNavigator({
+  AddressOne: { screen: AddressOne },
+  AddressTwo: { screen: AddressTwo }
+})
+
 const WrapperStackTab = createStackNavigator({
 
   LandingTabNavigator: {
@@ -391,20 +460,15 @@ const drawerConfig = {
 
 const LandingDrawerNavigator = createDrawerNavigator(
   {
-    Home: {
-      screen: WrapperStackTab,
-      // navigationOptions: {
-      //   drawerIcon: <Icon name="home" type="entypo" size={20} color="white" />
-      // }
-    },
+    Home: { screen: WrapperStackTab },
 
     Profilebloc: { screen: Profilestack },
 
     LogOut: { screen: LogOut },
 
-    Location: { screen: Location },
+    Location: { screen: AddressStack },
 
-    Transactions: { screen: Transactions },
+    Transactions: { screen: TransactionStack },
 
     Points: { screen: PointsStack },
 

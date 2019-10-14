@@ -7,9 +7,6 @@ import OffersOne from "./pages/OffersOne";
 import AuthLoad from "./pages/AuthLoad";
 import LogOut from "./pages/LogOut";
 
-import Transactions from "./pages/sidedrawer/Transactions";
-import Location from "./pages/sidedrawer/Location";
-
 import Refer from "./pages/sidedrawer/Refer";
 import Support from "./pages/sidedrawer/Support";
 import Feedback from "./pages/sidedrawer/Feedback";

@@ -141,14 +141,14 @@ export default class InstituteOne extends React.Component {
         <TouchableOpacity>
           <View style={styles.tile}>            
               <Image
-              source={require("../../assets/images/whiskey11.jpg")}
+              source={require("../../assets/images/Universityone.jpg")}
               style={styles.image}
               // resizeMode="contain"
               />  
               {/* {this.Imagesetter('1')} */}
               <View style={{margin:wp('1.5%')}}>
-                <Text>University of Scotland, Scotland</Text>
-                <Text>{essay}</Text>
+                <Text style={{fontWeight:'bold', color:'black'}}>University of Scotland, Scotland</Text>
+                <Text style={{fontSize:wp('3%'), color:'black'}}>{essay}</Text>
               </View>
           </View>
           </TouchableOpacity>
@@ -190,10 +190,10 @@ const styles = StyleSheet.create({
     left:wp('3.5%'),
   },
   tile:{
-    height:hp("35%"), 
+    height:hp("37%"), 
     width:wp("90%"), 
     marginTop:hp('1.5%'),
-    borderColor:'gray',
+    borderColor:'lightgray',
     borderWidth: 1,
     alignItems:'center'
   }

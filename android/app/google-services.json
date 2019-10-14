@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "560077884751-fgfnf2lb422kn5dk4pokuas5kab66l5q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spiritpedia",
+            "certificate_hash": "09bdead9d019500faa65f8ee751f796dabe42885"
+          }
+        },
+        {
           "client_id": "560077884751-7e6vi0hn0nkk9t5a9jsorm0c5642vuec.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -33,20 +41,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "560077884751-7unt1srstt203fqk602do7svb0ffdvlk.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

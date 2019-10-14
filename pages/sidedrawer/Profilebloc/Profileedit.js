@@ -482,7 +482,7 @@ export default class Profileedit extends React.Component {
                 height: hp("16%"),
                 width: wp("80%"),
                 backgroundColor: "#e3e3e3",
-                borderRadius: hp("1.65%")
+                borderRadius: hp("1.65%"),
               }}
             >
               <TextInput

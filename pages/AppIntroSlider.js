@@ -258,6 +258,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: isAndroidRTL ? 'row-reverse' : 'row',
   },
+  // change this, do this in percentage and after changing delete this comment
   paginationContainer: {
     position: 'absolute',
     bottom: 16 + (isIphoneX ? 34 : 0),

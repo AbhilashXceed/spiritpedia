@@ -72,6 +72,7 @@ export default class FAQ extends React.Component {
     })
     .then(response=>response.json())
     .then(resJson=>{
+      console.warn(resJson)
       this.setState({
         arraytwo: resJson
       })
