@@ -35,21 +35,30 @@ import MyBackButton from "../../MyBackButton";
 import MyBackTwo from "../../MyBackTwo";
 import AsyncStorage from "@react-native-community/async-storage";
 
-import { Icon, Badge, } from "react-native-elements";
-import SliderEntry from "./SliderEntry";
-import styles, { colors } from './styles/index.style';
-import { sliderWidth, itemWidth } from './styles/SliderEntry.style';
 import Modal from "react-native-modal";
-const SLIDER_1_FIRST_ITEM = 1;
 
-export default class MerchandiseTwo extends React.Component {
+export default class MerchandiseBuyNow extends React.Component {
   constructor(props){
     super(props);
     this.state = {
 
       item: null,
       data: [],
+      defaultAddress: null
     }
+  }
+
+  static navigationOptions = ({navigation, navigationOptions}) => {
+    const { params } = navigation.state;
+    return {
+      headerStyle:({backgroundColor:'#fdbd30', elevation:0}),
+      headerLeftContainerStyle:({paddingLeft:2}),
+      headerRightContainerStyle:({padding:10}),
+      headerTitle:(<Text style={{color:'white', fontSize:wp('5.5%')}}>Place Order</Text>),
+      headerLeft: (
+        <MyBackTwo navigation={navigation} />
+      )
+    };
   }
 
 	
@@ -58,9 +67,10 @@ export default class MerchandiseTwo extends React.Component {
     //this.servercaller();
     const { navigation: { getParam } } = this.props;
     const id = getParam('id', null);
-    const item = getParam('item', null)
+    const item = getParam('item', null);
+    const defaultAddress = getParam('defaultAddress', null)
     if (id === null) throw new Error('ID is not coming from previous page');
-    this.setState({ id, item })
+    this.setState({ id, item, defaultAddress })
   }
 
 
@@ -100,40 +110,32 @@ export default class MerchandiseTwo extends React.Component {
 
         <ScrollView>
           
-
           {this.state.item && (
             <View style={modulestyles.infobox}>
-              <Text style={{ fontWeight: "800", marginTop: wp("0.5%") }}>
-                {item.user.name}
-              </Text>
-              <Text style={{ color: "black" }}>{item.alt_description}</Text>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={{ fontWeight: "800", color: "black" }}>
-                  {`\u20B9 ${item.height}`}
-                </Text>
-                <Text
-                  style={modulestyles.cutprice}
-                >{`\u20B9 ${item.width}`}</Text>
-                <Text
-                  style={[modulestyles.discount, { marginLeft: wp("3%") }]}
-                >{`${item.likes}% off`}</Text>
+              <View>
+                <Image/>
               </View>
-              <Text style={[modulestyles.discount]}>Special Price</Text>
+              <View>
+                <Text style={{ fontWeight: "800", marginTop: wp("0.5%") }}>
+                  {item.product_name}
+                </Text>
+                <Text style={{ color: "black" }}>this will have item description</Text>
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ fontWeight: "800", color: "black" }}>
+                    {`\u20B9 ${item.discount_price}`}
+                  </Text>
+                  <Text
+                    style={modulestyles.cutprice}
+                  >{`\u20B9 ${item.actual_price}`}</Text>
+                  <Text
+                    style={[modulestyles.discount, { marginLeft: wp("3%") }]}
+                  >{`${item.discount}% off`}</Text>
+                </View>
+                  <Text style={[modulestyles.discount]}>Special Price</Text>
+                </View>
+              
             </View>
           )}
-
-          <View style={modulestyles.sizeContainer}>
-            <Text style={modulestyles.boxTitles}>Size</Text>
-            <View style={{ marginLeft: wp("1%") }}>
-              <ButtonGroup
-                onPress={this.updateIndexOne}
-                selectedIndex={groupOneIndex}
-                buttons={buttonsTwo}
-                containerStyle={{ height: hp("5%"), width: wp("70%") }}
-                selectedButtonStyle={{ backgroundColor: "#fdbd30" }}
-              />
-            </View>
-          </View>
 
           <View style={[modulestyles.sizeContainer]}>
             <Text style={modulestyles.boxTitles}>Product Details</Text>
@@ -154,27 +156,23 @@ export default class MerchandiseTwo extends React.Component {
               <Text style={{color:'black'}}>Striped</Text>
             </View>
           </View>
-
-          <TouchableOpacity 
-				    style={modulestyles.bigButton}>
-					    <Text style={{color:'white', fontWeight:'bold'}}>Add to Wishlist</Text>
-			    </TouchableOpacity>
           
           <View 
             style={[ modulestyles.sizeContainer, {
               flexDirection:'row', 
               marginBottom:hp('2%'), 
-              justifyContent:'space-around'
             }]}>
               <View  style={{width: wp('60%')}}>
-                <Text style={{color:'black'}}>{`Deliver to PLACEHOLDER`}</Text>
-                <Text >{`Address details will be shown here`}</Text>
+              {this.state.defaultAddress!==null && (
+                  <View>
+                    <Text style={{color:'black'}}>{`Deliver to ${this.state.defaultAddress[0].name}`}</Text>
+                    <Text >{this.state.defaultAddress[0].address}</Text>
+                    <Text >{`${this.state.defaultAddress[0].cityname} - ${this.state.defaultAddress[0].postal_code}`}</Text>
+                  </View>
+                )}          
               </View>
-          </View>
+            </View>
         </ScrollView>
-
-
-        
       </View>
     );
   }
@@ -185,7 +183,9 @@ const modulestyles = StyleSheet.create({
     backgroundColor: "white",
     width: wp("88%"),
     paddingVertical: wp("2%"),
-    alignSelf: "center"
+    alignSelf: "center",
+    borderColor: 'lightgrey',
+
   },
   discount: {
     fontWeight: "800",
@@ -212,15 +212,6 @@ const modulestyles = StyleSheet.create({
     fontWeight: "800",
     marginBottom: wp("1%")
   },
-  changeButton: {
-    backgroundColor: '#fdbd30',
-    height: hp('5%'),
-    width: wp('17%'),
-    alignItems:'center',
-    justifyContent: 'center',
-    alignSelf:'flex-end',
-    borderRadius: 4
-  },
   bigButton: {
     backgroundColor:'#fdbd30',
     width:wp('88%'),
@@ -229,13 +220,6 @@ const modulestyles = StyleSheet.create({
     justifyContent:'center',
     alignSelf: 'center',
     marginTop: hp("2%"),
-  },
-  modalContainer: {
-    backgroundColor: '#fdbd30',
-    padding: wp("2%"),
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: hp("10%")
   },
 });
 

@@ -9,7 +9,8 @@ import {
   StatusBar,
   ImageBackground,
   ScrollView,
-  Image
+  Image,
+  FlatList
 } from "react-native";
 
 import {
@@ -28,16 +29,10 @@ export default class InstituteOne extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ImageArray: [],
+      dataArray: [],
 
-      ImageOne: null,
-      ImageTwo: null,
-      ImageThree: null,
-      ImageFour: null,
-      ImageFive: null,
-      ImageSix: null,
-    };
   }
+}
 
   static navigationOptions = ({ navigation, navigationOptions }) => {
     const { params } = navigation.state;
@@ -53,13 +48,12 @@ export default class InstituteOne extends React.Component {
   };
   
 
-  componentDidMount = async () => {
-    // this.servercaller();
+  componentDidMount = () => {
+    this.getInstitutesList();
   };
 
-
-  servercaller = () => {
-    const URL = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/getMobileDashboard";
+  getInstitutesList = () => {
+    const URL = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/getInstituteList";
 
     fetch(URL, {
       method: 'GET',
@@ -69,132 +63,94 @@ export default class InstituteOne extends React.Component {
     })
     .then(response=>response.json())
     .then(resJson=>{
-      this.setState({ImageArray:resJson})
-      this.setState({
-        // ImageOne: JSON.stringify(this.state.ImageArray[0].image),
-        ImageOne: this.state.ImageArray[0].image,
-        ImageTwo: this.state.ImageArray[1].image,
-        ImageThree: this.state.ImageArray[2].image,
-        ImageFour: this.state.ImageArray[3].image,
-        ImageFive: this.state.ImageArray[4].image,
-        ImageSix: this.state.ImageArray[5].image
-      })
+      if (resJson.length === 0) {
+        this.setState({noData: true})
+      } else {
+        this.setState({noData: false})
+      }
+      console.warn('institutes', resJson);
+      this.setState({dataArray: resJson, loading: false})
     })
+    .catch(err => {
+      alert(`Something went wrong, please try again later`);
+    });
   }
 
-  Imagesetter = (value) => {
-
-    if(value=='1'){
-      return(
-        <Image
-          source={{uri: this.state.ImageOne}}
-          style={styles.image}
-          />
-        )
-    } else if (value=='2') {
-      return(
-        <Image
-          source={{uri: this.state.ImageTwo}}
-          style={styles.image}
-          />
-        )
-    } else if (value=='3') {
-      return(
-        <Image
-          source={{uri: this.state.ImageThree}}
-          style={styles.image}
-          />
-        )
-    } else if (value=='4') {
-      return(
-        <Image
-          source={{uri: this.state.ImageFour}}
-          style={styles.image}
-          />
-        )
-    } else if (value=='5') {
-      return(
-        <Image
-          source={{uri: this.state.ImageFive}}
-          style={styles.image}
-          />
-        )
-    } else if (value=='6') {
-      return(
-        <Image
-          source={{uri: this.state.ImageSix}}
-          style={styles.image}
-          />
-        )
-    }
-    
-      
-  }
+  handleItemPress = (key, item) => {
+    const { navigation: { navigate } } = this.props;
+   
+    navigate("InstituteTwo", {
+      returnRoute: "InstituteOne",
+      id: key,
+      item: item,
+    });
+  };
 
   render() {
-    const { currentUser } = this.state;
     return (
       <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={{ alignSelf: "center",}}>
+          { this.state.loading ? (
+            <View>
+              <ActivityIndicator size='large'/>
+              <Text>Loading</Text>
+            </View>
+          ) : (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={this.state.dataArray}
+              keyExtractor={item => item.id}
+              horizontal={false}
+              ListFooterComponent= {()=>(<View style={{height:hp('1%')}} />)}
+              renderItem={({ item }) => {
+                return (
+                  <TouchableOpacity onPress={()=>this.handleItemPress(item.id, item)}>
+                    <View style={styles.tile}>
+                      <Image
+                        source={{ uri: item.image }}
+                        style={styles.image}
+                      />
+                      <View style={{ margin: wp("1.5%"), }}>
+                        <Text style={{ fontWeight: "bold", color: "black" }}>
+                          {item.institute_name}
+                        </Text>
+                        <Text numberOfLines={3} style={{ fontSize: wp("3%"), color: "black" }}>
+                          {item.description}
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          )}
+          {this.state.noData && (
+            <Text>No Data to display</Text>
+          )}
+        </View>
 
-			
-        <TouchableOpacity>
-          <View style={styles.tile}>            
-              <Image
-              source={require("../../assets/images/Universityone.jpg")}
-              style={styles.image}
-              // resizeMode="contain"
-              />  
-              {/* {this.Imagesetter('1')} */}
-              <View style={{margin:wp('1.5%')}}>
-                <Text style={{fontWeight:'bold', color:'black'}}>University of Scotland, Scotland</Text>
-                <Text style={{fontSize:wp('3%'), color:'black'}}>{essay}</Text>
-              </View>
-          </View>
-          </TouchableOpacity>
-
-
-        </ScrollView>
-        {/* <Text>
-      Hi { currentUser && currentUser.email}!
-      </Text> */}
       </View>
     );
   }
 }
 
-const essay = 'University of Scotland, Scotland, University of Scotland, Scotland University of Scotland, Scotland University of Scotland, Scotland University of Scotland, Scotland University of Scotland, Scotland University of Scotland, ScotlandUniversity of Scotland, ScotlandUniversity of Scotland, ScotlandUniversity of Scotland, Scotland'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-    alignItems:'center'
   },
   image:{
     height: hp("26%"),
     width: wp("87%"),  
-    // position:'absolute', 
-    // top:0, 
     marginTop:wp('1.5%')
   },
-  titles:{
-    color:'black', 
-    fontSize:wp('3%'), 
-    textAlign:'center', 
-    marginTop:hp('0.5%')
-  },
-  titlebox:{
-    height:hp('3.5%'), 
-    backgroundColor:'#fdbd30', 
-    left:wp('3.5%'),
-  },
   tile:{
-    height:hp("37%"), 
+    height:hp("38%"), 
     width:wp("90%"), 
-    marginTop:hp('1.5%'),
+    marginTop:hp('1.5%'), 
     borderColor:'lightgray',
     borderWidth: 1,
-    alignItems:'center'
+    alignItems:'center',
+    overflow: 'hidden',
   }
 });

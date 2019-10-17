@@ -87,16 +87,9 @@ export default class AddressOne extends React.Component {
 
   async componentDidMount () {
     this.getStatesList();
-    const { navigation: { getParam } } = this.props;
-    const item = getParam('item', null);
     const LOGINDATA = await AsyncStorage.getItem('LOGINDATA');
     const data = JSON.parse(LOGINDATA);
-    console.warn('item came from previous screen', item);
     this.setState({user_id: data.id});
-    if (item !== null) { 
-      this.setState({item:item, user_id: data.id});
-      this.setFields(item); 
-    }
   }
   
   Radioclick(value) {
@@ -117,21 +110,7 @@ export default class AddressOne extends React.Component {
     }
   }
 
-  setFields = (item) => {
-    this.callCity(item.state);
-    this.setState({
-      fullName: item.name,
-      id: item.id,
-      address: item.address,
-      mobileNumber: item.mobile_no,
-      email: item.email,
-      postalCode: item.postal_code,
-      state: item.state,
-      radioOne: item.address_flag === "1" ? true : false,
-      radioTwo: item.address_flag === "2" ? true : false,
-    })
-    if(item.city){this.setState({district: item.city})}
-  }
+  
 
   getStatesList = () => {
     const URL = 'http://admin.spiritpedia.xceedtech.in/index.php?r=API/getState';
@@ -227,10 +206,9 @@ export default class AddressOne extends React.Component {
   }
 
   submitAddress = () => {
-    const { fullName, address, postalCode, email, radioOne, radioTwo, mobileNumber, state, district, item } = this.state;
+    const { fullName, address, postalCode, email, radioOne, radioTwo, mobileNumber, state, district,  } = this.state;
     const isValid = this.isValid();
     const insertURL = 'http://admin.spiritpedia.xceedtech.in/index.php?r=API/addAddress';
-    const updateURL = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/updateAddress"
     let body = { 
       name: fullName,
       email: email,
@@ -243,27 +221,7 @@ export default class AddressOne extends React.Component {
     }
     
     if (isValid) {
-      if (item!==null){
 
-        body['id'] = parseInt(item.id);
-        console.warn('body sent', body)
-
-        fetch(updateURL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(body)
-        })
-          .then(res => {
-            console.warn('response', res);
-            this.responseHandler(res)
-          })
-          .catch(err => {
-            console.warn('submit Address', err)
-          });
-      } 
-      else {
         body['user_id'] = parseInt(this.state.user_id);
         console.warn('body sent', body)
         console.log('body sent', JSON.stringify(body))
@@ -282,7 +240,6 @@ export default class AddressOne extends React.Component {
           .catch(err => {
             console.warn('submit Address', err)
           });
-      } 
     } 
   }
 

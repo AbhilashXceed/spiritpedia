@@ -186,9 +186,7 @@ export default class AuthScreen extends React.Component {
       } else {
         console.warn("Something went wrong", error.toString());
         Alert.alert("Something went wrong", error.toString());
-        this.setState({
-          error
-        });
+        this.setState({error});
       }
     }
   };

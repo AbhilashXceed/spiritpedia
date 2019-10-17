@@ -35,10 +35,16 @@ import PointsTwo from "../sidedrawer/Pointbloc/PointsTwo";
 
 import MerchandiseOne from "../sidedrawer/Merchandisebloc/MerchandiseOne";
 import MerchandiseTwo from "../sidedrawer/Merchandisebloc/MerchandiseTwo";
+import MerchandiseBuyNow from "../sidedrawer/Merchandisebloc/MerchandiseBuyNow";
+import MerchAddressOne from "../sidedrawer/Merchandisebloc/MerchAddressOne";
+import MerchAddressTwo from "../sidedrawer/Merchandisebloc/MerchAddressTwo";
+import MerchCart from "../sidedrawer/Merchandisebloc/MerchCart";
 
 import InstituteOne from "../institutebloc/InstituteOne";
+import InstituteTwo from "../institutebloc/InstituteTwo";
 
-import NewsOne from "../newsbloc/NewsOne"
+import NewsOne from "../newsbloc/NewsOne";
+import NewsTwo from "../newsbloc/NewsTwo";
 
 import About from "../sidedrawer/Aboutbloc/About";
 import TermConditions from "../sidedrawer/Aboutbloc/TermConditions";
@@ -50,7 +56,6 @@ import Profileedit from "../sidedrawer/Profilebloc/Profileedit"
 import Autocomplete from "../Autocomplete";
 
 import Setting from "../sidedrawer/Setting";
-
 
 import Drawermenu from '../navigation/Drawermenu';
 
@@ -81,7 +86,12 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 
 const InstituteStack = createStackNavigator({
-  screen: InstituteOne
+  InstituteOne: {
+    screen: InstituteOne
+  },
+  InstituteTwo: {
+    screen: InstituteTwo
+  }
 })
 
 const TourStack = createStackNavigator({
@@ -96,6 +106,9 @@ const TourStack = createStackNavigator({
 const NewsStack = createStackNavigator({
   NewsOne: {
     screen: NewsOne
+  },
+  NewsTwo: {
+    screen: NewsTwo
   }
 })
 
@@ -431,6 +444,18 @@ const TransactionStack = createStackNavigator({
   MerchandiseTwo: { 
     screen: MerchandiseTwo,
     navigationOptions: { header: null }
+  },
+  MerchandiseBuyNow: { 
+    screen: MerchandiseBuyNow,
+  },
+  MerchAddressOne: {
+    screen: MerchAddressOne,
+  },
+  MerchAddressTwo: {
+    screen: MerchAddressTwo,
+  },
+  MerchCart: {
+    screen: MerchCart,
   }
 })
 

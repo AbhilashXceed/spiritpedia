@@ -133,9 +133,7 @@ export default class ExploreOne extends React.Component {
           style={styles.image}
           />
         )
-    }
-    
-      
+    } 
   }
 
   render() {
@@ -149,26 +147,15 @@ export default class ExploreOne extends React.Component {
             <View style={[styles.titlebox, {width:wp('28%')}]}>
               <Text style={styles.titles}>Whiskeypedia</Text>
             </View>
-              {/* <Image
-              source={require("../assets/images/whiskey9.jpg")}
-              style={styles.image}
-              // resizeMode="contain"
-              />   */}
               {this.Imagesetter('1')}
           </View>
           </TouchableOpacity>
 
           <TouchableOpacity>
           <View style={styles.tile}>
-            
             <View style={[styles.titlebox, {width:wp('39%')}]}>
               <Text style={styles.titles}>Whiskey's of the world</Text>
             </View>
-              {/* <Image
-              source={require("../assets/images/whiskey10.jpg")}
-              style={styles.image}
-              // resizeMode="contain"
-              />           */}
               {this.Imagesetter('2')}
             </View>
           </TouchableOpacity>
@@ -179,11 +166,6 @@ export default class ExploreOne extends React.Component {
           <View style={[styles.titlebox, {width:wp('40%')}]}>
               <Text style={styles.titles}>Distilleries of the world</Text>
             </View>
-              {/* <Image
-              source={require("../assets/images/whiskey16.png")}
-              style={styles.image}
-              // resizeMode="contain"
-              /> */}
               {this.Imagesetter('3')}
           </View>
           </TouchableOpacity>
@@ -193,11 +175,6 @@ export default class ExploreOne extends React.Component {
             <View style={[styles.titlebox, {width:wp('27%')}]}>
               <Text style={styles.titles}>Events</Text>
             </View>
-            {/* <Image
-            source={require("../assets/images/whiskey14.jpg")}
-            style={styles.image}
-            // resizeMode="contain"
-            /> */}
             {this.Imagesetter('4')}
           </View>         
           </TouchableOpacity>
@@ -207,11 +184,6 @@ export default class ExploreOne extends React.Component {
             <View style={[styles.titlebox, {width:wp('27%')}]}>
               <Text style={styles.titles}>Offers</Text>
             </View>
-            {/* <Image
-            source={require("../assets/images/whiskey14.jpg")}
-            style={styles.image}
-            // resizeMode="contain"
-            /> */}
             {this.Imagesetter('5')}
           </View>         
           </TouchableOpacity>
@@ -221,11 +193,6 @@ export default class ExploreOne extends React.Component {
             <View style={[styles.titlebox, {width:wp('27%')}]}>
               <Text style={styles.titles}>Feeds</Text>
             </View>
-            {/* <Image
-            source={require("../assets/images/whiskey14.jpg")}
-            style={styles.image}
-            // resizeMode="contain"
-            /> */}
             {this.Imagesetter('6')}
           </View>         
           </TouchableOpacity>
@@ -238,7 +205,6 @@ export default class ExploreOne extends React.Component {
             <Image
             source={require("../assets/images/whiskey11.jpg")}
             style={styles.image}
-            // resizeMode="contain"
             />
             {/* {this.Imagesetter('7')} */}
           </View>         
@@ -252,7 +218,6 @@ export default class ExploreOne extends React.Component {
             <Image
             source={require("../assets/images/Universityone.jpg")}
             style={styles.image}
-            // resizeMode="contain"
             />
             {/* {this.Imagesetter('7')} */}
           </View>         
@@ -266,16 +231,12 @@ export default class ExploreOne extends React.Component {
             <Image
             source={require("../assets/images/News1.png")}
             style={styles.image}
-            // resizeMode="contain"
             />
             {/* {this.Imagesetter('7')} */}
           </View>         
           </TouchableOpacity>
 
         </ScrollView>
-        {/* <Text>
-      Hi { currentUser && currentUser.email}!
-      </Text> */}
       </View>
     );
   }

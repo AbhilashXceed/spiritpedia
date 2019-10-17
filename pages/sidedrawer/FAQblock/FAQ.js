@@ -106,7 +106,6 @@ export default class FAQ extends React.Component {
     return (
       <View
         style={{
-          // height: hp("5%"),
               width: wp("88%"),
               borderWidth: 1,
               borderColor: "black",
@@ -114,10 +113,7 @@ export default class FAQ extends React.Component {
               borderBottomRightRadius:5,
               alignItems: "center",
               borderTopWidth:0,
-              // marginTop: wp("5%"),
-              // marginBottom: wp("2%"),
               flexDirection: "row",
-              // flexWrap:'wrap'
         }}>
         {/* <Text style={{ fontSize: wp("3%"), padding:wp("2%") }} >
         {item.answer}

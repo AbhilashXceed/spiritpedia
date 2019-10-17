@@ -9,7 +9,9 @@ import {
   StatusBar,
   ImageBackground,
   ScrollView,
-  Image
+  Image,
+  FlatList,
+  ActivityIndicator
 } from "react-native";
 
 import {
@@ -27,7 +29,9 @@ export default class NewsOne extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ImageArray: []
+      newsArray: [],
+      loading: true,
+      noData: false,
     };
   }
 
@@ -44,59 +48,124 @@ export default class NewsOne extends React.Component {
     };
   };
 
-  componentDidMount = async () => {
-    // this.servercaller();
+  componentDidMount = () => {
+    this.getNewsList();
   };
 
-  servercaller = () => {
+  getNewsList = () => {
     const URL =
-      "http://admin.spiritpedia.xceedtech.in/index.php?r=API/getMobileDashboard";
+      "http://admin.spiritpedia.xceedtech.in/index.php?r=API/getNewsList";
 
     fetch(URL, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
       }
-    }).then(response => response.json());
+    })
+      .then(res => res.json())
+      .then(resjson => {
+        if (resjson.length === 0) {
+          this.setState({noData: true})
+        } else {
+          this.setState({noData: false})
+        }
+        console.warn("we got this", resjson);
+        this.setState({ newsArray: resjson, loading: false });
+      })
+      .catch(err => {
+        alert(`Something went wrong: ${err}`);
+      });
+  };
+
+  handleItemPress = (key, item) => {
+    const { navigation: { navigate } } = this.props;
+   
+    navigate("NewsTwo", {
+      returnRoute: "NewsOne",
+      id: key,
+      item: item,
+    });
   };
 
   render() {
-    const { currentUser } = this.state;
     return (
       <View style={styles.container}>
-        <Image
-          source={require("../../assets/images/News1.png")}
-          style={{ width: wp("100%"), height: hp("28%"), marginTop:hp('2%'), marginBottom:hp('2%') }}
-        />
-        <View>
-					<Text style={{marginHorizontal:wp('7%'), fontSize:wp('3.5%'), textAlign:'left'}}>
-						{essay}{essay}{essay}{essay}
-					</Text>
-				</View>
-				<TouchableOpacity 
-				style={{
-					backgroundColor:'#fdbd30',
-					width:wp('88%'),
-          height:hp('6%'),
-          position:'absolute',
-          bottom:hp('3%'),
-          alignItems:'center',
-          justifyContent:'center'
-				}}>
-					<Text style={{color:'white', fontWeight:'bold'}}>Pay Now</Text>
-				</TouchableOpacity>
+        <View style={{ alignSelf: "center",}}>
+          { this.state.loading ? (
+            <View>
+              <ActivityIndicator size='large'/>
+              <Text>Loading</Text>
+            </View>
+          ) : (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={this.state.newsArray}
+              keyExtractor={item => item.id}
+              horizontal={false}
+              ListFooterComponent= {()=>(<View style={{height:hp('1%')}} />)}
+              renderItem={({ item }) => {
+                return (
+                  <TouchableOpacity onPress={()=>this.handleItemPress(item.id, item)}>
+                    <View style={styles.tile}>
+                      <View style={[styles.titlebox, {width:wp('28%')}]}>
+                        <Text style={{color: 'black'}}>{item.date}</Text>
+                      </View>
+                      <Image
+                        source={{ uri: item.image }}
+                        style={styles.image}
+                      />
+                      <View style={{ margin: wp("1.5%"),}}>
+                        <Text style={{ fontWeight: "bold", color: "black" }}>
+                          {item.title}
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          )}
+          {this.state.noData && (
+            <Text>No Data to display</Text>
+          )}
+        </View>
       </View>
     );
   }
 }
 
-const essay =
-  "Ekdum badhiya quality chi he ashi trip rahnar,sarvyanna private room dila jail, paidal nahi chalava lagel auto rahil, mast tumhala ikde tikde firavalya jail ani ice cream pan dilya jail te pan free";
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-    alignItems: "center"
-  }
+    justifyContent:'center', 
+    alignItems:'center',
+  },
+  image:{
+    height: hp("26%"),
+    width: wp("87%"),  
+    position:'relative', 
+    top:wp('1.5%'), 
+    alignSelf:'center'
+  },
+  tile:{
+    height:hp("34%"), 
+    paddingBottom: hp('1%'), 
+    width:wp("90%"), 
+    marginTop:hp('1.5%'),
+    borderColor:'lightgray',
+    borderWidth: 1,
+    //alignItems:'center',
+    overflow: 'hidden',
+  },
+  titlebox:{
+    height:hp('3.5%'), 
+    backgroundColor:'#fdbd30', 
+    position:'absolute',
+    top:0,
+    left:wp('3.5%'),
+    flexWrap:'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
+  },
 });

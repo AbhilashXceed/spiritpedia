@@ -34,7 +34,7 @@ import {
 import MyBackButton from "../../MyBackButton";
 import MyBackTwo from "../../MyBackTwo";
 import AsyncStorage from "@react-native-community/async-storage";
-
+import { NavigationEvents } from "react-navigation";
 import { Icon, Badge, } from "react-native-elements";
 import SliderEntry from "./SliderEntry";
 import styles, { colors } from './styles/index.style';
@@ -46,8 +46,6 @@ export default class MerchandiseTwo extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      radioOne: false,
-      radioTwo: false,
       groupOneIndex: 0,
 
       item: null,
@@ -57,6 +55,7 @@ export default class MerchandiseTwo extends React.Component {
       district: '',
       data: [],
       modalVisible: false,
+      defaultAddress: null,
 			slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
 			ENTRIES1 : [
 				{
@@ -83,13 +82,43 @@ export default class MerchandiseTwo extends React.Component {
 
 	
 	
-	componentDidMount(){
-    //this.servercaller();
+	async componentDidMount(){
+    const LOGINDATA = await AsyncStorage.getItem('LOGINDATA');
+    const data = JSON.parse(LOGINDATA)
+    this.setState({user_id: data.id}) 
     const { navigation: { getParam } } = this.props;
     const id = getParam('id', null);
-    const item = getParam('item', null)
+    const item = getParam('item', null);
     if (id === null) throw new Error('ID is not coming from previous page');
-    this.setState({ id, item })
+    this.setState({ id, item });
+    //this.getItemdata(id);
+    this.getAddressList(data.id);
+  }
+
+  getAddressList = (userid) => {
+    const URL = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/getAddressBookList";
+
+    fetch(URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: parseInt(userid) })
+    })
+      .then(res => res.json())
+      .then(resjson => {
+        if (resjson.length === 0) {
+          this.setState({noAddress: true})
+        } else {
+          let defaultAddress = resjson.filter(function(element) {
+            return element.default_address === "1";
+          })
+          this.setState({ defaultAddress: defaultAddress });
+        }
+        console.warn("api response", resjson);
+      })
+      .catch(err => {
+        console.warn('address list err',err)
+        //alert(`Something went wrong, please try again later`, err);
+      });
   }
 
   updateIndexOne = (groupOneIndex) => {
@@ -100,21 +129,22 @@ export default class MerchandiseTwo extends React.Component {
     this.setState({modalVisible: visible});
   }
 
-	servercaller = () => {
+	getItemdata = () => {
     const Urltwo = "https://api.unsplash.com/photos/?client_id=234e2acd3ac4d6004e6df98b128efa9576075f5dcda00c13fc25eb5adbc6f9da"
 
     fetch(Urltwo, {
       method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept-Version": "v1",
-        },
+      headers: {
+        "Content-Type": "application/json",
+        "Accept-Version": "v1",
+      },
+      body: JSON.stringify({ id : id })
     })
     .then(res=>res.json())
     .then(res=>{
       console.warn(res)
       this.setState({
-				data: res,
+				item: res,
 				//error: res.error || null,
 				loading: false,
 				refreshing: false
@@ -124,6 +154,17 @@ export default class MerchandiseTwo extends React.Component {
 			err, loading:false
 		}))
   }
+
+  handleBuynow = (id, item) => {
+    const { navigation: { navigate } } = this.props;
+   
+    navigate("MerchandiseBuyNow", {
+      returnRoute: "MerchandiseTwo",
+      id: id,
+      item: item,
+      defaultAddress: this.state.defaultAddress,
+    });
+  };
 
 	_renderItemWithParallax ({item, index}, parallaxProps) {
 		return (
@@ -144,11 +185,23 @@ export default class MerchandiseTwo extends React.Component {
     }, 2000 );
   }
 
+  goToCart = () => {
+    const { navigation: { navigate } } = this.props;
+    console.warn('inside cart function')
+    navigate("MerchCart", {
+      returnRoute: "MerchandiseTwo",
+      defaultAddress: this.state.defaultAddress,
+    });
+  }
+
   render() {
     const buttonsTwo = ['S', 'M', 'L', 'XL', 'XXL']
 		const { slider1ActiveSlide, ENTRIES1, item, groupOneIndex } = this.state;
     return (
       <View style={{flexWrap:'wrap'}}>
+        <NavigationEvents
+          onDidFocus={() => this.getAddressList(this.state.user_id)}
+        />
 
         {/*   CUSTOM HEADER  */}
         <View 
@@ -171,17 +224,19 @@ export default class MerchandiseTwo extends React.Component {
             <Text style={{color:'white', fontSize:wp('5.5%')}}>Merchandise</Text>
           </View>
           <View style={{flex:1, alignItems:'center', justifyContent:'center', marginTop:hp('1%'), marginRight:wp('3%')}}>
-            <Icon
-              name="shoppingcart"
-              type="antdesign"
-              color="white"
-              size={wp('7%')}
-            />
-            <Badge
-              value={'2'}
-              status="primary"
-              containerStyle={{ position: 'absolute', top: 0, right: -3 }}
-            />
+            <TouchableOpacity onPress={()=>this.goToCart()}>
+              <Icon
+                name="shoppingcart"
+                type="antdesign"
+                color="white"
+                size={wp('7%')}
+              />
+              <Badge
+                value={'2'}
+                status="primary"
+                containerStyle={{ position: 'absolute', top: -3, right: -wp('2%') }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
         {/*  CUSTOM HEADER  */}
@@ -221,19 +276,19 @@ export default class MerchandiseTwo extends React.Component {
           {this.state.item && (
             <View style={modulestyles.infobox}>
               <Text style={{ fontWeight: "800", marginTop: wp("0.5%") }}>
-                {item.user.name}
+                {item.product_name}
               </Text>
-              <Text style={{ color: "black" }}>{item.alt_description}</Text>
+              <Text style={{ color: "black" }}>"place description here"</Text>
               <View style={{ flexDirection: "row" }}>
                 <Text style={{ fontWeight: "800", color: "black" }}>
-                  {`\u20B9 ${item.height}`}
+                  {`\u20B9 ${item.discount_price}`}
                 </Text>
                 <Text
                   style={modulestyles.cutprice}
-                >{`\u20B9 ${item.width}`}</Text>
+                >{`\u20B9 ${item.actual_price}`}</Text>
                 <Text
                   style={[modulestyles.discount, { marginLeft: wp("3%") }]}
-                >{`${item.likes}% off`}</Text>
+                >{`${item.discount}% off`}</Text>
               </View>
               <Text style={[modulestyles.discount]}>Special Price</Text>
             </View>
@@ -284,13 +339,25 @@ export default class MerchandiseTwo extends React.Component {
               justifyContent:'space-around'
             }]}>
               <View  style={{width: wp('60%')}}>
-                <Text style={{color:'black'}}>{`Deliver to PLACEHOLDER`}</Text>
-                <Text >{`Address details will be shown here`}</Text>
+                {this.state.defaultAddress===null ? (
+                  <Text>No Address added yet</Text>
+                ) : (
+                  <View>
+                    <Text style={{color:'black'}}>{`Deliver to ${this.state.defaultAddress[0].name}`}</Text>
+                    <Text >{this.state.defaultAddress[0].address}</Text>
+                    <Text >{`${this.state.defaultAddress[0].cityname} - ${this.state.defaultAddress[0].postal_code}`}</Text>
+                  </View>
+                )}
               </View>
               <View style={{justifyContent:'center', alignItems:'center'}}>
                 <TouchableOpacity 
+                  onPress={()=>this.props.navigation.navigate('MerchAddressOne')}
                   style={modulestyles.changeButton}>
-                  <Text style={{color:'white'}}>Change</Text>
+                  {this.state.defaultAddress!==null ? (
+                    <Text style={{color:'white'}}>Change</Text>
+                  ) : (
+                    <Text style={{color:'white'}}>Add</Text>
+                  )}
                 </TouchableOpacity>
               </View>
           </View>
@@ -302,7 +369,9 @@ export default class MerchandiseTwo extends React.Component {
             onPress={this.addToCart}>
             <Text style={{color:'#fdbd30', fontWeight:'800'}}>Add to Cart</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={modulestyles.bottomButtonTwo}>
+          <TouchableOpacity 
+            style={modulestyles.bottomButtonTwo}
+            onPress={()=>this.handleBuynow(this.state.id, this.state.item)}>
             <Text style={{color:'white', fontWeight:'800'}}>Buy Now</Text>
           </TouchableOpacity>
         </View>

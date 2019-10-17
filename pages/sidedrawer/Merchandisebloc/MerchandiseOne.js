@@ -54,8 +54,6 @@ export default class MerchandiseOne extends React.Component {
       radioOne: true,
       radioTwo: false,
       radioThree: false,
-      radioFour: false,
-      radioFive: false,
     }
   }
 	
@@ -74,8 +72,6 @@ export default class MerchandiseOne extends React.Component {
 
     } else if (value==="3") {
 
-    } else if (value==="4") {
-
     } 
   }
 
@@ -90,28 +86,32 @@ export default class MerchandiseOne extends React.Component {
   };
 
 	servercaller = () => {
-    const Urltwo = "https://api.unsplash.com/photos/?client_id=234e2acd3ac4d6004e6df98b128efa9576075f5dcda00c13fc25eb5adbc6f9da"
+    const URL = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/getAllProducts"
+    //const Urltwo = "https://api.unsplash.com/photos/?client_id=234e2acd3ac4d6004e6df98b128efa9576075f5dcda00c13fc25eb5adbc6f9da"
 
-    fetch(Urltwo, {
+    fetch(URL, {
       method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Accept-Version": "v1",
+          //"Accept-Version": "v1",
         },
     })
     .then(res=>res.json())
-    .then(res=>{
-      console.warn(res)
+    .then(resjson=>{
+      console.warn(resjson)
       this.setState({
-				data: res,
+				data: resjson,
 				//error: res.error || null,
 				loading: false,
 				refreshing: false
       })
 		})
-		.catch(err => this.setState({
-			err, loading:false
-		}))
+		.catch(err => {
+      console.log(err);
+      this.setState({
+			  loading:false
+      })
+    })
   }
 
   render() {
@@ -166,10 +166,10 @@ export default class MerchandiseOne extends React.Component {
                       height: hp("25%"),
                       width: wp("49.9%")
                     }}
-                    source={{ uri: item.urls.small }}
+                    source={{ uri: item.image }}
                   />
                   <View style={styles.infobox}>
-                    <Text style={{ color: "black" }}>{item.user.name}</Text>
+                    <Text style={{ color: "black" }}>{item.product_name}</Text>
                     <View style={{ flexDirection: "row" }}>
                       <Text
                         style={{
@@ -177,17 +177,19 @@ export default class MerchandiseOne extends React.Component {
                           color: "black"
                         }}
                       >
-                        {`\u20B9 ${item.height}`}
+                        {`\u20B9 ${item.discount_price}`}
                       </Text>
-                      <Text style={styles.cutprice}>
-                        {`\u20B9 ${item.width}`}
-                      </Text>
+                      {item.actual_price === "0" ? null : (
+                        <Text style={styles.cutprice}>
+                          {`\u20B9 ${item.actual_price}`}
+                        </Text>
+                      )}
                       <Text style={styles.discount}>
-                        {`${item.likes}% off`}
+                        {`${item.discount}% off`}
                       </Text>
                     </View>
                     <Text style={{ fontSize: wp("2.5%") }}>
-                      {`Free on ${item.width} Whiskey Points`}
+                      {`Free on ${item.whisky_points} Whiskey Points`}
                     </Text>
                   </View>
                 </View>

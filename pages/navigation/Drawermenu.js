@@ -74,7 +74,8 @@ export default class Drawermenu extends React.Component{
         
         
         return(
-            <TouchableOpacity style={{height: 40, flexDirection:'row', justifyContent:'center', alignItems:'center'}} onPress={()=>{this.props.navigation.navigate(nav)}}>
+            <TouchableOpacity style={{height: 40, flexDirection:'row', justifyContent:'center', alignItems:'center'}} 
+            onPress={()=>{this.props.navigation.navigate(nav)}}>
                 {/* <Image source={require(name)} style={styles.icons}/> */}
                 {this.imagery(name)}
                 <Text style={styles.link}>{text}</Text>
@@ -92,7 +93,7 @@ export default class Drawermenu extends React.Component{
 
                 <Header style={{ height: hp("30%"), backgroundColor: "white", flexDirection:'column', justifyContent:'center', alignItems:'center' }} androidStatusBarColor='#fdbd30'>
                     <TouchableOpacity style={{flexDirection:'column', justifyContent:'center', alignItems:'center'}}
-                    onPress={()=>this.props.navigation.navigate('Profilebloc')}>
+                        onPress={()=>this.props.navigation.navigate('Profilebloc')}>
                         <View >
                             <Image style={styles.Imgview} 
                             // source={{uri: this.state.userImg}}

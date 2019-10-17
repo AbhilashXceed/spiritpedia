@@ -27,11 +27,11 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import { NavigationEvents } from "react-navigation";
-
+import MyBackTwo from "../../MyBackTwo";
 import MyBackButton from "../../MyBackButton";
 import { ScrollView } from "react-native-gesture-handler";
 
-export default class AddressOne extends React.Component {
+export default class MerchAddressOne extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -47,7 +47,7 @@ export default class AddressOne extends React.Component {
       headerTitle: (
         <Text style={{ color: "white", fontSize: wp("5.5%") }}>Address Book</Text>
       ),
-      headerLeft: <MyBackButton navigation={navigation} />
+      headerLeft: <MyBackTwo navigation={navigation} />
     };
   }
   
@@ -85,44 +85,12 @@ export default class AddressOne extends React.Component {
       });
   }
 
-  editAddress = (item) => {
-    const { navigation: { navigate } } = this.props;
-   
-    navigate("AddressTwo", {
-      returnRoute: "AddressOne",
-      item: item,
-    });
 
-  }
-
-  deleteAddress = (addressId) => {
-    const URL = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/removeAddress";
-
-    fetch(URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ id: addressId })
-    })
-      .then(res => {
-        if(res.status===200){
-          alert("Address deleted successfully");
-          this.getAddressList(this.state.user_id)
-        } else {
-          alert(`Something went wrong, please try again later`);
-        }
-      })
-      .catch(err => {
-        console.warn('delete', err)
-        //alert(`Something went wrong, please try again later`);
-      });
-  }
 
   setDefaultAddress = (addressId) => {
     const URL = "http://admin.spiritpedia.xceedtech.in/index.php?r=API/setDefaultAddress";
     const body = { id: parseInt(addressId), user_id: parseInt(this.state.user_id)}
-    console.warn('body', JSON.stringify(body))
+    console.warn('body', body)
     fetch(URL, {
       method: "POST",
       headers: {
@@ -133,7 +101,7 @@ export default class AddressOne extends React.Component {
       .then(res => {
         if(res.status===200){
           alert("Default Address updated successfully");
-          this.getAddressList(this.state.user_id)
+          this.props.navigation.goBack();
         } else {
           console.warn('status', res.status);
           alert(`Something went wrong, please try again later`);
@@ -193,24 +161,6 @@ export default class AddressOne extends React.Component {
                           <Text style={{color: item.default_address==="1" ? "black" : "gray"}}>{`Mobile: ${item.mobile_no}`}</Text>
                         </View>
                       </View>
-                      <View style={styles.lowerhalf}>
-                        <TouchableOpacity
-                          onPress={() => this.deleteAddress(item.id)}
-                          style={{ marginRight: wp("5%") }}
-                        >
-                          <Text style={{ textDecorationLine: "underline", color: item.default_address==="1" ? "black" : "gray" }}>
-                            Remove
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => this.editAddress(item)}
-                          style={{ marginRight: wp("5%") }}
-                        >
-                          <Text style={{ textDecorationLine: "underline", color: item.default_address==="1" ? "black" : "gray" }}>
-                            Edit
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
                     </View>
                   </TouchableOpacity>
                 );
@@ -223,7 +173,7 @@ export default class AddressOne extends React.Component {
 
         <View style={styles.bigButtonContainer}>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("AddressTwo")}
+            onPress={() => this.props.navigation.navigate("MerchAddressTwo")}
             style={styles.bigButton}
           >
             <Text style={{ color: "white", fontWeight: "bold" }}>
@@ -246,11 +196,6 @@ const styles = StyleSheet.create({
     borderColor: "lightgray",
     borderWidth: 1,
     marginTop: hp("2//.5%"),
-  },
-  lowerhalf: {
-    flexDirection: "row-reverse",
-    height: hp("3%"),
-    marginBottom: hp("2%")
   },
   bigButton: {
     backgroundColor: "#fdbd30",
